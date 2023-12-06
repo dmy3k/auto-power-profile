@@ -2,8 +2,6 @@
 
 GNOME Shell extension to automatically switch between power profiles based on power supply status.
 
-This project is a fork from [eliapasquali/power-profile-switcher](https://github.com/eliapasquali/power-profile-switcher) with goal to provide better support and stability.
-
 ## Settings
 
 ![Settings window](.github/img/settings.png)
@@ -49,8 +47,14 @@ Extension will appear in the list of extensions and will be activated after you 
 
 ## GNOME Version Support
 
-This extensions is developed and tested on Fedora. Goal is to support latest stable GNOME version with new features and bugfixes.
+This extensions is developed and tested on Fedora. Currrent plan is to support latest stable GNOME version with new features and bugfixes.
 
 ## Contribution
 
 Contribution to this project are welcome
+
+## Credits
+
+This project was originally forked from [eliapasquali/power-profile-switcher](https://github.com/eliapasquali/power-profile-switcher) with goal to provide better support and stability. 
+
+
