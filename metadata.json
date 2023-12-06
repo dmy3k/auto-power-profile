@@ -1,7 +1,7 @@
 {
   "uuid": "auto-power-profile@dmy3k.github.io",
   "name": "Auto Power Profile",
-  "description": "Automatically switch between power profiles based on power supply and percentage.",
+  "description": "Automatically switch between power profiles based on power supply and battery status.",
   "version": 12,
   "shell-version": ["45"],
   "url": "https://github.com/dmy3k/auto-power-profile",

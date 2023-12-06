@@ -3,7 +3,6 @@ import GLib from "gi://GLib";
 import UPower from "gi://UPowerGlib";
 
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
-import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
 
 const UPOWER_BUS_NAME = "org.freedesktop.UPower";
@@ -63,11 +62,9 @@ export default class AutoPowerProfile extends Extension {
   _perfDebounceTimerId;
 
   _powerManagerProxy;
-  _powerManagerCancellable;
   _powerManagerWatcher;
 
   _powerProfilesProxy;
-  _powerProfilesCancellable;
   _powerProfileWatcher;
 
   _availableProfiles = [];
@@ -100,14 +97,13 @@ export default class AutoPowerProfile extends Extension {
       this._onSettingsChange
     );
 
-    this._powerManagerCancellable = new Gio.Cancellable();
     this._powerManagerProxy = new PowerManagerProxy(
       Gio.DBus.system,
       UPOWER_BUS_NAME,
       UPOWER_OBJECT_PATH,
       (proxy, error) => {
         if (error) {
-          logError(error.message);
+          console.error(error.message);
           return;
         }
         this._powerManagerWatcher = this._powerManagerProxy.connect(
@@ -118,50 +114,53 @@ export default class AutoPowerProfile extends Extension {
           p.Profile.unpack()
         );
         this._onSettingsChange();
-      },
-      this._powerManagerCancellable
+      }
     );
 
-    this._powerProfilesCancellable = new Gio.Cancellable();
     this._powerProfilesProxy = new PowerProfilesProxy(
       Gio.DBus.system,
       POWER_PROFILES_BUS_NAME,
       POWER_PROFILES_OBJECT_PATH,
       (proxy, error) => {
         if (error) {
-          logError(error.message);
+          console.error(error.message);
         } else {
           this._powerProfileWatcher = this._powerProfilesProxy.connect(
             "g-properties-changed",
             this._onProfileChange
           );
         }
-      },
-      this._powerProfilesCancellable
+      }
     );
   }
 
   disable() {
     this._switchProfile("balanced");
 
-    this._settings.disconnect(this._settingsWatcher);
+    this._settings?.disconnect(this._settingsWatcher);
 
-    this._powerManagerProxy.disconnect(this._powerManagerWatcher);
-    this._powerManagerCancellable.cancel();
-
-    this._powerProfilesProxy.disconnect(this._powerProfileWatcher);
-    this._powerProfilesCancellable.cancel();
+    if (this._powerManagerWatcher) {
+      this._powerManagerProxy?.disconnect(this._powerManagerWatcher);
+      this._powerManagerWatcher = null;
+    }
+    if (this._powerProfileWatcher) {
+      this._powerProfilesProxy?.disconnect(this._powerProfileWatcher);
+      this._powerProfileWatcher = null;
+    }
 
     if (this._perfDebounceTimerId) {
-      GLib.source_remove(this._perfDebounceTimerId);
+      GLib.Source.remove(this._perfDebounceTimerId);
       this._perfDebounceTimerId = null;
     }
-    this._transition.report({});
+    this._transition?.report({});
     this._transition = null;
 
     this._settings = null;
     this._settingsCache = {};
     this._availableProfiles = [];
+
+    this._powerManagerProxy = null;
+    this._powerProfilesProxy = null;
   }
 
   _onProfileChange = (p, properties) => {
@@ -170,7 +169,7 @@ export default class AutoPowerProfile extends Extension {
 
     if (payload?.ActiveProfile) {
       if (this._perfDebounceTimerId) {
-        GLib.source_remove(this._perfDebounceTimerId);
+        GLib.Source.remove(this._perfDebounceTimerId);
         this._perfDebounceTimerId = null;
       }
       if (!payload?.PerformanceDegraded) {
@@ -186,22 +185,23 @@ export default class AutoPowerProfile extends Extension {
         const reason = payload?.PerformanceDegraded?.unpack();
 
         if (reason === "lap-detected") {
-          this._perfDebounceTimerId = GLib.timeout_add(
+          this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
-            2000,
+            5,
             () => {
+              this._transition.report({});
               this._checkProfile();
               this._perfDebounceTimerId = null;
               return GLib.SOURCE_REMOVE;
             }
           );
         } else if (reason) {
-          log(
+          console.log(
             `ActiveProfile: ${this._powerProfilesProxy?.ActiveProfile}, PerformanceDegraded: ${reason}`
           );
         }
       } catch (e) {
-        logError(e);
+        console.error(e);
       }
     }
   };
@@ -231,22 +231,21 @@ export default class AutoPowerProfile extends Extension {
       this._powerManagerProxy?.State === UPower.DeviceState.DISCHARGING;
 
     const lowBattery =
-      onBattery === true &&
       this._settingsCache?.batteryThreshold >=
-        this._powerManagerProxy?.Percentage;
+      this._powerManagerProxy?.Percentage;
 
     if (onBattery === false) {
       configuredProfile = this._settingsCache?.ACDefault;
-    } else if (onBattery === true) {
-      configuredProfile = lowBattery
-        ? "power-saver"
-        : this._settingsCache?.batteryDefault;
+    } else if (onBattery === true && lowBattery) {
+      configuredProfile = "power-saver";
+    } else if (onBattery === true && !lowBattery) {
+      configuredProfile = this._settingsCache?.batteryDefault;
     }
 
     return {
       onBattery,
       onAC: onBattery === false,
-      lowBattery,
+      lowBattery: onBattery === true && lowBattery,
       configuredProfile,
     };
   };
@@ -256,14 +255,12 @@ export default class AutoPowerProfile extends Extension {
       return;
     }
     if (!this._availableProfiles.includes(profile)) {
-      logError(`Profile ${profile} is not in list of available profiles`);
+      console.error(
+        `Profile ${profile} is not in list of available profiles (${this._availableProfiles})`
+      );
       return;
     }
-    try {
-      this._powerProfilesProxy.ActiveProfile = profile;
-    } catch (e) {
-      logError(e);
-    }
+    this._powerProfilesProxy.ActiveProfile = profile;
   };
 
   _checkProfile = () => {
