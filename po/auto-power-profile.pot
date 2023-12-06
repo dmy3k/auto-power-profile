@@ -1,0 +1,74 @@
+# Translation template for auto-power-profile package.
+# Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the auto-power-profile package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: auto-power-profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-19 17:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: prefs.js:21
+msgid "General"
+msgstr ""
+
+#: prefs.js:27
+msgid "Default Profiles"
+msgstr ""
+
+#: prefs.js:28
+msgid "Configure the default profiles"
+msgstr ""
+
+#: prefs.js:34
+msgid "On AC"
+msgstr ""
+
+#: prefs.js:35
+msgid "Select the default profile when connected to AC"
+msgstr ""
+
+#: prefs.js:39 prefs.js:55
+msgid "Performance"
+msgstr ""
+
+#: prefs.js:40 prefs.js:56
+msgid "Balanced"
+msgstr ""
+
+#: prefs.js:41 prefs.js:57
+msgid "Power Saving"
+msgstr ""
+
+#: prefs.js:50
+msgid "On Battery"
+msgstr ""
+
+#: prefs.js:51
+msgid "Select the default profile when running on battery"
+msgstr ""
+
+#: prefs.js:66
+msgid "Power Saving Configuration"
+msgstr ""
+
+#: prefs.js:67
+msgid "Configure the power saving options"
+msgstr ""
+
+#: prefs.js:73
+msgid "Power Saving Threshold"
+msgstr ""
+
+#: prefs.js:74
+msgid "Switch to power saving profile when the battery level drops below"
+msgstr ""

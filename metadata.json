@@ -1,0 +1,10 @@
+{
+  "uuid": "auto-power-profile@dmy3k.github.io",
+  "name": "Auto Power Profile",
+  "description": "Automatically switch between power profiles based on power supply and percentage.",
+  "version": 12,
+  "shell-version": ["45"],
+  "url": "https://github.com/dmy3k/auto-power-profile",
+  "gettext-domain": "org.gnome.shell.extensions.auto-power-profile",
+  "settings-schema": "org.gnome.shell.extensions.auto-power-profile"
+}

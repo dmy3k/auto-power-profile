@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema id="org.gnome.shell.extensions.auto-power-profile" path="/org/gnome/shell/extensions/auto-power-profile/">
+    <key name="ac" type="s">
+      <default>"performance"</default>
+      <summary>On AC profile</summary>
+      <description>Select the default profile to use when connected to AC</description>
+    </key>
+    <key name="bat" type="s">
+      <default>"balanced"</default>
+      <summary>On battery profile</summary>
+      <description>Select the default profile to use when running on battery</description>
+    </key>
+    <key name="threshold" type="i">
+      <default>25</default>
+      <summary>Power saving threshold</summary>
+      <description>Select battery level to turn on the power saving profile</description>
+    </key>
+  </schema>
+</schemalist>
