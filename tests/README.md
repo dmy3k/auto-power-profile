@@ -1,4 +1,4 @@
-# Run test suite locally
+# Testing
 
 Tests and formatter check are enforced on pull requests.
 

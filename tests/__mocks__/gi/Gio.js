@@ -4,8 +4,8 @@ class PowerProfilesProxyMock {
   constructor(dbus, bus_name, obj_path, callback) {
     process.nextTick(callback);
   }
-  connect = () => jest.fn();
-  disconnect = () => jest.fn();
+  connect = jest.fn();
+  disconnect = jest.fn();
 
   Profiles = ["performance", "balanced", "power-saver"].map((x) => ({
     Profile: { unpack: () => x },

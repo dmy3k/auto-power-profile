@@ -28,6 +28,8 @@ test("starts in performance profile on AC according to settings", async () => {
   p.enable();
   await sleep(1);
 
+  expect(p._powerProfilesProxy.connect).toHaveBeenCalled();
+
   expect(p._powerProfilesProxy.ActiveProfile).toBe("performance");
 });
 

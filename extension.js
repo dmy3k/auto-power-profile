@@ -2,7 +2,11 @@ import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import UPower from "gi://UPowerGlib";
 
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import {
+  Extension,
+  gettext as _,
+} from "resource:///org/gnome/shell/extensions/extension.js";
 import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
 
 const UPOWER_BUS_NAME = "org.freedesktop.UPower";
@@ -69,6 +73,8 @@ export default class AutoPowerProfile extends Extension {
 
   _availableProfiles = [];
 
+  _quickSettingsItem;
+
   constructor(metadata) {
     super(metadata);
   }
@@ -129,6 +135,7 @@ export default class AutoPowerProfile extends Extension {
             "g-properties-changed",
             this._onProfileChange
           );
+          this._quickSettingsItem = this._addQuickSettingsItem();
         }
       }
     );
@@ -152,6 +159,10 @@ export default class AutoPowerProfile extends Extension {
       GLib.Source.remove(this._perfDebounceTimerId);
       this._perfDebounceTimerId = null;
     }
+
+    this._quickSettingsItem?.destroy();
+    this._quickSettingsItem = null;
+
     this._transition?.report({});
     this._transition = null;
 
@@ -161,6 +172,17 @@ export default class AutoPowerProfile extends Extension {
 
     this._powerManagerProxy = null;
     this._powerProfilesProxy = null;
+  }
+
+  _addQuickSettingsItem() {
+    const ppIndicator = Main.panel?.statusArea?.quickSettings?._powerProfiles;
+
+    if (ppIndicator) {
+      const ppToggle = ppIndicator.quickSettingsItems[0];
+      return ppToggle.menu.addAction(_("Power Mode Defaults"), () =>
+        this.openPreferences()
+      );
+    }
   }
 
   _onProfileChange = (p, properties) => {
