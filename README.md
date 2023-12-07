@@ -58,3 +58,5 @@ Contribution to this project are welcome
 ## Credits
 
 This project was originally forked from [eliapasquali/power-profile-switcher](https://github.com/eliapasquali/power-profile-switcher) with goal to provide better support and stability.
+
+The extension addresses [feature request #715](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/715) from GNOME Settings project.
