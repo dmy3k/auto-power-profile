@@ -16,21 +16,18 @@ jobs:
       run:
         working-directory: tests
 
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
           cache: "yarn"
           cache-dependency-path: tests/yarn.lock
 
       - name: Install dependencies
-        run: yarn install --non-interactive
+        run: yarn install --non-interactive --frozen-lockfile
 
       - name: Check formatting
         run: yarn fmtcheck
