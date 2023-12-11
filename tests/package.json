@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --runInBand",
-    "fmtcheck": "prettier --no-error-on-unmatched-pattern --check **/*.{js,json}"
+    "fmtcheck": "prettier --no-error-on-unmatched-pattern --check **/*.{js,json}",
+    "fmt": "prettier --no-error-on-unmatched-pattern --write **/*.{js,json}"
   },
   "jest": {
     "rootDir": ".",

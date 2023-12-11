@@ -124,21 +124,17 @@ export default class AutoPowerProfile extends Extension {
       (proxy, error) => {
         if (error) {
           console.error(error.message);
-        } else {
-          this._powerProfileWatcher = this._powerProfilesProxy.connect(
-            "g-properties-changed",
-            this._onProfileChange
-          );
+          return;
         }
+        this._powerProfileWatcher = this._powerProfilesProxy.connect(
+          "g-properties-changed",
+          this._onProfileChange
+        );
       }
     );
   }
 
   disable() {
-    this._switchProfile("balanced");
-
-    this._settings?.disconnect(this._settingsWatcher);
-
     if (this._powerManagerWatcher) {
       this._powerManagerProxy?.disconnect(this._powerManagerWatcher);
       this._powerManagerWatcher = null;
@@ -147,11 +143,15 @@ export default class AutoPowerProfile extends Extension {
       this._powerProfilesProxy?.disconnect(this._powerProfileWatcher);
       this._powerProfileWatcher = null;
     }
+    this._settings?.disconnect(this._settingsWatcher);
+
+    this._switchProfile("balanced");
 
     if (this._perfDebounceTimerId) {
       GLib.Source.remove(this._perfDebounceTimerId);
       this._perfDebounceTimerId = null;
     }
+
     this._transition?.report({});
     this._transition = null;
 
@@ -164,6 +164,9 @@ export default class AutoPowerProfile extends Extension {
   }
 
   _onProfileChange = (p, properties) => {
+    if (!this._powerProfilesProxy) {
+      return;
+    }
     const payload = properties?.deep_unpack();
     const powerConditions = this._getPowerConditions();
 
@@ -174,7 +177,7 @@ export default class AutoPowerProfile extends Extension {
       }
       if (!payload?.PerformanceDegraded) {
         this._transition.report({
-          effectiveProfile: this._powerProfilesProxy?.ActiveProfile,
+          effectiveProfile: this._powerProfilesProxy.ActiveProfile,
           ...powerConditions,
         });
       }
@@ -197,7 +200,7 @@ export default class AutoPowerProfile extends Extension {
           );
         } else if (reason) {
           console.log(
-            `ActiveProfile: ${this._powerProfilesProxy?.ActiveProfile}, PerformanceDegraded: ${reason}`
+            `ActiveProfile: ${this._powerProfilesProxy.ActiveProfile}, PerformanceDegraded: ${reason}`
           );
         }
       } catch (e) {
