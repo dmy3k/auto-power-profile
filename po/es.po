@@ -19,58 +19,66 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Gtranslator 42.0\n"
 
-#: prefs.js:21
-msgid "General"
-msgstr "General"
-
-#: prefs.js:27
-msgid "Default Profiles"
-msgstr "Perfiles predeterminados"
-
-#: prefs.js:28
-msgid "Configure the default profiles"
-msgstr "Configurar los perfiles predeterminados"
-
-#: prefs.js:34
-msgid "On AC"
-msgstr "Enchufado"
-
-#: prefs.js:35
-msgid "Select the default profile when connected to AC"
-msgstr "Perfil predeterminado cuando funcione enchufado"
-
-#: prefs.js:39 prefs.js:55
+#: prefs.js:112
 msgid "Performance"
 msgstr "Rendimiento"
 
-#: prefs.js:40 prefs.js:56
+#: prefs.js:113
 msgid "Balanced"
 msgstr "Balanceado"
 
-#: prefs.js:41 prefs.js:57
-msgid "Power Saving"
+#: prefs.js:114
+msgid "Power Saver"
 msgstr "Ahorro de energía"
 
-#: prefs.js:50
+#: ui/general.ui:5
+msgid "General"
+msgstr "General"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Perfiles predeterminados"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+
+#: ui/general.ui:14
+msgid "On AC"
+msgstr "Enchufado"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Perfil predeterminado cuando funcione enchufado"
+
+#: ui/general.ui:22
 msgid "On Battery"
 msgstr "Batería"
 
-#: prefs.js:51
+#: ui/general.ui:23
 msgid "Select the default profile when running on battery"
 msgstr "Perfil predeterminado cuando funcione con batería"
 
-#: prefs.js:66
-msgid "Power Saving Configuration"
-msgstr "Configuración de ahorro de energía"
-
-#: prefs.js:67
-msgid "Configure the power saving options"
-msgstr "Configurar las opciones de ahorro de energía"
-
-#: prefs.js:73
+#: ui/general.ui:35
 msgid "Power Saving Threshold"
 msgstr "Umbral de ahorro de energía"
 
-#: prefs.js:74
-msgid "Switch to power saving profile when the battery level drops below:"
-msgstr "Cambiar al perfil de ahorro de energía cuando la batería desciende de:"
+#: ui/general.ui:36
+msgid "Switch to power saving profile when the battery level drops below"
+msgstr "Cambiar al perfil de ahorro de energía cuando la batería desciende de"
+
+#: ui/general.ui:48
+msgid "Advanced"
+msgstr ""
+
+#: ui/general.ui:49
+msgid "Compatibility and troubleshooting"
+msgstr ""
+
+#: ui/general.ui:104
+msgid "Debug logging"
+msgstr ""
+
+#: ui/general.ui:105
+msgid "Enable detailed logs for troubleshooting"
+msgstr ""

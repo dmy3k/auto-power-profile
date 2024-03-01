@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="org.gnome.shell.extensions.auto-power-profile">
-    <template class="AutoPowerProfilePreferences" parent="AdwPreferencesPage">
+    <template class="AutoPowerProfileGeneralPrefs" parent="AdwPreferencesPage">
         <property name="name">general</property>
         <property name="title" translatable="yes">General</property>
-        <property name="icon-name">preferences-other-symbolic</property>
+        <property name="icon-name">view-list-symbolic</property>
         <child>
             <object class="AdwPreferencesGroup" id="ui_group">
                 <property name="title" translatable="yes">Default Profiles</property>
-                <property name="description" translatable="yes">Configure the default profiles</property>
+                <property name="description" translatable="yes">Applied automatically unless user sets manually another one</property>
 
                 <child>
                     <object class="AdwComboRow" id="ac_profile">
@@ -29,8 +29,6 @@
 
         <child>
             <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Power Saving Configuration</property>
-                <property name="description" translatable="yes">Configure the power saving options</property>
 
                 <child>
                     <object class="AdwSpinRow" id="threshold">
@@ -44,16 +42,81 @@
                 </child>
             </object>
         </child>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Advanced</property>
+                <property name="description" translatable="yes">Compatibility and troubleshooting</property>
+
+                <child>
+                    <object class="AdwExpanderRow" id="row_ppd">
+                        <property name="title" translatable="true">Power Profiles Daemon</property>
+                        <property name="subtitle">Required for extenstion to operate</property>
+
+                        <child>
+                            <object class="AdwActionRow" id="row_version">
+                                <child type="prefix">
+                                    <object class="GtkImage" id="version_icon">
+                                        <property name="icon_name">emblem-important-symbolic</property>
+                                    </object>
+                                </child>
+                                <property name="title" translatable="true">Installed Version</property>
+                                <child>
+                                    <object class="GtkLabel" id="ppd_version_label">
+                                        <property name="width-chars">4</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow" id="row_platform_driver">
+                                <child type="prefix">
+                                    <object class="GtkImage" id="platform_driver_icon">
+                                        <property name="icon_name">emblem-important-symbolic</property>
+                                    </object>
+                                </child>
+                                <property name="title" translatable="true">Platform Driver</property>
+                                <child>
+                                    <object class="GtkLabel" id="platform_driver_label"></object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="AdwActionRow" id="row_cpu_driver">
+                                <child type="prefix">
+                                    <object class="GtkImage" id="cpu_driver_icon">
+                                        <property name="icon_name">emblem-important-symbolic</property>
+                                    </object>
+                                </child>
+                                <property name="title" translatable="true">CPU Driver</property>
+                                <child>
+                                    <object class="GtkLabel" id="cpu_driver_label"></object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwActionRow">
+                        <property name="title" translatable="yes">Debug logging</property>
+                        <property name="subtitle" translatable="yes">Enable detailed logs for troubleshooting</property>
+                        <property name="activatable-widget">debug_logging</property>
+                        <child>
+                            <object class="GtkSwitch" id="debug_logging">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+
     </template>
 
-    <object class="GtkStringList" id="platform_profile_model">
-        <items>
-            <item translatable="yes">Performance</item>
-            <item translatable="yes">Balanced</item>
-            <item translatable="yes">Power Saver</item>
-        </items>
-    </object>
-
+    <object class="GtkStringList" id="platform_profile_model"></object>
 
     <object class="GtkAdjustment" id="threshold_adjustment">
         <property name="page-increment">5.0</property>
