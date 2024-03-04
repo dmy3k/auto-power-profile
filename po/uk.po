@@ -71,3 +71,37 @@ msgstr "Поріг заряду у відсотках"
 #: prefs.js:74
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Перейти в профіль Заощадження, при падінні заряду батареї нижче"
+
+#: ui/about.ui:5
+msgid "Compatibility"
+msgstr "Сумісність"
+
+#: ui/about.ui:11
+msgid "Makes power profiles handling available over D-Bus"
+msgstr "Надає можливість керування профілями через шину D-Bus"
+
+#: ui/about.ui:20
+msgid "Installed Version"
+msgstr ""
+
+#: ui/about.ui:36
+msgid "Platform Driver"
+msgstr "Драйвер платформи"
+
+#: ui/about.ui:50
+msgid "CPU Driver"
+msgstr "Драйвер CPU"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr "Застосовуються автоматично якшо не обрано вручну користувачем"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Обробляти режим lap-mode"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr "Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить перехід в режим 'Баланс' задля зниження температури пристрою"

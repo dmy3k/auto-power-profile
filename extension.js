@@ -1,9 +1,9 @@
-import Gio from "gi://Gio";
-import GLib from "gi://GLib";
-import UPower from "gi://UPowerGlib";
+const { Gio, GLib, St, GObject } = imports.gi;
+const UPower = imports.gi.UPowerGlib;
 
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
-import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
+const ExtensionUtils = imports.misc.extensionUtils;
+const FileUtils = imports.misc.fileUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 
 const UPOWER_BUS_NAME = "org.freedesktop.UPower";
 const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
@@ -53,7 +53,7 @@ class ProfileTransition {
   }
 }
 
-export default class AutoPowerProfile extends Extension {
+class AutoPowerProfile {
   _settings;
   _settingsCache = {};
 
@@ -66,12 +66,6 @@ export default class AutoPowerProfile extends Extension {
 
   _powerProfilesProxy;
   _powerProfileWatcher;
-
-  _availableProfiles = [];
-
-  constructor(metadata) {
-    super(metadata);
-  }
 
   enable() {
     const DisplayDeviceInterface = FileUtils.loadInterfaceXML(
@@ -89,32 +83,12 @@ export default class AutoPowerProfile extends Extension {
 
     this._transition = new ProfileTransition();
 
-    this._settings = this.getSettings(
+    this._settings = ExtensionUtils.getSettings(
       "org.gnome.shell.extensions.auto-power-profile"
     );
     this._settingsWatcher = this._settings.connect(
       "changed",
       this._onSettingsChange
-    );
-
-    this._powerManagerProxy = new PowerManagerProxy(
-      Gio.DBus.system,
-      UPOWER_BUS_NAME,
-      UPOWER_OBJECT_PATH,
-      (proxy, error) => {
-        if (error) {
-          console.error(error.message);
-          return;
-        }
-        this._powerManagerWatcher = this._powerManagerProxy.connect(
-          "g-properties-changed",
-          this._checkProfile
-        );
-        this._availableProfiles = this._powerProfilesProxy.Profiles.map((p) =>
-          p.Profile.unpack()
-        );
-        this._onSettingsChange();
-      }
     );
 
     this._powerProfilesProxy = new PowerProfilesProxy(
@@ -130,6 +104,23 @@ export default class AutoPowerProfile extends Extension {
           "g-properties-changed",
           this._onProfileChange
         );
+      }
+    );
+
+    this._powerManagerProxy = new PowerManagerProxy(
+      Gio.DBus.system,
+      UPOWER_BUS_NAME,
+      UPOWER_OBJECT_PATH,
+      (proxy, error) => {
+        if (error) {
+          console.error(error.message);
+          return;
+        }
+        this._powerManagerWatcher = this._powerManagerProxy.connect(
+          "g-properties-changed",
+          this._checkProfile
+        );
+        this._onSettingsChange();
       }
     );
   }
@@ -157,7 +148,6 @@ export default class AutoPowerProfile extends Extension {
 
     this._settings = null;
     this._settingsCache = {};
-    this._availableProfiles = [];
 
     this._powerManagerProxy = null;
     this._powerProfilesProxy = null;
@@ -187,7 +177,7 @@ export default class AutoPowerProfile extends Extension {
       try {
         const reason = payload?.PerformanceDegraded?.unpack();
 
-        if (reason === "lap-detected") {
+        if (reason === "lap-detected" && this._settingsCache.lapmode) {
           this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             5,
@@ -214,6 +204,7 @@ export default class AutoPowerProfile extends Extension {
       ACDefault: this._settings.get_string("ac"),
       batteryDefault: this._settings.get_string("bat"),
       batteryThreshold: this._settings.get_int("threshold"),
+      lapmode: this._settings.get_boolean("lapmode"),
     };
     this._transition.report({});
     this._checkProfile();
@@ -222,12 +213,10 @@ export default class AutoPowerProfile extends Extension {
   _getPowerConditions = () => {
     let configuredProfile = "balanced";
 
-    if (
+    const hasBattery = !(
       this._powerManagerProxy?.State === UPower.DeviceState.UNKNOWN ||
       this._powerManagerProxy?.Percentage === undefined
-    ) {
-      return { configuredProfile };
-    }
+    );
 
     const onBattery =
       this._powerManagerProxy?.State === UPower.DeviceState.PENDING_DISCHARGE ||
@@ -246,6 +235,7 @@ export default class AutoPowerProfile extends Extension {
     }
 
     return {
+      hasBattery,
       onBattery,
       onAC: onBattery === false,
       lowBattery: onBattery === true && lowBattery,
@@ -257,10 +247,12 @@ export default class AutoPowerProfile extends Extension {
     if (profile === this._powerProfilesProxy?.ActiveProfile) {
       return;
     }
-    if (!this._availableProfiles.includes(profile)) {
-      console.error(
-        `Profile ${profile} is not in list of available profiles (${this._availableProfiles})`
-      );
+
+    const canSwitch = this._powerProfilesProxy.Profiles.some(
+      (p) => p.Profile.unpack() === profile
+    );
+    if (!canSwitch) {
+      console.error(`Profile ${profile} is not in list of available profiles`);
       return;
     }
     this._powerProfilesProxy.ActiveProfile = profile;
@@ -274,4 +266,20 @@ export default class AutoPowerProfile extends Extension {
       this._switchProfile(powerConditions.configuredProfile);
     }
   };
+}
+
+let inst = null;
+
+function init() {
+  ExtensionUtils.initTranslations(Me.metadata.uuid);
+}
+
+function enable() {
+  inst = new AutoPowerProfile();
+  inst.enable();
+}
+
+function disable() {
+  inst.disable();
+  inst = null;
 }

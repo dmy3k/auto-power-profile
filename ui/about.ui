@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="org.gnome.shell.extensions.auto-power-profile">
+    <template class="AutoPowerProfileAboutPrefs" parent="AdwPreferencesPage">
+        <property name="name">about</property>
+        <property name="title" translatable="yes">Compatibility</property>
+        <property name="icon-name">help-about-symbolic</property>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Power Profiles Daemon</property>
+                <property name="description" translatable="yes">Makes power profiles handling available over D-Bus</property>
+
+                <child>
+                    <object class="AdwActionRow" id="row_version">
+                        <child type="prefix">
+                            <object class="GtkImage" id="version_icon">
+                                <property name="icon_name">emblem-important-symbolic</property>
+                            </object>
+                        </child>
+                        <property name="title" translatable="yes">Installed Version</property>
+                        <child>
+                            <object class="GtkLabel" id="ppd_version_label">
+                                <property name="width-chars">4</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwActionRow" id="row_platform_driver">
+                        <child type="prefix">
+                            <object class="GtkImage" id="platform_driver_icon">
+                                <property name="icon_name">emblem-important-symbolic</property>
+                            </object>
+                        </child>
+                        <property name="title" translatable="yes">Platform Driver</property>
+                        <child>
+                            <object class="GtkLabel" id="platform_driver_label"></object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="AdwActionRow" id="row_cpu_driver">
+                        <child type="prefix">
+                            <object class="GtkImage" id="cpu_driver_icon">
+                                <property name="icon_name">emblem-important-symbolic</property>
+                            </object>
+                        </child>
+                        <property name="title" translatable="yes">CPU Driver</property>
+                        <child>
+                            <object class="GtkLabel" id="cpu_driver_label"></object>
+                        </child>
+                    </object>
+                </child>
+            </object>
+        </child>
+    </template>
+</interface>

@@ -1,56 +1,48 @@
-import Adw from "gi://Adw";
-import GLib from "gi://GLib";
-import GObject from "gi://GObject";
-import Gio from "gi://Gio";
+const { Adw, Gio, GLib, GObject } = imports.gi;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const FileUtils = imports.misc.fileUtils;
+const gettextDomain = Me.metadata["gettext-domain"];
+const Gettext = imports.gettext.domain(gettextDomain);
+const _ = Gettext.gettext;
 
-import { ExtensionPreferences } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
+const { General } = Me.imports.preferences.general;
+const { About } = Me.imports.preferences.about;
 
-const PROFILE_CHOICES = ["performance", "balanced", "power-saver"];
+const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
+const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
 
-function bindAdwComboRow(comboRow, settings, key, map_) {
-  const initValue = settings.get_string(key);
-  comboRow.selected = map_.indexOf(initValue);
+const PowerProfilesIface = FileUtils.loadInterfaceXML(
+  "net.hadess.PowerProfiles"
+);
+const PowerProfilesProxy = Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
 
-  settings.connect(`changed::${key}`, () => {
-    const idx = map_.indexOf(settings.get_string(key));
-    comboRow.selected = idx;
-  });
-  comboRow.connect("notify::selected", () => {
-    const value = map_[comboRow.selected];
-    settings.set_string(key, value);
-  });
+function init() {
+  ExtensionUtils.initTranslations(Me.metadata["gettext-domain"]);
 }
 
-var General = GObject.registerClass(
-  {
-    GTypeName: "AutoPowerProfilePreferences",
-    Template: GLib.Uri.resolve_relative(
-      import.meta.url,
-      "./ui/general.ui",
-      GLib.UriFlags.NONE
-    ),
-    InternalChildren: ["ac_profile", "bat_profile", "threshold"],
-  },
-  class General extends Adw.PreferencesPage {
-    _init(settings, params = {}) {
-      super._init(params);
+function fillPreferencesWindow(window) {
+  const settings = ExtensionUtils.getSettings(
+    "org.gnome.shell.extensions.auto-power-profile"
+  );
 
-      bindAdwComboRow(this._ac_profile, settings, "ac", PROFILE_CHOICES);
-      bindAdwComboRow(this._bat_profile, settings, "bat", PROFILE_CHOICES);
-      settings.bind(
-        "threshold",
-        this._threshold,
-        "value",
-        Gio.SettingsBindFlags.DEFAULT
-      );
-    }
-  }
-);
+  const proxy = new Promise((resolve, reject) => {
+    new PowerProfilesProxy(
+      Gio.DBus.system,
+      POWER_PROFILES_BUS_NAME,
+      POWER_PROFILES_OBJECT_PATH,
+      (proxy, error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(proxy);
+        }
+      }
+    );
+  }).catch((e) => {
+    console.error(`failed to create dbus proxy (${e?.message})`);
+  });
 
-export default class AutoPowerProfilePreferences extends ExtensionPreferences {
-  fillPreferencesWindow(window) {
-    const settings = this.getSettings();
-
-    window.add(new General(settings));
-  }
+  window.add(new General(settings, proxy));
+  window.add(new About(settings, proxy));
 }

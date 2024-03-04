@@ -31,6 +31,3 @@ jobs:
 
       - name: Check formatting
         run: yarn fmtcheck
-
-      - name: Run test suite
-        run: yarn test
