@@ -5,6 +5,7 @@ class Extension {
       bat: "balanced",
       threshold: 25,
       debug: false,
+      lapmode: true,
     },
     handlers: [],
 

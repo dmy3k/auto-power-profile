@@ -2,7 +2,7 @@
 <schemalist>
   <schema id="org.gnome.shell.extensions.auto-power-profile" path="/org/gnome/shell/extensions/auto-power-profile/">
     <key name="ac" type="s">
-      <default>"balanced"</default>
+      <default>"performance"</default>
       <summary>On AC profile</summary>
       <description>Select the default profile to use when connected to AC</description>
     </key>
@@ -16,9 +16,9 @@
       <summary>Power saving threshold</summary>
       <description>Select battery level to turn on the power saving profile</description>
     </key>
-    <key name="debug" type="b">
-      <default>false</default>
-      <summary>Debug logging</summary>
+    <key name="lapmode" type="b">
+      <default>true</default>
+      <summary>lap-mode handling on AC</summary>
     </key>
   </schema>
 </schemalist>

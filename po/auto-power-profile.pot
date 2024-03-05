@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 15:14+0100\n"
+"POT-Creation-Date: 2024-03-07 14:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,56 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: prefs.js:112
+#: preferences/about.js:72
+msgid "Battery is present"
+msgstr ""
+
+#: preferences/general.js:43
 msgid "Performance"
 msgstr ""
 
-#: prefs.js:113
+#: preferences/general.js:44
 msgid "Balanced"
 msgstr ""
 
-#: prefs.js:114
+#: preferences/general.js:45
 msgid "Power Saver"
+msgstr ""
+
+#: ui/about.ui:5
+msgid "Compatibility"
+msgstr ""
+
+#: ui/about.ui:10
+msgid "Power Profiles Daemon"
+msgstr ""
+
+#: ui/about.ui:11
+msgid "Makes power profiles handling available over D-Bus"
+msgstr ""
+
+#: ui/about.ui:21
+msgid "Installed Version"
+msgstr ""
+
+#: ui/about.ui:38
+msgid "Platform Driver"
+msgstr ""
+
+#: ui/about.ui:55
+msgid "CPU Driver"
+msgstr ""
+
+#: ui/about.ui:68
+msgid "UPower"
+msgstr ""
+
+#: ui/about.ui:69
+msgid "Battery has to be recognized by power management system"
+msgstr ""
+
+#: ui/about.ui:79
+msgid "Battery is absent"
 msgstr ""
 
 #: ui/general.ui:5
@@ -50,33 +90,27 @@ msgid "Select the default profile when connected to AC"
 msgstr ""
 
 #: ui/general.ui:22
-msgid "On Battery"
+msgid "Handle lap-mode on AC"
 msgstr ""
 
 #: ui/general.ui:23
-msgid "Select the default profile when running on battery"
-msgstr ""
-
-#: ui/general.ui:35
-msgid "Power Saving Threshold"
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
 msgstr ""
 
 #: ui/general.ui:36
-msgid "Switch to power saving profile when the battery level drops below"
+msgid "On Battery"
+msgstr ""
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
 msgstr ""
 
 #: ui/general.ui:48
-msgid "Advanced"
+msgid "Power Saving Threshold"
 msgstr ""
 
 #: ui/general.ui:49
-msgid "Compatibility and troubleshooting"
-msgstr ""
-
-#: ui/general.ui:104
-msgid "Debug logging"
-msgstr ""
-
-#: ui/general.ui:105
-msgid "Enable detailed logs for troubleshooting"
+msgid "Switch to power saving profile when the battery level drops below"
 msgstr ""

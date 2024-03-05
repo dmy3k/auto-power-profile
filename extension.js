@@ -180,9 +180,8 @@ export default class AutoPowerProfile extends Extension {
     if (powerConditions.onAC && payload?.PerformanceDegraded) {
       try {
         const reason = payload?.PerformanceDegraded?.unpack();
-        this.debug("onProfileChange.PerformanceDegraded=%o", reason);
 
-        if (reason === "lap-detected") {
+        if (reason === "lap-detected" && this._settingsCache.lapmode) {
           this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             5,
@@ -209,7 +208,7 @@ export default class AutoPowerProfile extends Extension {
       ACDefault: this._settings.get_string("ac"),
       batteryDefault: this._settings.get_string("bat"),
       batteryThreshold: this._settings.get_int("threshold"),
-      debug: this._settings.get_boolean("debug"),
+      lapmode: this._settings.get_boolean("lapmode"),
     };
     this._transition.report({});
     this._checkProfile();
@@ -252,12 +251,14 @@ export default class AutoPowerProfile extends Extension {
     if (profile === this._powerProfilesProxy?.ActiveProfile) {
       return;
     }
-
-    const isAvailableProfile = this._powerProfilesProxy.Profiles.some(
+    const canSwitch = this._powerProfilesProxy.Profiles.some(
       (p) => p.Profile.unpack() === profile
     );
-    if (!isAvailableProfile) {
-      console.error(`Profile ${profile} is not in list of available profiles`);
+
+    if (!canSwitch) {
+      console.error(
+        `switchProfile: Profile ${profile} is not in list of available profiles`
+      );
       return;
     }
     this._powerProfilesProxy.ActiveProfile = profile;
@@ -267,19 +268,8 @@ export default class AutoPowerProfile extends Extension {
     const powerConditions = this._getPowerConditions();
     const allowed = this._transition.request(powerConditions);
 
-    this.debug(
-      "checkProfile powerConditions=%o, transition allowed=%o",
-      powerConditions,
-      allowed
-    );
     if (allowed) {
       this._switchProfile(powerConditions.configuredProfile);
     }
   };
-
-  debug(...args) {
-    if (this._settingsCache?.debug) {
-      console.log(...args);
-    }
-  }
 }

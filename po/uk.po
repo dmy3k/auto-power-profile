@@ -16,66 +16,109 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Gtranslator 42.0\n"
 
-#: prefs.js:112
-msgid "Performance"
-msgstr "Швидкодія"
-
-#: prefs.js:113
-msgid "Balanced"
-msgstr "Баланс"
-
-#: prefs.js:114
-msgid "Power Saver"
-msgstr "Заощадження"
-
-#: ui/general.ui:5
+#: prefs.js:21
 msgid "General"
 msgstr "Загальні"
 
-#: ui/general.ui:9
+#: prefs.js:27
 msgid "Default Profiles"
 msgstr "За замовчуванням"
 
-#: ui/general.ui:10
-msgid "Applied automatically unless user sets manually another one"
-msgstr "Застосується автоматично якшо не встановлено користувачем"
+#: prefs.js:28
+msgid "Configure the default profiles"
+msgstr "Налаштування профілю за замовчуванням"
 
-#: ui/general.ui:14
+#: prefs.js:34
 msgid "On AC"
 msgstr "Від мережі"
 
-#: ui/general.ui:15
+#: prefs.js:35
 msgid "Select the default profile when connected to AC"
 msgstr "Профіль за замовчуванням від мережі"
 
-#: ui/general.ui:22
+#: prefs.js:39 prefs.js:55
+msgid "Performance"
+msgstr "Швидкодія"
+
+#: prefs.js:40 prefs.js:56
+msgid "Balanced"
+msgstr "Баланс"
+
+#: prefs.js:41 prefs.js:57
+msgid "Power Saver"
+msgstr "Заощадження"
+
+#: prefs.js:50
 msgid "On Battery"
 msgstr "Від батареї"
 
-#: ui/general.ui:23
+#: prefs.js:51
 msgid "Select the default profile when running on battery"
 msgstr "Профіль за замовчуванням від батареї"
 
-#: ui/general.ui:35
+#: prefs.js:66
+msgid "Power Saving Configuration"
+msgstr "Енергозбереження"
+
+#: prefs.js:67
+msgid "Configure the power saving options"
+msgstr "Налаштування профілю енергозбереження"
+
+#: prefs.js:73
 msgid "Power Saving Threshold"
 msgstr "Поріг заряду у відсотках"
 
-#: ui/general.ui:36
+#: prefs.js:74
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Перейти в профіль Заощадження, при падінні заряду батареї нижче"
 
-#: ui/general.ui:48
-msgid "Advanced"
-msgstr "Додатково"
+#: ui/about.ui:5
+msgid "Compatibility"
+msgstr "Сумісність"
 
-#: ui/general.ui:49
-msgid "Compatibility and troubleshooting"
-msgstr "Сумісність і вирішення проблем"
+#: ui/about.ui:11
+msgid "Makes power profiles handling available over D-Bus"
+msgstr "Надає можливість керування профілями через шину D-Bus"
 
-#: ui/general.ui:104
-msgid "Debug logging"
-msgstr "Детальне логування"
+#: ui/about.ui:20
+msgid "Installed Version"
+msgstr ""
 
-#: ui/general.ui:105
-msgid "Enable detailed logs for troubleshooting"
-msgstr "Розширене логування для вирішення проблем"
+#: ui/about.ui:36
+msgid "Platform Driver"
+msgstr "Драйвер платформи"
+
+#: ui/about.ui:50
+msgid "CPU Driver"
+msgstr "Драйвер CPU"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr "Застосовуються автоматично якшо не обрано вручну користувачем"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Обробляти режим lap-mode"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr "Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить перехід в режим 'Баланс' задля зниження температури пристрою"
+
+#: ui/about.ui:69
+msgid "UPower"
+msgstr ""
+
+#: preferences/about.js:72
+msgid "Battery is present"
+msgstr "Батарея присутня"
+
+#: ui/about.ui:69
+msgid "Battery has to be recognized by power management system"
+msgstr "Система керування живленням має розпізнати батарею"
+
+#: ui/about.ui:79
+msgid "Battery is absent"
+msgstr "Батарея відсутня"
+
