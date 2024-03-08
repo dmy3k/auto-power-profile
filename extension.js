@@ -340,7 +340,7 @@ class AutoPowerProfile {
       return;
     }
 
-    const canSwitch = this._powerProfilesProxy.Profiles.some(
+    const canSwitch = this._powerProfilesProxy?.Profiles?.some(
       (p) => p.Profile.unpack() === profile
     );
     if (!canSwitch) {
@@ -361,7 +361,7 @@ class AutoPowerProfile {
 
   _isValidDrivers() {
     const active = this._powerProfilesProxy.ActiveProfile;
-    const profile = this._powerProfilesProxy.Profiles?.find(
+    const profile = this._powerProfilesProxy?.Profiles?.find(
       (x) => x.Profile?.unpack() === active
     );
 
