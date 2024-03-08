@@ -1,56 +1,83 @@
-import Adw from "gi://Adw";
-import GLib from "gi://GLib";
-import GObject from "gi://GObject";
 import Gio from "gi://Gio";
+import {
+  ExtensionPreferences,
+  gettext as _,
+} from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-import { ExtensionPreferences } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
+import { About } from "./preferences/about.js";
+import { General } from "./preferences/general.js";
 
-const PROFILE_CHOICES = ["performance", "balanced", "power-saver"];
+function loadInterfaceXML(iface) {
+  let uri = `resource:///org/gnome/shell/dbus-interfaces/${iface}.xml`;
+  let f = Gio.File.new_for_uri(uri);
 
-function bindAdwComboRow(comboRow, settings, key, map_) {
-  const initValue = settings.get_string(key);
-  comboRow.selected = map_.indexOf(initValue);
+  try {
+    let [ok_, bytes] = f.load_contents(null);
+    return new TextDecoder().decode(bytes);
+  } catch (e) {
+    console.error(`Failed to load D-Bus interface ${iface}`);
+  }
 
-  settings.connect(`changed::${key}`, () => {
-    const idx = map_.indexOf(settings.get_string(key));
-    comboRow.selected = idx;
-  });
-  comboRow.connect("notify::selected", () => {
-    const value = map_[comboRow.selected];
-    settings.set_string(key, value);
-  });
+  return null;
 }
 
-var General = GObject.registerClass(
-  {
-    GTypeName: "AutoPowerProfilePreferences",
-    Template: GLib.Uri.resolve_relative(
-      import.meta.url,
-      "./ui/general.ui",
-      GLib.UriFlags.NONE
-    ),
-    InternalChildren: ["ac_profile", "bat_profile", "threshold"],
-  },
-  class General extends Adw.PreferencesPage {
-    _init(settings, params = {}) {
-      super._init(params);
+const UPOWER_BUS_NAME = "org.freedesktop.UPower";
+const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
 
-      bindAdwComboRow(this._ac_profile, settings, "ac", PROFILE_CHOICES);
-      bindAdwComboRow(this._bat_profile, settings, "bat", PROFILE_CHOICES);
-      settings.bind(
-        "threshold",
-        this._threshold,
-        "value",
-        Gio.SettingsBindFlags.DEFAULT
-      );
-    }
-  }
-);
+const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
+const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
 
 export default class AutoPowerProfilePreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {
     const settings = this.getSettings();
 
-    window.add(new General(settings));
+    const ppdProxy = new Promise((resolve, reject) => {
+      const PowerProfilesIface = loadInterfaceXML("net.hadess.PowerProfiles");
+
+      const PowerProfilesProxy =
+        Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
+
+      new PowerProfilesProxy(
+        Gio.DBus.system,
+        POWER_PROFILES_BUS_NAME,
+        POWER_PROFILES_OBJECT_PATH,
+        (proxy, error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(proxy);
+          }
+        }
+      );
+    }).catch((e) => {
+      console.error(`failed to create dbus proxy (${e?.message})`);
+    });
+
+    const upowerProxy = new Promise((resolve, reject) => {
+      const DisplayDeviceInterface = loadInterfaceXML(
+        "org.freedesktop.UPower.Device"
+      );
+      const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(
+        DisplayDeviceInterface
+      );
+
+      new PowerManagerProxy(
+        Gio.DBus.system,
+        UPOWER_BUS_NAME,
+        UPOWER_OBJECT_PATH,
+        (proxy, error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(proxy);
+          }
+        }
+      );
+    }).catch((e) => {
+      console.error(`failed to create dbus proxy (${e?.message})`);
+    });
+
+    window.add(new General(settings, ppdProxy));
+    window.add(new About(settings, ppdProxy, upowerProxy));
   }
 }

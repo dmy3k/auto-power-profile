@@ -1,74 +1,116 @@
-# Translation template for auto-power-profile package.
-# Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the auto-power-profile package.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Auto Power Profile package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: auto-power-profile\n"
+"Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 17:29+0200\n"
+"POT-Creation-Date: 2024-03-07 14:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: prefs.js:21
-msgid "General"
+#: preferences/about.js:72
+msgid "Battery is present"
 msgstr ""
 
-#: prefs.js:27
-msgid "Default Profiles"
-msgstr ""
-
-#: prefs.js:28
-msgid "Configure the default profiles"
-msgstr ""
-
-#: prefs.js:34
-msgid "On AC"
-msgstr ""
-
-#: prefs.js:35
-msgid "Select the default profile when connected to AC"
-msgstr ""
-
-#: prefs.js:39 prefs.js:55
+#: preferences/general.js:43
 msgid "Performance"
 msgstr ""
 
-#: prefs.js:40 prefs.js:56
+#: preferences/general.js:44
 msgid "Balanced"
 msgstr ""
 
-#: prefs.js:41 prefs.js:57
-msgid "Power Saving"
+#: preferences/general.js:45
+msgid "Power Saver"
 msgstr ""
 
-#: prefs.js:50
+#: ui/about.ui:5
+msgid "Compatibility"
+msgstr ""
+
+#: ui/about.ui:10
+msgid "Power Profiles Daemon"
+msgstr ""
+
+#: ui/about.ui:11
+msgid "Makes power profiles handling available over D-Bus"
+msgstr ""
+
+#: ui/about.ui:21
+msgid "Installed Version"
+msgstr ""
+
+#: ui/about.ui:38
+msgid "Platform Driver"
+msgstr ""
+
+#: ui/about.ui:55
+msgid "CPU Driver"
+msgstr ""
+
+#: ui/about.ui:68
+msgid "UPower"
+msgstr ""
+
+#: ui/about.ui:69
+msgid "Battery has to be recognized by power management system"
+msgstr ""
+
+#: ui/about.ui:79
+msgid "Battery is absent"
+msgstr ""
+
+#: ui/general.ui:5
+msgid "General"
+msgstr ""
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr ""
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+
+#: ui/general.ui:14
+msgid "On AC"
+msgstr ""
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr ""
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr ""
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+
+#: ui/general.ui:36
 msgid "On Battery"
 msgstr ""
 
-#: prefs.js:51
+#: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr ""
 
-#: prefs.js:66
-msgid "Power Saving Configuration"
-msgstr ""
-
-#: prefs.js:67
-msgid "Configure the power saving options"
-msgstr ""
-
-#: prefs.js:73
+#: ui/general.ui:48
 msgid "Power Saving Threshold"
 msgstr ""
 
-#: prefs.js:74
+#: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr ""

@@ -38,7 +38,8 @@ git clone https://github.com/dmy3k/auto-power-profile
 cd auto-power-profile
 
 # Build
-gnome-extensions pack --podir=po --extra-source=ui
+glib-compile-schemas schemas/
+gnome-extensions pack --podir=po --extra-source=ui --extra-source=preferences
 
 # Install and activate
 gnome-extensions install --force auto-power-profile@dmy3k.github.io.shell-extension.zip
@@ -46,6 +47,23 @@ gnome-extensions enable auto-power-profile@dmy3k.github.io
 ```
 
 Extension will appear in the list of extensions and will be activated after you logout and log back in.
+
+### Translations
+
+- re-generate `pot` file if you add new strings during development
+
+```
+xgettext \
+    --from-code=UTF-8 \
+    --package-name="Auto Power Profile" \
+    --output="po/auto-power-profile.pot" \
+    *.js \
+    preferences/*.js \
+    ui/*.ui
+```
+
+- create (e.g `cp po/auto-power-profile.pot po/es.po`) or edit corresponding `po` files, e.g with [Gtranslator](https://flathub.org/nb-NO/apps/org.gnome.Gtranslator)
+- create pull request
 
 ## GNOME Version Support
 

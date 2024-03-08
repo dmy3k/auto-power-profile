@@ -67,8 +67,6 @@ export default class AutoPowerProfile extends Extension {
   _powerProfilesProxy;
   _powerProfileWatcher;
 
-  _availableProfiles = [];
-
   constructor(metadata) {
     super(metadata);
   }
@@ -109,9 +107,6 @@ export default class AutoPowerProfile extends Extension {
         this._powerManagerWatcher = this._powerManagerProxy.connect(
           "g-properties-changed",
           this._checkProfile
-        );
-        this._availableProfiles = this._powerProfilesProxy.Profiles.map((p) =>
-          p.Profile.unpack()
         );
         this._onSettingsChange();
       }
@@ -157,7 +152,6 @@ export default class AutoPowerProfile extends Extension {
 
     this._settings = null;
     this._settingsCache = {};
-    this._availableProfiles = [];
 
     this._powerManagerProxy = null;
     this._powerProfilesProxy = null;
@@ -187,7 +181,7 @@ export default class AutoPowerProfile extends Extension {
       try {
         const reason = payload?.PerformanceDegraded?.unpack();
 
-        if (reason === "lap-detected") {
+        if (reason === "lap-detected" && this._settingsCache.lapmode) {
           this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             5,
@@ -214,6 +208,7 @@ export default class AutoPowerProfile extends Extension {
       ACDefault: this._settings.get_string("ac"),
       batteryDefault: this._settings.get_string("bat"),
       batteryThreshold: this._settings.get_int("threshold"),
+      lapmode: this._settings.get_boolean("lapmode"),
     };
     this._transition.report({});
     this._checkProfile();
@@ -222,12 +217,10 @@ export default class AutoPowerProfile extends Extension {
   _getPowerConditions = () => {
     let configuredProfile = "balanced";
 
-    if (
+    const hasBattery = !(
       this._powerManagerProxy?.State === UPower.DeviceState.UNKNOWN ||
       this._powerManagerProxy?.Percentage === undefined
-    ) {
-      return { configuredProfile };
-    }
+    );
 
     const onBattery =
       this._powerManagerProxy?.State === UPower.DeviceState.PENDING_DISCHARGE ||
@@ -246,6 +239,7 @@ export default class AutoPowerProfile extends Extension {
     }
 
     return {
+      hasBattery,
       onBattery,
       onAC: onBattery === false,
       lowBattery: onBattery === true && lowBattery,
@@ -257,9 +251,13 @@ export default class AutoPowerProfile extends Extension {
     if (profile === this._powerProfilesProxy?.ActiveProfile) {
       return;
     }
-    if (!this._availableProfiles.includes(profile)) {
+    const canSwitch = this._powerProfilesProxy.Profiles.some(
+      (p) => p.Profile.unpack() === profile
+    );
+
+    if (!canSwitch) {
       console.error(
-        `Profile ${profile} is not in list of available profiles (${this._availableProfiles})`
+        `switchProfile: Profile ${profile} is not in list of available profiles`
       );
       return;
     }

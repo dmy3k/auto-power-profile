@@ -4,11 +4,17 @@ class Extension {
       ac: "performance",
       bat: "balanced",
       threshold: 25,
+      debug: false,
+      lapmode: true,
     },
     handlers: [],
 
     get_string(k) {
       return String(this.state[k]);
+    },
+
+    get_boolean(k) {
+      return Boolean(this.state[k]);
     },
 
     get_int(k) {
