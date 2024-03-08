@@ -9,9 +9,6 @@ import {
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-const UPOWER_BUS_NAME = "org.freedesktop.UPower";
-const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
-
 const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
 const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
 
@@ -60,7 +57,7 @@ export const General = GObject.registerClass(
     ],
   },
   class General extends Adw.PreferencesPage {
-    _init(settings, proxyPromise, upowerProxyPromise, params = {}) {
+    _init(settings, proxyPromise, params = {}) {
       super._init(params);
 
       const PROFILES_I18N = [
@@ -108,16 +105,6 @@ export const General = GObject.registerClass(
         .catch((e) => {
           console.log(e);
         });
-
-      upowerProxyPromise
-        .then((proxy) => {
-          this._bat_profile.set_sensitive(
-            proxy?.State !== UPower.DeviceState.UNKNOWN
-          );
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     }
   }
 );
@@ -148,30 +135,6 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
       console.error(`failed to create dbus proxy (${e?.message})`);
     });
 
-    const upowerProxy = new Promise((resolve, reject) => {
-      const DisplayDeviceInterface = loadInterfaceXML(
-        "org.freedesktop.UPower.Device"
-      );
-      const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(
-        DisplayDeviceInterface
-      );
-
-      new PowerManagerProxy(
-        Gio.DBus.system,
-        UPOWER_BUS_NAME,
-        UPOWER_OBJECT_PATH,
-        (proxy, error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(proxy);
-          }
-        }
-      );
-    }).catch((e) => {
-      console.error(`failed to create dbus proxy (${e?.message})`);
-    });
-
-    window.add(new General(settings, ppdProxy, upowerProxy));
+    window.add(new General(settings, ppdProxy));
   }
 }
