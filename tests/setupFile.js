@@ -5,3 +5,5 @@ global.logError = function (...args) {
 global.log = function (...args) {
   console.log(...args);
 };
+
+global._ = (x) => x;
