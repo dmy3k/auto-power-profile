@@ -5,11 +5,80 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const FileUtils = imports.misc.fileUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
+const Main = imports.ui.main;
+const MessageTray = imports.ui.messageTray;
+
 const UPOWER_BUS_NAME = "org.freedesktop.UPower";
 const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
 
 const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
 const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
+
+class Notifier {
+  constructor(extensionObject) {
+    this._uuid = extensionObject.uuid;
+    this._name = extensionObject.metadata.name;
+  }
+
+  notify(msg, action = "error") {
+    let notifyIcon = "battery-level-100-charged-symbolic";
+    let notifyTitle = _("Auto Power Profiles");
+    let urgency = MessageTray.Urgency.NORMAL;
+
+    if (action === "error") {
+      urgency === MessageTray.Urgency.CRITICAL;
+      notifyIcon = "dialog-warning-symbolic";
+    }
+
+    this._source = new MessageTray.Source(this._name, notifyIcon);
+    Main.messageTray.add(this._source);
+
+    if (this._notification) {
+      this._notification.destroy(NotificationDestroyedReason.REPLACED);
+      this._notification = null;
+    }
+
+    Main.messageTray.add(this._source);
+    this._notification = new MessageTray.Notification(
+      this._source,
+      notifyTitle,
+      msg
+    );
+
+    if (action === "show-details") {
+      this._notification.addAction(_("Show details"), () => {
+        const uri = `https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html`;
+        Gio.app_info_launch_default_for_uri(uri, null, null, null);
+      });
+    }
+
+    this._notification.setUrgency(urgency);
+    this._notification.setTransient(true);
+    this._source.showNotification(this._notification);
+
+    this._notification.connectObject(
+      "destroy",
+      () => {
+        this._notification = null;
+      },
+      this._notification
+    );
+  }
+
+  _removeActiveNofications() {
+    if (this._notification) {
+      this._notification.destroy(
+        MessageTray.NotificationDestroyedReason.SOURCE_CLOSED
+      );
+    }
+    this._notification = null;
+    this._source = null;
+  }
+
+  destroy() {
+    this._removeActiveNofications();
+  }
+}
 
 class ProfileTransition {
   effectiveProfile;
@@ -67,6 +136,8 @@ class AutoPowerProfile {
   _powerProfilesProxy;
   _powerProfileWatcher;
 
+  _notifier;
+
   enable() {
     const DisplayDeviceInterface = FileUtils.loadInterfaceXML(
       "org.freedesktop.UPower.Device"
@@ -98,12 +169,24 @@ class AutoPowerProfile {
       (proxy, error) => {
         if (error) {
           console.error(error.message);
+          this._notifier.notify(
+            _(
+              "Error connecting power-profiles-daemon DBus. Check your installation"
+            )
+          );
           return;
         }
         this._powerProfileWatcher = this._powerProfilesProxy.connect(
           "g-properties-changed",
           this._onProfileChange
         );
+
+        if (!this._isValidDrivers()) {
+          this._notifier.notify(
+            _("No system-specific platform driver is available"),
+            "show-details"
+          );
+        }
       }
     );
 
@@ -114,6 +197,9 @@ class AutoPowerProfile {
       (proxy, error) => {
         if (error) {
           console.error(error.message);
+          this._notifier.notify(
+            _("Error connecting UPower DBus. Check your installation")
+          );
           return;
         }
         this._powerManagerWatcher = this._powerManagerProxy.connect(
@@ -123,6 +209,8 @@ class AutoPowerProfile {
         this._onSettingsChange();
       }
     );
+
+    this._notifier = new Notifier(Me);
   }
 
   disable() {
@@ -133,6 +221,10 @@ class AutoPowerProfile {
     if (this._powerProfileWatcher) {
       this._powerProfilesProxy?.disconnect(this._powerProfileWatcher);
       this._powerProfileWatcher = null;
+    }
+    if (this._notifier) {
+      this._notifier.destroy();
+      this._notifier = null;
     }
     this._settings?.disconnect(this._settingsWatcher);
 
@@ -266,6 +358,20 @@ class AutoPowerProfile {
       this._switchProfile(powerConditions.configuredProfile);
     }
   };
+
+  _isValidDrivers() {
+    const active = this._powerProfilesProxy.ActiveProfile;
+    const profile = this._powerProfilesProxy.Profiles?.find(
+      (x) => x.Profile?.unpack() === active
+    );
+
+    const driver = profile?.Driver?.get_string()?.[0];
+    const platformDriver = profile?.PlatformDriver?.get_string()?.[0];
+    const cpuDriver = profile?.CpuDriver?.get_string()?.[0];
+    const drivers = [driver, platformDriver, cpuDriver];
+
+    return drivers.some((x) => x && x !== "placeholder");
+  }
 }
 
 let inst = null;
