@@ -1,4 +1,6 @@
 class Extension {
+  metadata = {};
+
   static _mock = {
     state: {
       ac: "performance",

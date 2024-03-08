@@ -72,26 +72,6 @@ msgstr "Поріг заряду у відсотках"
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Перейти в профіль Заощадження, при падінні заряду батареї нижче"
 
-#: ui/about.ui:5
-msgid "Compatibility"
-msgstr "Сумісність"
-
-#: ui/about.ui:11
-msgid "Makes power profiles handling available over D-Bus"
-msgstr "Надає можливість керування профілями через шину D-Bus"
-
-#: ui/about.ui:20
-msgid "Installed Version"
-msgstr ""
-
-#: ui/about.ui:36
-msgid "Platform Driver"
-msgstr "Драйвер платформи"
-
-#: ui/about.ui:50
-msgid "CPU Driver"
-msgstr "Драйвер CPU"
-
 #: ui/general.ui:10
 msgid "Applied automatically unless user sets manually another one"
 msgstr "Застосовуються автоматично якшо не обрано вручну користувачем"
@@ -106,19 +86,19 @@ msgid ""
 "experiencing thermal issues"
 msgstr "Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить перехід в режим 'Баланс' задля зниження температури пристрою"
 
-#: ui/about.ui:69
-msgid "UPower"
-msgstr ""
+#: extension.js:39
+msgid "Show details"
+msgstr "Детальніше"
 
-#: preferences/about.js:72
-msgid "Battery is present"
-msgstr "Батарея присутня"
+#: extension.js:189
+msgid "Error connecting UPower DBus. Check your installation"
+msgstr "Помилка з'єднання з UPower DBus"
 
-#: ui/about.ui:69
-msgid "Battery has to be recognized by power management system"
-msgstr "Система керування живленням має розпізнати батарею"
+#: extension.js:210
+msgid "Error connecting power-profiles-daemon DBus. Check your installation"
+msgstr "Помилка з'єднання з power-profiles-daemon DBus"
 
-#: ui/about.ui:79
-msgid "Battery is absent"
-msgstr "Батарея відсутня"
+#: extension.js:223
+msgid "No system-specific platform driver is available"
+msgstr "Не знайдено драйвера платформи для даної системи"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-07 14:33+0100\n"
+"POT-Creation-Date: 2024-03-08 13:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,56 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: preferences/about.js:72
-msgid "Battery is present"
+#: extension.js:30
+msgid "Auto Power Profiles"
 msgstr ""
 
-#: preferences/general.js:43
+#: extension.js:39
+msgid "Show details"
+msgstr ""
+
+#: extension.js:189
+msgid "Error connecting UPower DBus. Check your installation"
+msgstr ""
+
+#: extension.js:210
+msgid "Error connecting power-profiles-daemon DBus. Check your installation"
+msgstr ""
+
+#: extension.js:223
+msgid "No system-specific platform driver is available"
+msgstr ""
+
+#: prefs.js:65
 msgid "Performance"
 msgstr ""
 
-#: preferences/general.js:44
+#: prefs.js:66
 msgid "Balanced"
 msgstr ""
 
-#: preferences/general.js:45
+#: prefs.js:67
 msgid "Power Saver"
-msgstr ""
-
-#: ui/about.ui:5
-msgid "Compatibility"
-msgstr ""
-
-#: ui/about.ui:10
-msgid "Power Profiles Daemon"
-msgstr ""
-
-#: ui/about.ui:11
-msgid "Makes power profiles handling available over D-Bus"
-msgstr ""
-
-#: ui/about.ui:21
-msgid "Installed Version"
-msgstr ""
-
-#: ui/about.ui:38
-msgid "Platform Driver"
-msgstr ""
-
-#: ui/about.ui:55
-msgid "CPU Driver"
-msgstr ""
-
-#: ui/about.ui:68
-msgid "UPower"
-msgstr ""
-
-#: ui/about.ui:69
-msgid "Battery has to be recognized by power management system"
-msgstr ""
-
-#: ui/about.ui:79
-msgid "Battery is absent"
 msgstr ""
 
 #: ui/general.ui:5
