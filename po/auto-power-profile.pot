@@ -26,11 +26,11 @@ msgid "Show details"
 msgstr ""
 
 #: extension.js:189
-msgid "Error connecting UPower DBus. Check your installation"
+msgid "Error connecting UPower DBus"
 msgstr ""
 
 #: extension.js:210
-msgid "Error connecting power-profiles-daemon DBus. Check your installation"
+msgid "Error connecting power-profiles-daemon DBus"
 msgstr ""
 
 #: extension.js:223

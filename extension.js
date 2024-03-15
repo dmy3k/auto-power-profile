@@ -22,18 +22,13 @@ class Notifier {
     this._source = null;
   }
 
-  notify(msg, action = "error") {
+  notify(msg, uri) {
     const [major] = Config.PACKAGE_VERSION.split(".");
     const shellVersion45 = Number.parseInt(major) < 46;
 
-    let notifyIcon = "battery-level-100-charged-symbolic";
+    let notifyIcon = "dialog-warning-symbolic";
     let notifyTitle = _("Auto Power Profiles");
-    let urgency = MessageTray.Urgency.NORMAL;
-
-    if (action === "error") {
-      urgency === MessageTray.Urgency.CRITICAL;
-      notifyIcon = "dialog-warning-symbolic";
-    }
+    let urgency = MessageTray.Urgency.CRITICAL;
 
     if (this._checkActiveNotification()) {
       this._source.destroy(MessageTray.NotificationDestroyedReason.REPLACED);
@@ -56,9 +51,8 @@ class Notifier {
       msg
     );
 
-    if (action === "show-details") {
+    if (uri) {
       notification.addAction(_("Show details"), () => {
-        const uri = `https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html`;
         Gio.app_info_launch_default_for_uri(uri, null, null, null);
       });
     }
@@ -83,7 +77,9 @@ class Notifier {
 
   _removeActiveNofications() {
     if (this._checkActiveNotification())
-      this._source.destroy(NotificationDestroyedReason.SOURCE_CLOSED);
+      this._source.destroy(
+        MessageTray.NotificationDestroyedReason.SOURCE_CLOSED
+      );
     this._source = null;
   }
 
@@ -185,9 +181,7 @@ export default class AutoPowerProfile extends Extension {
       (proxy, error) => {
         if (error) {
           console.error(error);
-          this._notifier.notify(
-            _("Error connecting UPower DBus. Check your installation")
-          );
+          this._notifier.notify(_("Error connecting UPower DBus"));
           return;
         }
         this._powerManagerWatcher = this._powerManagerProxy.connect(
@@ -206,9 +200,7 @@ export default class AutoPowerProfile extends Extension {
         if (error) {
           console.error(error);
           this._notifier.notify(
-            _(
-              "Error connecting power-profiles-daemon DBus. Check your installation"
-            )
+            _("Error connecting power-profiles-daemon DBus")
           );
           return;
         }
@@ -218,12 +210,7 @@ export default class AutoPowerProfile extends Extension {
           this._onProfileChange
         );
 
-        if (!this._isValidDrivers()) {
-          this._notifier.notify(
-            _("No system-specific platform driver is available"),
-            "show-details"
-          );
-        }
+        this._validateDrivers();
       }
     );
 
@@ -378,7 +365,7 @@ export default class AutoPowerProfile extends Extension {
     }
   };
 
-  _isValidDrivers() {
+  _validateDrivers() {
     const active = this._powerProfilesProxy.ActiveProfile;
     const profile = this._powerProfilesProxy?.Profiles?.find(
       (x) => x.Profile?.unpack() === active
@@ -389,6 +376,17 @@ export default class AutoPowerProfile extends Extension {
     const cpuDriver = profile?.CpuDriver?.get_string()?.[0];
     const drivers = [driver, platformDriver, cpuDriver];
 
-    return drivers.some((x) => x && x !== "placeholder");
+    if (!active) {
+      this._notifier.notify(
+        _("Package power-profiles-daemon is not installed")
+      );
+    } else if (!drivers.some((x) => x && x !== "placeholder")) {
+      this._notifier.notify(
+        _(
+          "No system-specific platform driver is available. Consider upgrading power-profiles-daemon and linux kernel"
+        ),
+        "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html"
+      );
+    }
   }
 }
