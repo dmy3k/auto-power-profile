@@ -9,8 +9,14 @@ import {
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
-const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
+const POWER_PROFILES_BUS_NAME =
+  Config.PACKAGE_VERSION >= "48"
+    ? "org.freedesktop.UPower.PowerProfiles"
+    : "net.hadess.PowerProfiles";
+const POWER_PROFILES_OBJECT_PATH =
+  Config.PACKAGE_VERSION >= "48"
+    ? "/org/freedesktop/UPower/PowerProfiles"
+    : "/net/hadess/PowerProfiles";
 
 function loadInterfaceXML(iface) {
   let uri = `resource:///org/gnome/shell/dbus-interfaces/${iface}.xml`;

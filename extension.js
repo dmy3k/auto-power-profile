@@ -12,8 +12,14 @@ import * as Config from "resource:///org/gnome/shell/misc/config.js";
 const UPOWER_BUS_NAME = "org.freedesktop.UPower";
 const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
 
-const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
-const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
+const POWER_PROFILES_BUS_NAME =
+  Config.PACKAGE_VERSION >= "48"
+    ? "org.freedesktop.UPower.PowerProfiles"
+    : "net.hadess.PowerProfiles";
+const POWER_PROFILES_OBJECT_PATH =
+  Config.PACKAGE_VERSION >= "48"
+    ? "/org/freedesktop/UPower/PowerProfiles"
+    : "/net/hadess/PowerProfiles";
 
 class Notifier {
   constructor(extensionObject) {
@@ -159,7 +165,7 @@ export default class AutoPowerProfile extends Extension {
     );
 
     const PowerProfilesIface = FileUtils.loadInterfaceXML(
-      "net.hadess.PowerProfiles"
+      POWER_PROFILES_BUS_NAME
     );
     const PowerProfilesProxy =
       Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
