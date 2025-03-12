@@ -3,6 +3,7 @@ import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Gio from "gi://Gio";
 import UPower from "gi://UPowerGlib";
+import * as Config from "resource:///org/gnome/shell/misc/config.js";
 
 import {
   ExtensionPreferences,
