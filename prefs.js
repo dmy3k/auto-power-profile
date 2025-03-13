@@ -3,19 +3,19 @@ import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Gio from "gi://Gio";
 import UPower from "gi://UPowerGlib";
-import * as Config from "resource:///org/gnome/shell/misc/config.js";
 
+import * as Utils from "./utils.js";
 import {
   ExtensionPreferences,
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 const POWER_PROFILES_BUS_NAME =
-  Config.PACKAGE_VERSION >= "48"
+  (await Utils.getShellVersion()) >= 48
     ? "org.freedesktop.UPower.PowerProfiles"
     : "net.hadess.PowerProfiles";
 const POWER_PROFILES_OBJECT_PATH =
-  Config.PACKAGE_VERSION >= "48"
+  (await Utils.getShellVersion()) >= 48
     ? "/org/freedesktop/UPower/PowerProfiles"
     : "/net/hadess/PowerProfiles";
 
@@ -121,7 +121,7 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const settings = this.getSettings();
 
     const ppdProxy = new Promise((resolve, reject) => {
-      const PowerProfilesIface = loadInterfaceXML("net.hadess.PowerProfiles");
+      const PowerProfilesIface = loadInterfaceXML(POWER_PROFILES_BUS_NAME);
 
       const PowerProfilesProxy =
         Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);

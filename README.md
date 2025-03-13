@@ -39,7 +39,7 @@ cd auto-power-profile
 
 # Build
 glib-compile-schemas schemas/
-gnome-extensions pack --podir=po --extra-source=ui
+gnome-extensions pack --podir=po --extra-source=ui --extra-source=utils.js
 
 # Install and activate
 gnome-extensions install --force auto-power-profile@dmy3k.github.io.shell-extension.zip
