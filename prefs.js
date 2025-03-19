@@ -4,7 +4,6 @@ import GObject from "gi://GObject";
 import Gio from "gi://Gio";
 import UPower from "gi://UPowerGlib";
 
-import * as Utils from "./utils.js";
 import {
   ExtensionPreferences,
   gettext as _,
