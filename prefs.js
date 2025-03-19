@@ -9,8 +9,33 @@ import {
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-const POWER_PROFILES_BUS_NAME = "net.hadess.PowerProfiles";
-const POWER_PROFILES_OBJECT_PATH = "/net/hadess/PowerProfiles";
+function isBusNameAvailable(busName) {
+  try {
+    const bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, null);
+    bus.call_sync(
+      busName,
+      "/",
+      "org.freedesktop.DBus.Peer",
+      "Ping",
+      null,
+      null,
+      Gio.DBusCallFlags.NONE,
+      -1,
+      null
+    );
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const [POWER_PROFILES_BUS_NAME, POWER_PROFILES_OBJECT_PATH] = [
+  [
+    "org.freedesktop.UPower.PowerProfiles",
+    "/org/freedesktop/UPower/PowerProfiles",
+  ],
+  ["net.hadess.PowerProfiles", "/net/hadess/PowerProfiles"],
+].find(([busName, objectPath]) => isBusNameAvailable(busName));
 
 function loadInterfaceXML(iface) {
   let uri = `resource:///org/gnome/shell/dbus-interfaces/${iface}.xml`;
@@ -114,7 +139,7 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const settings = this.getSettings();
 
     const ppdProxy = new Promise((resolve, reject) => {
-      const PowerProfilesIface = loadInterfaceXML("net.hadess.PowerProfiles");
+      const PowerProfilesIface = loadInterfaceXML(POWER_PROFILES_BUS_NAME);
 
       const PowerProfilesProxy =
         Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
