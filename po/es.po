@@ -1,23 +1,24 @@
 # Spanish translations for auto-power-profile package
-# Traducciones al español para el paquete auto-power-profile.
+# Traducciones al Español para el paquete auto-power-profile.
 # Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the auto-power-profile package.
 # Óscar Fernández Díaz <oscfdezdz@tuta.io>, 2023.
+# Marcelo Gigirey <mgigirey@gmail.com>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: auto-power-profile\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-19 17:29+0200\n"
-"PO-Revision-Date: 2023-06-19 17:54+0200\n"
-"Last-Translator: Óscar Fernández Díaz <oscfdezdz@tuta.io>\n"
+"PO-Revision-Date: 2025-03-19 18:56+0100\n"
+"Last-Translator: Marcelo Gigirey <mgigirey@gmail.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 47.1\n"
 
 #: prefs.js:112
 msgid "Performance"
@@ -42,6 +43,7 @@ msgstr "Perfiles predeterminados"
 #: ui/general.ui:10
 msgid "Applied automatically unless user sets manually another one"
 msgstr ""
+"Se aplica automáticamente a menos que el usuario configure manualmente otro"
 
 #: ui/general.ui:14
 msgid "On AC"
@@ -69,16 +71,16 @@ msgstr "Cambiar al perfil de ahorro de energía cuando la batería desciende de"
 
 #: ui/general.ui:48
 msgid "Advanced"
-msgstr ""
+msgstr "Avanzado"
 
 #: ui/general.ui:49
 msgid "Compatibility and troubleshooting"
-msgstr ""
+msgstr "Compatibilidad y solución de problemas"
 
 #: ui/general.ui:104
 msgid "Debug logging"
-msgstr ""
+msgstr "Registro de depuración"
 
 #: ui/general.ui:105
 msgid "Enable detailed logs for troubleshooting"
-msgstr ""
+msgstr "Habilitar registros detallados para resolución de problemas"
