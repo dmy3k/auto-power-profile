@@ -100,7 +100,10 @@ module.exports = {
     makeProxyWrapper(ref) {
       if (ref.includes("org.freedesktop.UPower.Device")) {
         return UpowerProxyMock;
-      } else if (ref.includes("net.hadess.PowerProfiles")) {
+      } else if (
+        ref.includes("net.hadess.PowerProfiles") ||
+        ref.includes("org.freedesktop.UPower.PowerProfiles")
+      ) {
         return PowerProfilesProxyMock;
       } else {
         throw new Error(`No mock is defined for makeProxyWrapper("${ref}")`);
