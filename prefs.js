@@ -2,40 +2,13 @@ import Adw from "gi://Adw";
 import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Gio from "gi://Gio";
-import UPower from "gi://UPowerGlib";
 
 import {
   ExtensionPreferences,
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-function isBusNameAvailable(busName) {
-  try {
-    const bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, null);
-    bus.call_sync(
-      busName,
-      "/",
-      "org.freedesktop.DBus.Peer",
-      "Ping",
-      null,
-      null,
-      Gio.DBusCallFlags.NONE,
-      -1,
-      null
-    );
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-const [POWER_PROFILES_BUS_NAME, POWER_PROFILES_OBJECT_PATH] = [
-  [
-    "org.freedesktop.UPower.PowerProfiles",
-    "/org/freedesktop/UPower/PowerProfiles",
-  ],
-  ["net.hadess.PowerProfiles", "/net/hadess/PowerProfiles"],
-].find(([busName, objectPath]) => isBusNameAvailable(busName));
+import { findPowerProfilesDbus } from "./lib/utils.js";
 
 function loadInterfaceXML(iface) {
   let uri = `resource:///org/gnome/shell/dbus-interfaces/${iface}.xml`;
@@ -50,6 +23,7 @@ function loadInterfaceXML(iface) {
 
   return null;
 }
+
 function bindAdwComboRow(comboRow, settings, key, map_) {
   const initValue = settings.get_string(key);
   comboRow.selected = map_.indexOf(initValue);
@@ -139,15 +113,17 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const settings = this.getSettings();
 
     const ppdProxy = new Promise((resolve, reject) => {
-      const PowerProfilesIface = loadInterfaceXML(POWER_PROFILES_BUS_NAME);
+      const [BUS_NAME, OBJECT_PATH] = findPowerProfilesDbus();
+
+      const PowerProfilesIface = loadInterfaceXML(BUS_NAME);
 
       const PowerProfilesProxy =
         Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
 
       new PowerProfilesProxy(
         Gio.DBus.system,
-        POWER_PROFILES_BUS_NAME,
-        POWER_PROFILES_OBJECT_PATH,
+        BUS_NAME,
+        OBJECT_PATH,
         (proxy, error) => {
           if (error) {
             reject(error);

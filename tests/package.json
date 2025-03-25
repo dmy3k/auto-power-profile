@@ -15,12 +15,12 @@
     },
     "moduleNameMapper": {
       "^(gi|resource)://(.+)$": [
-        "./tests/__mocks__/$1/$2",
-        "./tests/__mocks__/EmptyModule.js"
+        "<rootDir>/__mocks__/$1/$2",
+        "<rootDir>/__mocks__/EmptyModule.js"
       ]
     },
     "setupFiles": [
-      "./setupFile.js"
+      "<rootDir>/setupFile.js"
     ]
   },
   "devDependencies": {
