@@ -102,9 +102,7 @@ export const General = GObject.registerClass(
           settings.connect("changed::ac", onSettingsUpdate);
           onSettingsUpdate();
         })
-        .catch((e) => {
-          console.log(e);
-        });
+        .catch((e) => console.error(e));
     }
   }
 );
@@ -114,19 +112,14 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const settings = this.getSettings();
 
     const ppdProxy = new Promise((resolve, reject) => {
-      createPowerProfilesProxy(
-        (x) => loadInterfaceXML(x),
-        (proxy, error) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(proxy);
-          }
+      createPowerProfilesProxy(loadInterfaceXML, (proxy, error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(proxy);
         }
-      );
-    }).catch((e) =>
-      console.error(`failed to create dbus proxy (${e?.message})`)
-    );
+      });
+    }).catch((e) => console.error(e));
 
     window.add(new General(settings, ppdProxy));
   }
