@@ -23,42 +23,51 @@ class Notifier {
     this._source = null;
   }
 
-  notify(msg, uri) {
+  notify(body, uri) {
     const [major] = Config.PACKAGE_VERSION.split(".");
     const shellVersion45 = Number.parseInt(major) < 46;
 
-    let notifyIcon = "dialog-warning-symbolic";
-    let notifyTitle = _("Auto Power Profiles");
-    let urgency = MessageTray.Urgency.CRITICAL;
+    const iconName = "dialog-warning-symbolic";
+    const title = _("Auto Power Profiles");
+    const urgency = MessageTray.Urgency.CRITICAL;
 
     if (this._checkActiveNotification()) {
       this._source.destroy(MessageTray.NotificationDestroyedReason.REPLACED);
       this._source = null;
     }
 
+    let notification;
     if (shellVersion45) {
-      this._source = new MessageTray.Source(this._name, notifyIcon);
+      this._source = new MessageTray.Source(this._name, iconName);
+      notification = new MessageTray.Notification(this._source, title, body);
+      notification.setUrgency(urgency);
+      notification.setTransient(true);
     } else {
       this._source = new MessageTray.Source({
         title: this._name,
-        icon: Gio.icon_new_for_string(notifyIcon),
+        icon: Gio.icon_new_for_string(iconName),
+      });
+      notification = new MessageTray.Notification({
+        source: this._source,
+        title,
+        body,
+        urgency,
       });
     }
 
     Main.messageTray.add(this._source);
-    const notification = new MessageTray.Notification({
-      source: this._source,
-      title: notifyTitle,
-      body: msg,
-      urgency,
-    });
 
     if (uri) {
       notification.addAction(_("Show details"), () => {
         Gio.app_info_launch_default_for_uri(uri, null, null, null);
       });
     }
-    this._source.addNotification(notification);
+
+    if (shellVersion45) {
+      this._source.showNotification(notification);
+    } else {
+      this._source.addNotification(notification);
+    }
   }
 
   _checkActiveNotification() {
