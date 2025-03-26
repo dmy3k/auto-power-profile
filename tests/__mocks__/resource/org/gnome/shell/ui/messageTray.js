@@ -6,6 +6,7 @@ class Notification {
 
 class Source {
   showNotification() {}
+  addNotification() {}
 }
 
 module.exports = {

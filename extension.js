@@ -3,16 +3,18 @@ import GLib from "gi://GLib";
 import UPower from "gi://UPowerGlib";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+import {
+  Extension,
+  gettext as _,
+} from "resource:///org/gnome/shell/extensions/extension.js";
 import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
-
 import * as MessageTray from "resource:///org/gnome/shell/ui/messageTray.js";
 import * as Config from "resource:///org/gnome/shell/misc/config.js";
 
-import { findPowerProfilesDbus } from "./lib/utils.js";
-
-const UPOWER_BUS_NAME = "org.freedesktop.UPower";
-const UPOWER_OBJECT_PATH = "/org/freedesktop/UPower/devices/DisplayDevice";
+import {
+  createPowerProfilesProxy,
+  createPowerManagerProxy,
+} from "./lib/utils.js";
 
 class Notifier {
   constructor(extensionObject) {
@@ -39,26 +41,24 @@ class Notifier {
     } else {
       this._source = new MessageTray.Source({
         title: this._name,
-        icon: notifyIcon,
+        icon: Gio.icon_new_for_string(notifyIcon),
       });
     }
 
     Main.messageTray.add(this._source);
-    const notification = new MessageTray.Notification(
-      this._source,
-      notifyTitle,
-      msg
-    );
+    const notification = new MessageTray.Notification({
+      source: this._source,
+      title: notifyTitle,
+      body: msg,
+      urgency,
+    });
 
     if (uri) {
       notification.addAction(_("Show details"), () => {
         Gio.app_info_launch_default_for_uri(uri, null, null, null);
       });
     }
-
-    notification.setUrgency(urgency);
-    notification.setTransient(true);
-    this._source.showNotification(notification);
+    this._source.addNotification(notification);
   }
 
   _checkActiveNotification() {
@@ -150,22 +150,6 @@ export default class AutoPowerProfile extends Extension {
   }
 
   enable() {
-    const [POWER_PROFILES_BUS_NAME, POWER_PROFILES_OBJECT_PATH] =
-      findPowerProfilesDbus();
-
-    const DisplayDeviceInterface = FileUtils.loadInterfaceXML(
-      "org.freedesktop.UPower.Device"
-    );
-    const PowerManagerProxy = Gio.DBusProxy.makeProxyWrapper(
-      DisplayDeviceInterface
-    );
-
-    const PowerProfilesIface = FileUtils.loadInterfaceXML(
-      POWER_PROFILES_BUS_NAME
-    );
-    const PowerProfilesProxy =
-      Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
-
     this._transition = new ProfileTransition();
 
     this._settings = this.getSettings(
@@ -176,10 +160,8 @@ export default class AutoPowerProfile extends Extension {
       this._onSettingsChange
     );
 
-    this._powerManagerProxy = new PowerManagerProxy(
-      Gio.DBus.system,
-      UPOWER_BUS_NAME,
-      UPOWER_OBJECT_PATH,
+    this._powerManagerProxy = createPowerManagerProxy(
+      (x) => FileUtils.loadInterfaceXML(x),
       (proxy, error) => {
         if (error) {
           console.error(error);
@@ -194,10 +176,8 @@ export default class AutoPowerProfile extends Extension {
       }
     );
 
-    this._powerProfilesProxy = new PowerProfilesProxy(
-      Gio.DBus.system,
-      POWER_PROFILES_BUS_NAME,
-      POWER_PROFILES_OBJECT_PATH,
+    this._powerProfilesProxy = createPowerProfilesProxy(
+      (x) => FileUtils.loadInterfaceXML(x),
       (proxy, error) => {
         if (error) {
           console.error(error);
@@ -211,7 +191,6 @@ export default class AutoPowerProfile extends Extension {
           "g-properties-changed",
           this._onProfileChange
         );
-
         this._validateDrivers();
       }
     );

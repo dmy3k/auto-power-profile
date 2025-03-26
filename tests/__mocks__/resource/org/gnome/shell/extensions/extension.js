@@ -48,4 +48,5 @@ class Extension {
 
 module.exports = {
   Extension,
+  gettext: (x) => x,
 };
