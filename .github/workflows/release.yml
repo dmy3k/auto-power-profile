@@ -1,0 +1,21 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Pack extension
+        run: glib-compile-schemas schemas/ && gnome-extensions pack --podir=po --extra-source=ui --extra-source=lib
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: auto-power-profile@dmy3k.github.io.shell-extension.zip
