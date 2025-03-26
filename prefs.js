@@ -8,8 +8,9 @@ import {
   gettext as _,
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
-import { findPowerProfilesDbus } from "./lib/utils.js";
+import { createPowerProfilesProxy } from "./lib/utils.js";
 
+// https://github.com/GNOME/gnome-shell/blob/3c1f6113fafda391e360114987298a14c6d72f66/js/misc/dbusUtils.js#L26
 function loadInterfaceXML(iface) {
   let uri = `resource:///org/gnome/shell/dbus-interfaces/${iface}.xml`;
   let f = Gio.File.new_for_uri(uri);
@@ -113,17 +114,8 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const settings = this.getSettings();
 
     const ppdProxy = new Promise((resolve, reject) => {
-      const [BUS_NAME, OBJECT_PATH] = findPowerProfilesDbus();
-
-      const PowerProfilesIface = loadInterfaceXML(BUS_NAME);
-
-      const PowerProfilesProxy =
-        Gio.DBusProxy.makeProxyWrapper(PowerProfilesIface);
-
-      new PowerProfilesProxy(
-        Gio.DBus.system,
-        BUS_NAME,
-        OBJECT_PATH,
+      createPowerProfilesProxy(
+        (x) => loadInterfaceXML(x),
         (proxy, error) => {
           if (error) {
             reject(error);
@@ -132,9 +124,9 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
           }
         }
       );
-    }).catch((e) => {
-      console.error(`failed to create dbus proxy (${e?.message})`);
-    });
+    }).catch((e) =>
+      console.error(`failed to create dbus proxy (${e?.message})`)
+    );
 
     window.add(new General(settings, ppdProxy));
   }
