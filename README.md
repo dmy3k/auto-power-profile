@@ -1,26 +1,21 @@
 # Auto Power Profile
 
-GNOME Shell extension to automatically switch between power profiles based on power supply status.
-
 [![Tests](https://github.com/dmy3k/auto-power-profile/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/dmy3k/auto-power-profile/actions/workflows/tests.yml)
+
+GNOME Shell extension to automatically switch between power profiles based on power supply status and battery level.
+
+The extension offers alternative solution to long-standing
+[feature request #715](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/715) in `gnome-settings-daemon` repo.
 
 ## Settings
 
 ![Settings window](.github/img/settings.png)
 
-When enabled, the extension will automatically switch to:
-
-- the selected defaults profiles based on the which power supply the device is running on.
-- to power saving profile if running on battery and the percentage drops below the selected level.
-
 ## Installation
 
 ### Dependencies
 
-This extension depends on [`powerprofilesctl`](https://gitlab.freedesktop.org/upower/power-profiles-daemon),
-which is a part of GNOME desktop in such distros as Fedora, Ubuntu.
-
-In case you are using another distro this dependency should be installed manually.
+This extension requires [`powerprofilesctl`](https://gitlab.freedesktop.org/upower/power-profiles-daemon) (used in most distros with Gnome desktop) or `tuned-ppd` (Fedora >= 40) package to operate.
 
 ### From Gnome Extensions store
 
@@ -28,9 +23,9 @@ This extension can be found in the [store](https://extensions.gnome.org/extensio
 
 [<img src=".github/img/store.png" height="100" alt="Get it on GNOME Extensions">](https://extensions.gnome.org/extension/6583/auto-power-profile/)
 
-### Installation from source
+### From source
 
-Clone the repo, pack and install the extension.
+Typically this is needed for testing and development. Clone the repo, pack and install the extension.
 
 ```
 # Clone repository
@@ -64,16 +59,10 @@ xgettext \
 - create (e.g `cp po/auto-power-profile.pot po/es.po`) or edit corresponding `po` files, e.g with [Gtranslator](https://flathub.org/nb-NO/apps/org.gnome.Gtranslator)
 - create pull request
 
-## GNOME Version Support
-
-This extensions is developed and tested on Fedora. Currrent plan is to support latest stable GNOME version with new features and bugfixes.
-
 ## Contribution
 
 Contribution to this project are welcome
 
 ## Credits
 
-This project was originally forked from [eliapasquali/power-profile-switcher](https://github.com/eliapasquali/power-profile-switcher) with goal to provide better support and stability.
-
-The extension addresses [feature request #715](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/715) from GNOME Settings project.
+To the authors of [eliapasquali/power-profile-switcher](https://github.com/eliapasquali/power-profile-switcher), as current project was forked from it.
