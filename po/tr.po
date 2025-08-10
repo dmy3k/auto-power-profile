@@ -1,0 +1,100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Auto Power Profile package.
+# bywkgexmkiltxh <ascdasvcfasx@outlook.com>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Power Profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-08 13:01+0100\n"
+"PO-Revision-Date: 2025-08-10 22:26+0300\n"
+"Last-Translator: bywkgexmkiltxh <ascdasvcfasx@outlook.com>\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
+
+#: extension.js:30
+msgid "Auto Power Profiles"
+msgstr "Auto Power Profiles"
+
+#: extension.js:39
+msgid "Show details"
+msgstr "Ayrıntıları göster"
+
+#: extension.js:189
+msgid "Error connecting UPower DBus"
+msgstr "UPower DBus'a bağlanırken hata oluştu"
+
+#: extension.js:210
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "power-profiles-daemon DBus'a bağlanırken hata oluştu"
+
+#: extension.js:223
+msgid "No system-specific platform driver is available"
+msgstr "Sisteme özgü bir platform sürücüsü yok"
+
+#: prefs.js:65
+msgid "Performance"
+msgstr "Başarım"
+
+#: prefs.js:66
+msgid "Balanced"
+msgstr "Dengeli"
+
+#: prefs.js:67
+msgid "Power Saver"
+msgstr "Güç Tutumu"
+
+#: ui/general.ui:5
+msgid "General"
+msgstr "Genel"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Öntanımlı Profiller"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+"Kullanıcı başka birini elle seçmediği sürece kendiliğinden uygulanır"
+
+#: ui/general.ui:14
+msgid "On AC"
+msgstr "Fişe Takılıyken"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Fişe takılıyken kullanılacak öntanımlı profili seç"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Fişe takılıyken kucak modunu ele al"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları "
+"yaşıyorsanız etkisizleştirin"
+
+#: ui/general.ui:36
+msgid "On Battery"
+msgstr "Pildeyken"
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Pildeyken kullanılacak öntanımlı profili seç"
+
+#: ui/general.ui:48
+msgid "Power Saving Threshold"
+msgstr "Güç Tutumu Eşiği"
+
+#: ui/general.ui:49
+msgid "Switch to power saving profile when the battery level drops below"
+msgstr "Pil düzeyi şunun altına düştüğünde güç tutumu profiline geç"
