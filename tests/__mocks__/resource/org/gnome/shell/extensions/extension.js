@@ -8,10 +8,17 @@ class Extension {
       threshold: 25,
       debug: false,
       lapmode: true,
+      "performance-apps": [],
+      "performance-apps-ac": "performance",
+      "performance-apps-bat": "balanced",
     },
     handlers: [],
 
     get_string(k) {
+      return String(this.state[k]);
+    },
+
+    get_strv(k) {
       return String(this.state[k]);
     },
 

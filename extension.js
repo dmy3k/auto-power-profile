@@ -1,6 +1,6 @@
 import GLib from "gi://GLib";
 import UPower from "gi://UPowerGlib";
-
+import Shell from "gi://Shell";
 import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
 import {
   Extension,
@@ -29,13 +29,16 @@ export default class AutoPowerProfile extends Extension {
   _powerProfileWatcher;
 
   _notifier;
+  _tracker;
 
   constructor(metadata) {
     super(metadata);
+    this._trackedWindows = new Map();
   }
 
   enable() {
     this._transition = new ProfileTransition();
+    this._tracker = Shell.WindowTracker.get_default();
 
     this._settings = this.getSettings(
       "org.gnome.shell.extensions.auto-power-profile"
@@ -44,6 +47,15 @@ export default class AutoPowerProfile extends Extension {
       "changed",
       this._onSettingsChange
     );
+
+    global.display.connect_after("window-created", (display, win) => {
+      if (this._settingsCache.performanceApps?.length) {
+        GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+          this._onWindowCreated(win);
+          return GLib.SOURCE_REMOVE;
+        });
+      }
+    });
 
     this._powerManagerProxy = createPowerManagerProxy(
       (x) => FileUtils.loadInterfaceXML(x),
@@ -113,7 +125,34 @@ export default class AutoPowerProfile extends Extension {
 
     this._powerManagerProxy = null;
     this._powerProfilesProxy = null;
+
+    this._tracker = null;
+
+    for (const [win, cid] of this._trackedWindows.entries()) {
+      win.disconnect(cid);
+    }
+    this._trackedWindows = new Map();
   }
+
+  _onWindowCreated = (win) => {
+    const app = this._tracker.get_window_app(win);
+    const appId = app?.get_id();
+    const isPerfApp = this._settingsCache.performanceApps.includes(appId);
+
+    if (isPerfApp && !this._trackedWindows.has(win)) {
+      const cid = win.connect("unmanaged", (win) => {
+        this._trackedWindows.delete(win);
+        this._checkProfile();
+      });
+
+      this._trackedWindows.set(win, cid);
+      this._checkProfile();
+    } else if (!isPerfApp && this._trackedWindows.has(win)) {
+      const cid = this._trackedWindows.get(win);
+      win.disconnect(cid);
+      this._trackedWindows.delete(win);
+    }
+  };
 
   _onProfileChange = (p, properties) => {
     if (!this._powerProfilesProxy) {
@@ -167,9 +206,25 @@ export default class AutoPowerProfile extends Extension {
       batteryDefault: this._settings.get_string("bat"),
       batteryThreshold: this._settings.get_int("threshold"),
       lapmode: this._settings.get_boolean("lapmode"),
+      performanceApps: this._settings.get_strv("performance-apps"),
+      perfAppsAcMode: this._settings.get_string("performance-apps-ac"),
+      perfAppsBatMode: this._settings.get_string("performance-apps-bat"),
     };
+
     this._transition.report({});
+    this._checkPerformanceApps();
     this._checkProfile();
+  };
+
+  _checkPerformanceApps = () => {
+    if (
+      this._settingsCache.performanceApps?.length ||
+      this._trackedWindows.size
+    ) {
+      global
+        .get_window_actors()
+        .forEach((actor) => this._onWindowCreated(actor.meta_window));
+    }
   };
 
   _getPowerConditions = () => {
@@ -196,11 +251,18 @@ export default class AutoPowerProfile extends Extension {
       configuredProfile = this._settingsCache?.batteryDefault;
     }
 
+    if (this._trackedWindows.size && onBattery === true) {
+      configuredProfile = this._settingsCache.perfAppsBatMode;
+    } else if (this._trackedWindows.size && onBattery === false) {
+      configuredProfile = this._settingsCache.perfAppsAcMode;
+    }
+
     return {
       hasBattery,
       onBattery,
       onAC: onBattery === false,
       lowBattery: onBattery === true && lowBattery,
+      perfApps: this._trackedWindows.size > 0,
       configuredProfile,
     };
   };
