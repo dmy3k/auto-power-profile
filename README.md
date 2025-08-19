@@ -56,7 +56,7 @@ xgettext \
     ui/*.ui
 ```
 
-- create (e.g `cp po/auto-power-profile.pot po/es.po`) or edit corresponding `po` files, e.g with [Gtranslator](https://flathub.org/nb-NO/apps/org.gnome.Gtranslator)
+- create (e.g `cp po/auto-power-profile.pot po/es.po`) or edit corresponding `po` files, e.g with [Poedit](https://poedit.net/)
 - create pull request
 
 ## Contribution

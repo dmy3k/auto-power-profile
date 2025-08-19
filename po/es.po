@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: auto-power-profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 17:29+0200\n"
-"PO-Revision-Date: 2025-03-19 18:56+0100\n"
+"POT-Creation-Date: 2025-08-19 10:16+0200\n"
+"PO-Revision-Date: 2025-08-19 11:45+0200\n"
 "Last-Translator: Marcelo Gigirey <mgigirey@gmail.com>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -18,23 +18,65 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 47.1\n"
+"X-Generator: Poedit 3.6\n"
+
+#: extension.js:69
+msgid "Error connecting UPower DBus"
+msgstr "Error al conectar con UPower DBus"
+
+#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "Error al conectar con el DBus de power-profiles-daemon"
+
+#: extension.js:317
+msgid "Package power-profiles-daemon is not installed"
+msgstr "El paquete power-profiles-daemon no está instalado"
+
+#: extension.js:322
+msgid ""
+"No system-specific platform driver is available. Consider upgrading power-"
+"profiles-daemon and linux kernel"
+msgstr ""
+"No hay un controlador de plataforma específico del sistema disponible. Considere actualizar power-profiles-daemon y el kernel de Linux"
+
+#: prefs.js:65 ui/general.ui:5
+msgid "General"
+msgstr "General"
 
 #: prefs.js:112
+msgid "Performance Apps"
+msgstr "Aplicaciones de rendimiento"
+
+#: prefs.js:117
+msgid "Application-Based Profiles"
+msgstr "Perfiles según la aplicación"
+
+#: prefs.js:119
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Activa perfiles para las aplicaciones seleccionadas en ejecución. Puede usarse para priorizar el rendimiento de forma puntual"
+
+#: prefs.js:141 ui/general.ui:36
+msgid "On Battery"
+msgstr "Batería"
+
+#: prefs.js:149 ui/general.ui:14
+msgid "On AC"
+msgstr "Enchufado"
+
+#: prefs.js:238
 msgid "Performance"
 msgstr "Rendimiento"
 
-#: prefs.js:113
+#: prefs.js:239
 msgid "Balanced"
 msgstr "Balanceado"
 
-#: prefs.js:114
+#: prefs.js:240
 msgid "Power Saver"
 msgstr "Ahorro de energía"
-
-#: ui/general.ui:5
-msgid "General"
-msgstr "General"
 
 #: ui/general.ui:9
 msgid "Default Profiles"
@@ -45,42 +87,41 @@ msgid "Applied automatically unless user sets manually another one"
 msgstr ""
 "Se aplica automáticamente a menos que el usuario configure manualmente otro"
 
-#: ui/general.ui:14
-msgid "On AC"
-msgstr "Enchufado"
-
 #: ui/general.ui:15
 msgid "Select the default profile when connected to AC"
 msgstr "Perfil predeterminado cuando funcione enchufado"
 
 #: ui/general.ui:22
-msgid "On Battery"
-msgstr "Batería"
+msgid "Handle lap-mode on AC"
+msgstr "Gestionar modo 'en las piernas' con el adaptador de corriente"
 
 #: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Intenta mantener el modo de rendimiento en superficies inestables. Desactívelo si experimenta problemas térmicos"
+
+#: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr "Perfil predeterminado cuando funcione con batería"
 
-#: ui/general.ui:35
+#: ui/general.ui:48
 msgid "Power Saving Threshold"
 msgstr "Umbral de ahorro de energía"
 
-#: ui/general.ui:36
+#: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Cambiar al perfil de ahorro de energía cuando la batería desciende de"
 
-#: ui/general.ui:48
-msgid "Advanced"
-msgstr "Avanzado"
+#~ msgid "Advanced"
+#~ msgstr "Avanzado"
 
-#: ui/general.ui:49
-msgid "Compatibility and troubleshooting"
-msgstr "Compatibilidad y solución de problemas"
+#~ msgid "Compatibility and troubleshooting"
+#~ msgstr "Compatibilidad y solución de problemas"
 
-#: ui/general.ui:104
-msgid "Debug logging"
-msgstr "Registro de depuración"
+#~ msgid "Debug logging"
+#~ msgstr "Registro de depuración"
 
-#: ui/general.ui:105
-msgid "Enable detailed logs for troubleshooting"
-msgstr "Habilitar registros detallados para resolución de problemas"
+#~ msgid "Enable detailed logs for troubleshooting"
+#~ msgstr "Habilitar registros detallados para resolución de problemas"
