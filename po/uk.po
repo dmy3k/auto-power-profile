@@ -6,75 +6,86 @@ msgid ""
 msgstr ""
 "Project-Id-Version: auto-power-profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-19 17:29+0200\n"
-"PO-Revision-Date: 2023-06-19 17:54+0200\n"
+"POT-Creation-Date: 2025-08-19 10:16+0200\n"
+"PO-Revision-Date: 2025-08-19 11:54+0200\n"
+"Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
 
-#: prefs.js:21
+#: extension.js:69
+msgid "Error connecting UPower DBus"
+msgstr "Помилка з'єднання з UPower DBus"
+
+#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "Помилка з'єднання з power-profiles-daemon DBus"
+
+#: extension.js:317
+msgid "Package power-profiles-daemon is not installed"
+msgstr "Пакет power-profiles-daemon не встановлено"
+
+#: extension.js:322
+msgid ""
+"No system-specific platform driver is available. Consider upgrading power-"
+"profiles-daemon and linux kernel"
+msgstr "Не знайдено драйвера платформи для даної системи"
+
+#: prefs.js:65 ui/general.ui:5
 msgid "General"
 msgstr "Загальні"
 
-#: prefs.js:27
-msgid "Default Profiles"
-msgstr "За замовчуванням"
+#: prefs.js:112
+msgid "Performance Apps"
+msgstr "Профілі додатків"
 
-#: prefs.js:28
-msgid "Configure the default profiles"
-msgstr "Налаштування профілю за замовчуванням"
+#: prefs.js:117
+msgid "Application-Based Profiles"
+msgstr "Профілі додатків"
 
-#: prefs.js:34
-msgid "On AC"
-msgstr "Від мережі"
+#: prefs.js:119
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Активує профіль для запуску обраних додатків. Можна використати для "
+"підвищеної продуктивності ПО"
 
-#: prefs.js:35
-msgid "Select the default profile when connected to AC"
-msgstr "Профіль за замовчуванням від мережі"
-
-#: prefs.js:39 prefs.js:55
-msgid "Performance"
-msgstr "Швидкодія"
-
-#: prefs.js:40 prefs.js:56
-msgid "Balanced"
-msgstr "Баланс"
-
-#: prefs.js:41 prefs.js:57
-msgid "Power Saver"
-msgstr "Заощадження"
-
-#: prefs.js:50
+#: prefs.js:141 ui/general.ui:36
 msgid "On Battery"
 msgstr "Від батареї"
 
-#: prefs.js:51
-msgid "Select the default profile when running on battery"
-msgstr "Профіль за замовчуванням від батареї"
+#: prefs.js:149 ui/general.ui:14
+msgid "On AC"
+msgstr "Від мережі"
 
-#: prefs.js:66
-msgid "Power Saving Configuration"
-msgstr "Енергозбереження"
+#: prefs.js:238
+msgid "Performance"
+msgstr "Швидкодія"
 
-#: prefs.js:67
-msgid "Configure the power saving options"
-msgstr "Налаштування профілю енергозбереження"
+#: prefs.js:239
+msgid "Balanced"
+msgstr "Баланс"
 
-#: prefs.js:73
-msgid "Power Saving Threshold"
-msgstr "Поріг заряду у відсотках"
+#: prefs.js:240
+msgid "Power Saver"
+msgstr "Заощадження"
 
-#: prefs.js:74
-msgid "Switch to power saving profile when the battery level drops below"
-msgstr "Перейти в профіль Заощадження, при падінні заряду батареї нижче"
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "За замовчуванням"
 
 #: ui/general.ui:10
 msgid "Applied automatically unless user sets manually another one"
 msgstr "Застосовуються автоматично якшо не обрано вручну користувачем"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Профіль за замовчуванням від мережі"
 
 #: ui/general.ui:22
 msgid "Handle lap-mode on AC"
@@ -84,21 +95,30 @@ msgstr "Обробляти режим lap-mode"
 msgid ""
 "Try to maintain performance mode on unstable surfaces. Disable if you are "
 "experiencing thermal issues"
-msgstr "Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить перехід в режим 'Баланс' задля зниження температури пристрою"
+msgstr ""
+"Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить "
+"перехід в режим 'Баланс' задля зниження температури пристрою"
 
-#: extension.js:39
-msgid "Show details"
-msgstr "Детальніше"
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Профіль за замовчуванням від батареї"
 
-#: extension.js:189
-msgid "Error connecting UPower DBus"
-msgstr "Помилка з'єднання з UPower DBus"
+#: ui/general.ui:48
+msgid "Power Saving Threshold"
+msgstr "Поріг заряду у відсотках"
 
-#: extension.js:210
-msgid "Error connecting power-profiles-daemon DBus"
-msgstr "Помилка з'єднання з power-profiles-daemon DBus"
+#: ui/general.ui:49
+msgid "Switch to power saving profile when the battery level drops below"
+msgstr "Перейти в профіль Заощадження, при падінні заряду батареї нижче"
 
-#: extension.js:223
-msgid "No system-specific platform driver is available"
-msgstr "Не знайдено драйвера платформи для даної системи"
+#~ msgid "Configure the default profiles"
+#~ msgstr "Налаштування профілю за замовчуванням"
 
+#~ msgid "Power Saving Configuration"
+#~ msgstr "Енергозбереження"
+
+#~ msgid "Configure the power saving options"
+#~ msgstr "Налаштування профілю енергозбереження"
+
+#~ msgid "Show details"
+#~ msgstr "Детальніше"

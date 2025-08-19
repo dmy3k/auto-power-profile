@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Auto Power Profile package.
-# bywkgexmkiltxh <ascdasvcfasx@outlook.com>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 10:16+0200\n"
-"PO-Revision-Date: 2025-08-19 11:45+0200\n"
-"Last-Translator: bywkgexmkiltxh <ascdasvcfasx@outlook.com>\n"
-"Language-Team: Turkish\n"
-"Language: tr\n"
+"PO-Revision-Date: 2025-08-19 11:59+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,102 +20,93 @@ msgstr ""
 
 #: extension.js:69
 msgid "Error connecting UPower DBus"
-msgstr "UPower DBus'a bağlanırken hata oluştu"
+msgstr "Fel vid anslutning till UPower DBus"
 
 #: extension.js:86
 msgid "Error connecting power-profiles-daemon DBus"
-msgstr "power-profiles-daemon DBus'a bağlanırken hata oluştu"
+msgstr "Fel vid anslutning till power-profiles-daemon DBus"
 
 #: extension.js:317
 msgid "Package power-profiles-daemon is not installed"
-msgstr "power-profiles-daemon paketi yüklü değil"
+msgstr "Paketet power-profiles-daemon är inte installerat"
 
 #: extension.js:322
-#, fuzzy
-#| msgid "No system-specific platform driver is available"
 msgid ""
 "No system-specific platform driver is available. Consider upgrading power-"
 "profiles-daemon and linux kernel"
-msgstr "Sisteme özgü bir platform sürücüsü yok. power-profiles-daemon ve linux çekirdeğini yükseltmeyi düşünün"
+msgstr ""
+"Inget systemspecifikt plattformsdrivrutin är tillgängligt. Överväg att uppgradera power-profiles-daemon och Linux-kärnan"
 
 #: prefs.js:65 ui/general.ui:5
 msgid "General"
-msgstr "Genel"
+msgstr "Allmänt"
 
 #: prefs.js:112
-#, fuzzy
-#| msgid "Performance"
 msgid "Performance Apps"
-msgstr "Başarım Uygulamaları"
+msgstr "Prestandaappar"
 
 #: prefs.js:117
 msgid "Application-Based Profiles"
-msgstr "Uygulama Tabanlı Profiller"
+msgstr "Applikationsbaserade profiler"
 
 #: prefs.js:119
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
-msgstr "Seçili uygulamalar çalışırken profilleri etkinleştir. Anlık olarak başarım önceliği vermek için kullanılabilir"
+msgstr ""
+"Aktivera profiler för valda appar som körs. Kan användas för att prioritera prestanda ad-hoc"
 
 #: prefs.js:141 ui/general.ui:36
 msgid "On Battery"
-msgstr "Pildeyken"
+msgstr "På batteri"
 
 #: prefs.js:149 ui/general.ui:14
 msgid "On AC"
-msgstr "Fişe Takılıyken"
+msgstr "På nätström"
 
 #: prefs.js:238
 msgid "Performance"
-msgstr "Başarım"
+msgstr "Prestanda"
 
 #: prefs.js:239
 msgid "Balanced"
-msgstr "Dengeli"
+msgstr "Balanserad"
 
 #: prefs.js:240
 msgid "Power Saver"
-msgstr "Güç Tutumu"
+msgstr "Energisparläge"
 
 #: ui/general.ui:9
 msgid "Default Profiles"
-msgstr "Öntanımlı Profiller"
+msgstr "Standardprofiler"
 
 #: ui/general.ui:10
 msgid "Applied automatically unless user sets manually another one"
-msgstr "Kullanıcı başka birini elle seçmediği sürece kendiliğinden uygulanır"
+msgstr "Tillämpas automatiskt om inte användaren manuellt väljer en annan"
 
 #: ui/general.ui:15
 msgid "Select the default profile when connected to AC"
-msgstr "Fişe takılıyken kullanılacak öntanımlı profili seç"
+msgstr "Välj standardprofil när nätström är ansluten"
 
 #: ui/general.ui:22
 msgid "Handle lap-mode on AC"
-msgstr "Fişe takılıyken kucak modunu ele al"
+msgstr "Hantera knäläge på nätström"
 
 #: ui/general.ui:23
 msgid ""
 "Try to maintain performance mode on unstable surfaces. Disable if you are "
 "experiencing thermal issues"
 msgstr ""
-"Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları "
-"yaşıyorsanız etkisizleştirin"
+"Försök behålla prestandaläge på instabila ytor. Inaktivera om du upplever termiska problem"
 
 #: ui/general.ui:37
 msgid "Select the default profile when running on battery"
-msgstr "Pildeyken kullanılacak öntanımlı profili seç"
+msgstr "Välj standardprofil när datorn körs på batteri"
 
 #: ui/general.ui:48
 msgid "Power Saving Threshold"
-msgstr "Güç Tutumu Eşiği"
+msgstr "Gräns för energisparläge"
 
 #: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
-msgstr "Pil düzeyi şunun altına düştüğünde güç tutumu profiline geç"
-
-#~ msgid "Auto Power Profiles"
-#~ msgstr "Auto Power Profiles"
-
-#~ msgid "Show details"
-#~ msgstr "Ayrıntıları göster"
+msgstr "Byt till energisparprofil när batterinivån sjunker under"
