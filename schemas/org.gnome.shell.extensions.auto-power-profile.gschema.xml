@@ -42,5 +42,12 @@
         The power profile to enter when launching a performance app while on AC power.
       </description>
     </key>
+    <key name="disable-animations-on-battery" type="b">
+      <default>false</default>
+      <summary>Disable animations on battery</summary>
+      <description>
+        Automatically disable GNOME animations when running on battery power to save energy. Animations are restored when connecting to AC power.
+      </description>
+    </key>
   </schema>
 </schemalist>

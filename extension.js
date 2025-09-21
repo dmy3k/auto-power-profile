@@ -1,3 +1,4 @@
+import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import UPower from "gi://UPowerGlib";
 import Shell from "gi://Shell";
@@ -35,6 +36,8 @@ export default class AutoPowerProfile extends Extension {
   constructor(metadata) {
     super(metadata);
     this._trackedWindows = new Map();
+    this._animationsEnabled = null; // Store original animation setting
+    this._desktopSettings = null;
   }
 
   enable() {
@@ -44,6 +47,11 @@ export default class AutoPowerProfile extends Extension {
     this._settings = this.getSettings(
       "org.gnome.shell.extensions.auto-power-profile"
     );
+
+    // Initialize desktop settings for animation control
+    this._desktopSettings = new Gio.Settings({
+      schema: "org.gnome.desktop.interface",
+    });
     this._settingsWatcher = this._settings.connect(
       "changed",
       this._onSettingsChange
@@ -118,6 +126,14 @@ export default class AutoPowerProfile extends Extension {
     }
     this._settings?.disconnect(this._settingsWatcher);
 
+    // Restore original animation setting on disable
+    if (this._animationsEnabled !== null && this._desktopSettings) {
+      this._desktopSettings.set_boolean(
+        "enable-animations",
+        this._animationsEnabled
+      );
+    }
+
     this._switchProfile("balanced");
 
     if (this._perfDebounceTimerId) {
@@ -135,6 +151,8 @@ export default class AutoPowerProfile extends Extension {
     this._powerProfilesProxy = null;
 
     this._tracker = null;
+    this._desktopSettings = null;
+    this._animationsEnabled = null;
 
     for (const [win, cid] of this._trackedWindows.entries()) {
       win.disconnect(cid);
@@ -217,6 +235,9 @@ export default class AutoPowerProfile extends Extension {
       performanceApps: this._settings.get_strv("performance-apps"),
       perfAppsAcMode: this._settings.get_string("performance-apps-ac"),
       perfAppsBatMode: this._settings.get_string("performance-apps-bat"),
+      disableAnimationsOnBattery: this._settings.get_boolean(
+        "disable-animations-on-battery"
+      ),
     };
 
     this._transition.report({});
@@ -247,6 +268,12 @@ export default class AutoPowerProfile extends Extension {
       this._powerManagerProxy?.State === UPower.DeviceState.PENDING_DISCHARGE ||
       this._powerManagerProxy?.State === UPower.DeviceState.DISCHARGING;
 
+    const acPowered =
+      this._powerManagerProxy?.State === UPower.DeviceState.CHARGING ||
+      this._powerManagerProxy?.State === UPower.DeviceState.FULLY_CHARGED ||
+      this._powerManagerProxy?.State === UPower.DeviceState.PENDING_CHARGE ||
+      onBattery === false;
+
     const lowBattery =
       this._settingsCache?.batteryThreshold >=
       this._powerManagerProxy?.Percentage;
@@ -268,6 +295,7 @@ export default class AutoPowerProfile extends Extension {
     return {
       hasBattery,
       onBattery,
+      acPowered,
       onAC: onBattery === false,
       lowBattery: onBattery === true && lowBattery,
       perfApps: this._trackedWindows.size > 0,
@@ -299,6 +327,9 @@ export default class AutoPowerProfile extends Extension {
     if (allowed) {
       this._switchProfile(powerConditions.configuredProfile);
     }
+
+    // Manage animations based on power state
+    this._manageAnimationsBasedOnPower();
   };
 
   _validateDrivers() {
@@ -323,6 +354,37 @@ export default class AutoPowerProfile extends Extension {
         ),
         "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html"
       );
+    }
+  }
+
+  /**
+   * Manages GNOME animations based on power state for battery optimization
+   */
+  _manageAnimationsBasedOnPower() {
+    if (!this._settingsCache.disableAnimationsOnBattery) {
+      return; // Feature disabled
+    }
+
+    const powerConditions = this._getPowerConditions();
+    const isOnBattery = !powerConditions.acPowered;
+
+    if (isOnBattery) {
+      // Store original setting if not already stored
+      if (this._animationsEnabled === null) {
+        this._animationsEnabled =
+          this._desktopSettings.get_boolean("enable-animations");
+      }
+      // Disable animations on battery
+      this._desktopSettings.set_boolean("enable-animations", false);
+    } else {
+      // Restore original setting when on AC power
+      if (this._animationsEnabled !== null) {
+        this._desktopSettings.set_boolean(
+          "enable-animations",
+          this._animationsEnabled
+        );
+        this._animationsEnabled = null; // Reset stored value
+      }
     }
   }
 }

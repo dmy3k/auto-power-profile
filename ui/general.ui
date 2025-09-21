@@ -55,6 +55,19 @@
                 </child>
             </object>
         </child>
+
+        <child>
+            <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Battery Optimizations</property>
+                <property name="description" translatable="yes">Additional power saving features when running on battery</property>
+                <child>
+                    <object class="AdwSwitchRow" id="disable_animations_on_battery">
+                        <property name="title" translatable="yes">Disable animations on battery</property>
+                        <property name="subtitle" translatable="yes">Automatically disable GNOME animations when running on battery power to save energy. Animations are restored when connecting to AC power.</property>
+                    </object>
+                </child>
+            </object>
+        </child>
     </template>
 
     <object class="GtkStringList" id="platform_profile_model"></object>
