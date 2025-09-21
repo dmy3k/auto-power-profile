@@ -233,6 +233,11 @@ export const PerformanceApps = GObject.registerClass(
 
 export default class AutoPowerProfilePreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {
+    // Configure window size for better usability
+    // Format: width x height  
+    window.set_default_size(600, 720);
+    window.set_size_request(550, 650);
+    
     const settings = this.getSettings();
     const availableProfiles = this._loadAvailableProfiles();
 
