@@ -1,0 +1,144 @@
+# Brazilian portuguese translations for auto-power-profile package
+# This file is distributed under the same license as the auto-power-profile package.
+# André Vieira <andrecesarvieira@hotmail.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: auto-power-profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-21 10:27-0300\n"
+"PO-Revision-Date: 2025-09-21 10:30-0300\n"
+"Last-Translator: André Vieira <andrecesarvieira@hotmail.com>\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.6\n"
+
+#: extension.js:69
+msgid "Error connecting UPower DBus"
+msgstr "Erro ao conectar ao UPower DBus"
+
+#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "Erro ao conectar ao power-profiles-daemon DBus"
+
+#: extension.js:317
+msgid "Package power-profiles-daemon is not installed"
+msgstr "O pacote power-profiles-daemon não está instalado"
+
+#: extension.js:322
+msgid ""
+"No system-specific platform driver is available. Consider upgrading power-"
+"profiles-daemon and linux kernel"
+msgstr ""
+"Não há disponível um driver específico do controlador de plataforma. Considerar atualizar o power-profiles-daemon e o kernel do Linux"
+
+#: prefs.js:65 ui/general.ui:5
+msgid "General"
+msgstr "Geral"
+
+#: prefs.js:112
+msgid "Performance Apps"
+msgstr "Aplicativos"
+
+#: prefs.js:117
+msgid "Application-Based Profiles"
+msgstr "Perfil por Aplicativo"
+
+#: prefs.js:119
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Selecione os aplicativos que executarão com os perfis:"
+
+#: prefs.js:141 ui/general.ui:36
+msgid "On Battery"
+msgstr "Bateria"
+
+#: prefs.js:149 ui/general.ui:14
+msgid "On AC"
+msgstr "Energia"
+
+#: prefs.js:238
+msgid "Performance"
+msgstr "Desempenho"
+
+#: prefs.js:239
+msgid "Balanced"
+msgstr "Balanceado"
+
+#: prefs.js:240
+msgid "Power Saver"
+msgstr "Economia de Energia"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Perfis de Energia"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+"Aplicado automaticamente, exceto se o usuário escolher outro perfil manualmente"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Selecione o perfil para quando conectado à energia"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Modo 'colo' quando conectado à energia"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Tenta manter no perfil de desempenho em superfícies instáveis. Desabilite se houver super-aquecimento"
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Selecione o perfil para quando estiver somente na bateria"
+
+#: ui/general.ui:48
+msgid "Power Saving Threshold"
+msgstr "Limite para economia de energia"
+
+#: ui/general.ui:49
+msgid "Switch to power saving profile when the battery level drops below"
+msgstr "Trocar para o perfil de economia de energia quando o nível da bateria ficar abaixo de:"
+
+#: ui/general.ui:61
+msgid "Battery Optimizations"
+msgstr "Otimizações de Bateria"
+
+#: ui/general.ui:62
+msgid "Additional power saving features when running on battery"
+msgstr "Recursos adicionais de economia de energia ao usar a bateria"
+
+#: ui/general.ui:65
+msgid "Disable animations on battery"
+msgstr "Desabilitar animações na bateria"
+
+#: ui/general.ui:66
+msgid ""
+"Automatically disable GNOME animations when running on battery power to "
+"save energy. Animations are restored when connecting to AC power."
+msgstr ""
+"Desabilita automaticamente as animações do GNOME ao usar a bateria para "
+"economizar energia. As animações são restauradas ao conectar à energia."
+
+#~ msgid "Advanced"
+#~ msgstr "Avançado"
+
+#~ msgid "Compatibility and troubleshooting"
+#~ msgstr "Compatibilidade e solução de problemas"
+
+#~ msgid "Debug logging"
+#~ msgstr "Registros de depuração"
+
+#~ msgid "Enable detailed logs for troubleshooting"
+#~ msgstr "Habilitar registros detalhados para solução de problemas"
