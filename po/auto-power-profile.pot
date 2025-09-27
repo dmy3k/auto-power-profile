@@ -26,13 +26,16 @@ msgid "Error connecting power-profiles-daemon DBus"
 msgstr ""
 
 #: extension.js:317
-msgid "Package power-profiles-daemon is not installed"
+msgid ""
+"Power profile management is not available - this extension will have no "
+"effect on your system"
 msgstr ""
 
 #: extension.js:322
 msgid ""
-"No system-specific platform driver is available. Consider upgrading power-"
-"profiles-daemon and linux kernel"
+"Power profile switching may not work properly on this device - energy "
+"savings will be limited. Your system may need updates to enable full "
+"functionality"
 msgstr ""
 
 #: prefs.js:65 ui/general.ui:5
