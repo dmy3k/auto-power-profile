@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 10:16+0200\n"
-"PO-Revision-Date: 2025-08-19 11:45+0200\n"
+"PO-Revision-Date: 2025-09-23 00:46+0300\n"
 "Last-Translator: bywkgexmkiltxh <ascdasvcfasx@outlook.com>\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
@@ -31,11 +31,7 @@ msgid "Package power-profiles-daemon is not installed"
 msgstr "power-profiles-daemon paketi yüklü değil"
 
 #: extension.js:322
-#, fuzzy
-#| msgid "No system-specific platform driver is available"
-msgid ""
-"No system-specific platform driver is available. Consider upgrading power-"
-"profiles-daemon and linux kernel"
+msgid "No system-specific platform driver is available. Consider upgrading power-profiles-daemon and linux kernel"
 msgstr "Sisteme özgü bir platform sürücüsü yok. power-profiles-daemon ve linux çekirdeğini yükseltmeyi düşünün"
 
 #: prefs.js:65 ui/general.ui:5
@@ -43,8 +39,6 @@ msgid "General"
 msgstr "Genel"
 
 #: prefs.js:112
-#, fuzzy
-#| msgid "Performance"
 msgid "Performance Apps"
 msgstr "Başarım Uygulamaları"
 
@@ -53,10 +47,8 @@ msgid "Application-Based Profiles"
 msgstr "Uygulama Tabanlı Profiller"
 
 #: prefs.js:119
-msgid ""
-"Activate profiles for running selected apps. Can be used to prioritize "
-"performance ad-hoc"
-msgstr "Seçili uygulamalar çalışırken profilleri etkinleştir. Anlık olarak başarım önceliği vermek için kullanılabilir"
+msgid "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc"
+msgstr "Seçili uygulamalar çalıştırıldığında profiller etkinleştirilir. Geçici olarak başarım önceliği vermek için kullanılabilir"
 
 #: prefs.js:141 ui/general.ui:36
 msgid "On Battery"
@@ -95,12 +87,8 @@ msgid "Handle lap-mode on AC"
 msgstr "Fişe takılıyken kucak modunu ele al"
 
 #: ui/general.ui:23
-msgid ""
-"Try to maintain performance mode on unstable surfaces. Disable if you are "
-"experiencing thermal issues"
-msgstr ""
-"Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları "
-"yaşıyorsanız etkisizleştirin"
+msgid "Try to maintain performance mode on unstable surfaces. Disable if you are experiencing thermal issues"
+msgstr "Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları yaşıyorsanız etkisizleştirin"
 
 #: ui/general.ui:37
 msgid "Select the default profile when running on battery"
