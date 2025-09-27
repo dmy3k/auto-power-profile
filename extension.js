@@ -314,12 +314,14 @@ export default class AutoPowerProfile extends Extension {
 
     if (!active) {
       this._notifier.notify(
-        _("Package power-profiles-daemon is not installed")
+        _(
+          "Power profile management is not available - this extension will have no effect on your system"
+        )
       );
     } else if (!drivers.some((x) => x && x !== "placeholder")) {
       this._notifier.notify(
         _(
-          "No system-specific platform driver is available. Consider upgrading power-profiles-daemon and linux kernel"
+          "Power profile switching may not work properly on this device - energy savings will be limited. Your system may need updates to enable full functionality"
         ),
         "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html"
       );

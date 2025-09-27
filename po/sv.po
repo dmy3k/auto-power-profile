@@ -27,15 +27,22 @@ msgid "Error connecting power-profiles-daemon DBus"
 msgstr "Fel vid anslutning till power-profiles-daemon DBus"
 
 #: extension.js:317
-msgid "Package power-profiles-daemon is not installed"
-msgstr "Paketet power-profiles-daemon är inte installerat"
+msgid ""
+"Power profile management is not available - this extension will have no "
+"effect on your system"
+msgstr ""
+"Strömprofilhantering är inte tillgänglig - detta tillägg kommer inte att "
+"ha någon effekt på ditt system"
 
 #: extension.js:322
 msgid ""
-"No system-specific platform driver is available. Consider upgrading power-"
-"profiles-daemon and linux kernel"
+"Power profile switching may not work properly on this device - energy "
+"savings will be limited. Your system may need updates to enable full "
+"functionality"
 msgstr ""
-"Inget systemspecifikt plattformsdrivrutin är tillgängligt. Överväg att uppgradera power-profiles-daemon och Linux-kärnan"
+"Strömprofilväxling kanske inte fungerar korrekt på denna enhet - "
+"energibesparingar kommer att vara begränsade. Ditt system kan behöva "
+"uppdateringar för att aktivera full funktionalitet"
 
 #: prefs.js:65 ui/general.ui:5
 msgid "General"
