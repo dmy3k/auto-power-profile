@@ -21,6 +21,12 @@
       <summary>lap-mode handling on AC</summary>
     </key>
 
+    <key name="notifications" type="b">
+      <default>true</default>
+      <summary>Show notifications</summary>
+      <description>Show extension notifications</description>
+    </key>
+
     <key name="performance-apps" type="as">
       <default>[]</default>
       <summary>List of application IDs that should enable performance mode</summary>

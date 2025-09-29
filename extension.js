@@ -8,7 +8,6 @@ import {
 } from "resource:///org/gnome/shell/extensions/extension.js";
 
 import { Notifier } from "./lib/notifier.js";
-import { ProfileTransition } from "./lib/profiletransition.js";
 import {
   createPowerProfilesProxy,
   createPowerManagerProxy,
@@ -18,7 +17,10 @@ export default class AutoPowerProfile extends Extension {
   _settings;
   _settingsCache = {};
 
-  _transition;
+  // Used to distinguish between user and extension-initiated changes
+  _currentPowerState = {};
+  _currentProfile;
+  _requestedProfile;
 
   _perfDebounceTimerId;
 
@@ -38,13 +40,7 @@ export default class AutoPowerProfile extends Extension {
   }
 
   enable() {
-    this._transition = new ProfileTransition();
     this._tracker = Shell.WindowTracker.get_default();
-
-    // Set up callback for handling user-initiated profile changes
-    this._transition.setUserChangeCallback((profile, powerState) => {
-      this._onUserProfileChange(profile, powerState);
-    });
 
     this._settings = this.getSettings(
       "org.gnome.shell.extensions.auto-power-profile"
@@ -101,7 +97,7 @@ export default class AutoPowerProfile extends Extension {
       }
     );
 
-    this._notifier = new Notifier(this);
+    this._notifier = new Notifier(this, this._settings);
   }
 
   disable() {
@@ -130,8 +126,7 @@ export default class AutoPowerProfile extends Extension {
       this._perfDebounceTimerId = null;
     }
 
-    this._transition?.report({});
-    this._transition = null;
+    this._clearCurrentPowerState();
 
     this._settings = null;
     this._settingsCache = {};
@@ -147,15 +142,10 @@ export default class AutoPowerProfile extends Extension {
     this._trackedWindows = new Map();
   }
 
-  _onUserProfileChange = (profile, { onBattery, onAC }) => {
+  _onUserProfileChange = (profile, { lowBattery, onBattery, onAC }) => {
     // Only update defaults for basic profiles, not when performance apps are active
-    if (this._trackedWindows.size > 0) {
-      return;
-    }
-
     // Don't update if we're in low battery mode (power-saver is forced)
-    const powerConditions = this._getPowerConditions();
-    if (powerConditions.lowBattery) {
+    if (lowBattery || this._trackedWindows.size > 0) {
       return;
     }
 
@@ -163,27 +153,23 @@ export default class AutoPowerProfile extends Extension {
     if (onAC) {
       const currentACDefault = this._settings.get_string("ac");
       if (currentACDefault !== profile) {
-        console.log(
-          `Updating AC default from ${currentACDefault} to ${profile} (user change)`
-        );
         this._settings.set_string("ac", profile);
         this._notifier?.notify(
           _(
-            `Power profile "${profile}" will now be used by default when connected to AC power`
-          )
+            `Power profile '%s' will now be used by default when connected to AC power`
+          ).format(profile),
+          { isTransient: true }
         );
       }
-    } else if (onBattery && !powerConditions.lowBattery) {
+    } else if (onBattery) {
       const currentBatDefault = this._settings.get_string("bat");
       if (currentBatDefault !== profile) {
-        console.log(
-          `Updating battery default from ${currentBatDefault} to ${profile} (user change)`
-        );
         this._settings.set_string("bat", profile);
         this._notifier?.notify(
           _(
-            `Power profile "${profile}" will now be used by default when running on battery`
-          )
+            `Power profile '%s' will now be used by default when running on battery`
+          ).format(profile),
+          { isTransient: true }
         );
       }
     }
@@ -214,7 +200,7 @@ export default class AutoPowerProfile extends Extension {
       return;
     }
     const payload = properties?.deep_unpack();
-    const powerConditions = this._getPowerConditions();
+    const powerState = this._getPowerState();
 
     if (payload?.ActiveProfile) {
       if (this._perfDebounceTimerId) {
@@ -222,14 +208,21 @@ export default class AutoPowerProfile extends Extension {
         this._perfDebounceTimerId = null;
       }
       if (!payload?.PerformanceDegraded) {
-        this._transition.report({
-          effectiveProfile: this._powerProfilesProxy.ActiveProfile,
-          ...powerConditions,
-        });
+        this._currentProfile = this._powerProfilesProxy.ActiveProfile;
+        this._currentPowerState = powerState;
+
+        if (this._currentProfile === this._requestedProfile) {
+          // This was our requested change - mark as complete
+          this.requestedProfile = null;
+        } else {
+          // This appears to be a user-initiated change
+          this._onUserProfileChange(this._currentProfile, powerState);
+          this.requestedProfile = null;
+        }
       }
     }
 
-    if (powerConditions.onAC && payload?.PerformanceDegraded) {
+    if (powerState.onAC && payload?.PerformanceDegraded) {
       try {
         const reason = payload?.PerformanceDegraded?.unpack();
 
@@ -238,7 +231,7 @@ export default class AutoPowerProfile extends Extension {
             GLib.PRIORITY_DEFAULT,
             5,
             () => {
-              this._transition.report({});
+              this._clearCurrentPowerState();
               this._checkProfile();
               this._perfDebounceTimerId = null;
               return GLib.SOURCE_REMOVE;
@@ -261,12 +254,13 @@ export default class AutoPowerProfile extends Extension {
       batteryDefault: this._settings.get_string("bat"),
       batteryThreshold: this._settings.get_int("threshold"),
       lapmode: this._settings.get_boolean("lapmode"),
+      notifications: this._settings.get_boolean("notifications"),
       performanceApps: this._settings.get_strv("performance-apps"),
       perfAppsAcMode: this._settings.get_string("performance-apps-ac"),
       perfAppsBatMode: this._settings.get_string("performance-apps-bat"),
     };
 
-    this._transition.report({});
+    this._clearCurrentPowerState();
     this._checkPerformanceApps();
     this._checkProfile();
   };
@@ -282,7 +276,7 @@ export default class AutoPowerProfile extends Extension {
     }
   };
 
-  _getPowerConditions = () => {
+  _getPowerState = () => {
     let configuredProfile = "balanced";
 
     const hasBattery = !(
@@ -322,6 +316,12 @@ export default class AutoPowerProfile extends Extension {
     };
   };
 
+  _clearCurrentPowerState() {
+    this._currentProfile = null;
+    this._requestedProfile = null;
+    this._currentPowerState = {};
+  }
+
   _switchProfile = (profile) => {
     if (profile === this._powerProfilesProxy?.ActiveProfile) {
       return;
@@ -340,11 +340,22 @@ export default class AutoPowerProfile extends Extension {
   };
 
   _checkProfile = () => {
-    const powerConditions = this._getPowerConditions();
-    const allowed = this._transition.request(powerConditions);
+    const newState = this._getPowerState();
 
-    if (allowed) {
-      this._switchProfile(powerConditions.configuredProfile);
+    const hasPowerConditionChanged =
+      this._currentPowerState.onBattery !== newState.onBattery ||
+      this._currentPowerState.lowBattery !== newState.lowBattery ||
+      this._currentPowerState.perfApps !== newState.perfApps;
+
+    if (
+      hasPowerConditionChanged &&
+      this._currentProfile === newState.configuredProfile
+    ) {
+      // handling edge case where user-initiated profile matches target
+      this._currentPowerState = newState;
+    } else if (hasPowerConditionChanged || !this._currentProfile) {
+      this._requestedProfile = newState.configuredProfile;
+      this._switchProfile(this._requestedProfile);
     }
   };
 
@@ -370,7 +381,9 @@ export default class AutoPowerProfile extends Extension {
         _(
           "Power profile switching may not work properly on this device - energy savings will be limited. Your system may need updates to enable full functionality"
         ),
-        "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html"
+        {
+          uri: "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html",
+        }
       );
     }
   }

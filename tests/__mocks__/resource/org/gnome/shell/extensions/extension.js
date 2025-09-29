@@ -30,6 +30,10 @@ class Extension {
       return Number(this.state[k]);
     },
 
+    set_string(k, v) {
+      this.state[k] = v;
+    },
+
     update(patch) {
       for (const [k, v] of Object.entries(patch)) {
         if (v && k in this.state) {
@@ -55,5 +59,10 @@ class Extension {
 
 module.exports = {
   Extension,
-  gettext: (x) => x,
+  gettext: (x) => {
+    return {
+      toString: () => x,
+      format: (...args) => x.replace(/%s/g, () => args.shift()),
+    };
+  },
 };
