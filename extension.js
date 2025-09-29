@@ -41,6 +41,11 @@ export default class AutoPowerProfile extends Extension {
     this._transition = new ProfileTransition();
     this._tracker = Shell.WindowTracker.get_default();
 
+    // Set up callback for handling user-initiated profile changes
+    this._transition.setUserChangeCallback((profile, powerState) => {
+      this._onUserProfileChange(profile, powerState);
+    });
+
     this._settings = this.getSettings(
       "org.gnome.shell.extensions.auto-power-profile"
     );
@@ -141,6 +146,48 @@ export default class AutoPowerProfile extends Extension {
     }
     this._trackedWindows = new Map();
   }
+
+  _onUserProfileChange = (profile, { onBattery, onAC }) => {
+    // Only update defaults for basic profiles, not when performance apps are active
+    if (this._trackedWindows.size > 0) {
+      return;
+    }
+
+    // Don't update if we're in low battery mode (power-saver is forced)
+    const powerConditions = this._getPowerConditions();
+    if (powerConditions.lowBattery) {
+      return;
+    }
+
+    // Update the appropriate default based on current power state
+    if (onAC) {
+      const currentACDefault = this._settings.get_string("ac");
+      if (currentACDefault !== profile) {
+        console.log(
+          `Updating AC default from ${currentACDefault} to ${profile} (user change)`
+        );
+        this._settings.set_string("ac", profile);
+        this._notifier?.notify(
+          _(
+            `Power profile "${profile}" will now be used by default when connected to AC power`
+          )
+        );
+      }
+    } else if (onBattery && !powerConditions.lowBattery) {
+      const currentBatDefault = this._settings.get_string("bat");
+      if (currentBatDefault !== profile) {
+        console.log(
+          `Updating battery default from ${currentBatDefault} to ${profile} (user change)`
+        );
+        this._settings.set_string("bat", profile);
+        this._notifier?.notify(
+          _(
+            `Power profile "${profile}" will now be used by default when running on battery`
+          )
+        );
+      }
+    }
+  };
 
   _onWindowCreated = (win) => {
     const app = this._tracker.get_window_app(win);

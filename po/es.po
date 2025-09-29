@@ -1,4 +1,16 @@
-# Spanish translations for auto-power-profile package
+# Spanish translations for#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "Error conectando al DBus de power-profiles-daemon"
+
+#: extension.js:165
+msgid "Power profile \"%s\" will now be used by default when connected to AC power"
+msgstr "El perfil de energía \"%s\" se usará por defecto cuando esté conectado a la corriente"
+
+#: extension.js:177
+msgid "Power profile \"%s\" will now be used by default when running on battery"
+msgstr "El perfil de energía \"%s\" se usará por defecto cuando funcione con batería"
+
+#: extension.js:317-power-profile package
 # Traducciones al Español para el paquete auto-power-profile.
 # Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the auto-power-profile package.

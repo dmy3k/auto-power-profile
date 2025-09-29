@@ -1,5 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# SOME DESCRIPTIVE TITLE#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "power-profiles-daemon DBus'a bağlanırken hata"
+
+#: extension.js:165
+msgid "Power profile \"%s\" will now be used by default when connected to AC power"
+msgstr "Güç profili \"%s\" artık AC güce bağlıyken varsayılan olarak kullanılacak"
+
+#: extension.js:177
+msgid "Power profile \"%s\" will now be used by default when running on battery"
+msgstr "Güç profili \"%s\" artık pille çalışırken varsayılan olarak kullanılacak"
+
+#: extension.js:317opyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Auto Power Profile package.
 # bywkgexmkiltxh <ascdasvcfasx@outlook.com>, 2025.
 #

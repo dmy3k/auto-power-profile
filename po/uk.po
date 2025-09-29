@@ -1,4 +1,16 @@
-# Ukrainian translations for auto-power-profile package
+# Ukrainian translation#: extension.js:86
+msgid "Error connecting power-profiles-daemon DBus"
+msgstr "Помилка підключення до power-profiles-daemon DBus"
+
+#: extension.js:165
+msgid "Power profile \"%s\" will now be used by default when connected to AC power"
+msgstr "Профіль живлення \"%s\" тепер використовуватиметься за замовчуванням при підключенні до мережі"
+
+#: extension.js:177
+msgid "Power profile \"%s\" will now be used by default when running on battery"
+msgstr "Профіль живлення \"%s\" тепер використовуватиметься за замовчуванням при роботі від батареї"
+
+#: extension.js:317 auto-power-profile package
 # Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the auto-power-profile package.
 #

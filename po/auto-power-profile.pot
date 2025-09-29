@@ -25,6 +25,14 @@ msgstr ""
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr ""
 
+#: extension.js:165
+msgid "Power profile \"%s\" will now be used by default when connected to AC power"
+msgstr ""
+
+#: extension.js:177
+msgid "Power profile \"%s\" will now be used by default when running on battery"
+msgstr ""
+
 #: extension.js:317
 msgid ""
 "Power profile management is not available - this extension will have no "
