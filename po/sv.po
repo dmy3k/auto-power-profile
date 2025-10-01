@@ -1,14 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Swedish translations for auto-power-profile package
+# Copyright (C) 2025 THE auto-power-profile'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Auto Power Profile package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Swedish translator, 2025.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 10:16+0200\n"
+"POT-Creation-Date: 2025-10-01 16:29+0200\n"
 "PO-Revision-Date: 2025-08-19 11:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,15 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:69
+#: extension.js:70
 msgid "Error connecting UPower DBus"
 msgstr "Fel vid anslutning till UPower DBus"
 
-#: extension.js:86
+#: extension.js:87
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "Fel vid anslutning till power-profiles-daemon DBus"
 
-#: extension.js:317
+#: extension.js:159
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr "Strömprofi '%s' kommer nu att användas som standard vid nätström"
+
+#: extension.js:170
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr "Strömprofi '%s' kommer nu att användas som standard vid batteriström"
+
+#: extension.js:376
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -34,7 +44,7 @@ msgstr ""
 "Strömprofilhantering är inte tillgänglig - detta tillägg kommer inte att "
 "ha någon effekt på ditt system"
 
-#: extension.js:322
+#: extension.js:382
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -44,42 +54,42 @@ msgstr ""
 "energibesparingar kommer att vara begränsade. Ditt system kan behöva "
 "uppdateringar för att aktivera full funktionalitet"
 
-#: prefs.js:65 ui/general.ui:5
+#: prefs.js:66 ui/general.ui:5
 msgid "General"
 msgstr "Allmänt"
 
-#: prefs.js:112
+#: prefs.js:119
 msgid "Performance Apps"
 msgstr "Prestandaappar"
 
-#: prefs.js:117
+#: prefs.js:124
 msgid "Application-Based Profiles"
 msgstr "Applikationsbaserade profiler"
 
-#: prefs.js:119
+#: prefs.js:126
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
 msgstr ""
 "Aktivera profiler för valda appar som körs. Kan användas för att prioritera prestanda ad-hoc"
 
-#: prefs.js:141 ui/general.ui:36
+#: prefs.js:148 ui/general.ui:36
 msgid "On Battery"
 msgstr "På batteri"
 
-#: prefs.js:149 ui/general.ui:14
+#: prefs.js:156 ui/general.ui:14
 msgid "On AC"
 msgstr "På nätström"
 
-#: prefs.js:238
+#: prefs.js:245
 msgid "Performance"
 msgstr "Prestanda"
 
-#: prefs.js:239
+#: prefs.js:246
 msgid "Balanced"
 msgstr "Balanserad"
 
-#: prefs.js:240
+#: prefs.js:247
 msgid "Power Saver"
 msgstr "Energisparläge"
 
@@ -117,3 +127,11 @@ msgstr "Gräns för energisparläge"
 #: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Byt till energisparprofil när batterinivån sjunker under"
+
+#: ui/general.ui:59
+msgid "Show notifications"
+msgstr "Visa notifikationer"
+
+#: ui/general.ui:60
+msgid "Display extension notifications"
+msgstr "Visa tilläggsnotifikationer"
