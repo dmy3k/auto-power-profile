@@ -1,4 +1,4 @@
-import { DeviceState } from "./UPowerGlib";
+import { DeviceState, DeviceLevel } from "./UPowerGlib";
 
 class PowerProfilesProxyMock {
   static _state = {
@@ -20,7 +20,7 @@ class PowerProfilesProxyMock {
 
       const payload = Object.entries(props).reduce(
         (acc, [k, v]) => ({ ...acc, [k]: { unpack: () => v } }),
-        {},
+        {}
       );
       this.handlers.forEach((x) => x(null, { deep_unpack: () => payload }));
 
@@ -63,12 +63,15 @@ class UpowerProxyMock {
     on_battery: false,
     state: DeviceState.CHARGING,
     percentage: 0,
+    warningLevel: DeviceLevel.NONE,
     handlers: [],
 
-    update({ state, percentage }) {
+    update({ state, percentage, warningLevel }) {
       this.state = state || this.state;
       this.on_battery = this.state === DeviceState.DISCHARGING;
-      this.percentage = percentage || this.percentage || 0;
+      this.percentage = percentage !== undefined ? percentage : this.percentage;
+      this.warningLevel =
+        warningLevel !== undefined ? warningLevel : this.warningLevel;
       this.handlers.forEach((x) => x());
     },
   };
@@ -85,6 +88,19 @@ class UpowerProxyMock {
     return UpowerProxyMock._state.percentage;
   }
 
+  get WarningLevel() {
+    return UpowerProxyMock._state.warningLevel;
+  }
+
+  get_cached_property(propertyName) {
+    if (propertyName === "WarningLevel") {
+      return {
+        unpack: () => UpowerProxyMock._state.warningLevel
+      };
+    }
+    return null;
+  }
+
   connect = (name, handler) => {
     return UpowerProxyMock._state.handlers.push(handler) - 1;
   };
@@ -92,6 +108,43 @@ class UpowerProxyMock {
   disconnect = (handlerId) => {
     UpowerProxyMock._state.handlers.splice(handlerId, 1);
   };
+}
+
+class SettingsMock {
+  static _state = {
+    "power-saver-profile-on-low-battery": true,
+    handlers: [],
+  };
+
+  constructor({ schema_id }) {
+    this.schema_id = schema_id;
+  }
+
+  get_boolean(key) {
+    return SettingsMock._state[key] ?? false;
+  }
+
+  connect(signal, handler) {
+    return SettingsMock._state.handlers.push(handler) - 1;
+  }
+
+  disconnect(handlerId) {
+    SettingsMock._state.handlers.splice(handlerId, 1);
+  }
+}
+
+class SettingsSchemaSourceMock {
+  static get_default() {
+    return new SettingsSchemaSourceMock();
+  }
+
+  lookup(schema_id, recursive) {
+    // Return a truthy value for org.gnome.settings-daemon.plugins.power
+    if (schema_id === "org.gnome.settings-daemon.plugins.power") {
+      return { schema_id };
+    }
+    return null;
+  }
 }
 
 module.exports = {
@@ -110,6 +163,9 @@ module.exports = {
       }
     },
   },
+  Settings: SettingsMock,
+  SettingsSchemaSource: SettingsSchemaSourceMock,
   PowerProfilesProxyMock,
   UpowerProxyMock,
+  SettingsMock,
 };

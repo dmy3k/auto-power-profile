@@ -11,11 +11,6 @@
       <summary>On battery profile</summary>
       <description>Select the default profile to use when running on battery</description>
     </key>
-    <key name="threshold" type="i">
-      <default>25</default>
-      <summary>Power saving threshold</summary>
-      <description>Select battery level to turn on the power saving profile</description>
-    </key>
     <key name="lapmode" type="b">
       <default>true</default>
       <summary>lap-mode handling on AC</summary>

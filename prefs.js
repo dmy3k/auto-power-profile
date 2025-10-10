@@ -10,6 +10,7 @@ import {
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 import { createPowerProfilesProxy } from "./lib/utils.js";
+import { readPercentageLow } from "./lib/upowerConfig.js";
 
 // https://github.com/GNOME/gnome-shell/blob/3c1f6113fafda391e360114987298a14c6d72f66/js/misc/dbusUtils.js#L26
 function loadInterfaceXML(iface) {
@@ -51,8 +52,10 @@ export const General = GObject.registerClass(
     InternalChildren: [
       "ac_profile",
       "bat_profile",
-      "threshold",
       "platform_profile_model",
+      "ui_group",
+      "row_low_battery",
+      "low_battery_value",
       "row_lap_mode",
       "lap_mode",
       "notifications",
@@ -67,6 +70,9 @@ export const General = GObject.registerClass(
         icon_name: "power-profile-performance-symbolic",
       });
 
+      // Update low battery threshold info
+      this._updateLowBatteryInfo();
+
       availableProfilesPromise
         .then((availableProfiles) => {
           const indexedProfiles = availableProfiles.map(([k, name]) => k);
@@ -78,12 +84,6 @@ export const General = GObject.registerClass(
           bindAdwComboRow(this._ac_profile, settings, "ac", indexedProfiles);
           bindAdwComboRow(this._bat_profile, settings, "bat", indexedProfiles);
 
-          settings.bind(
-            "threshold",
-            this._threshold,
-            "value",
-            Gio.SettingsBindFlags.DEFAULT
-          );
           settings.bind(
             "lapmode",
             this._lap_mode,
@@ -105,6 +105,46 @@ export const General = GObject.registerClass(
           onSettingsUpdate();
         })
         .catch((e) => console.error(e));
+    }
+
+    _updateLowBatteryInfo() {
+      const upowerPercentageLow = readPercentageLow();
+
+      // Try to read GNOME power settings
+      let gnomeLowBatteryEnabled = false;
+      try {
+        const schemaSource = Gio.SettingsSchemaSource.get_default();
+        const schema = schemaSource.lookup(
+          "org.gnome.settings-daemon.plugins.power",
+          false
+        );
+
+        if (schema) {
+          const gnomePowerSettings = new Gio.Settings({
+            schema_id: "org.gnome.settings-daemon.plugins.power",
+          });
+          gnomeLowBatteryEnabled = gnomePowerSettings.get_boolean(
+            "power-saver-profile-on-low-battery"
+          );
+        }
+      } catch (e) {
+        console.log("Could not read GNOME power settings:", e.message);
+      }
+
+      // Always show the row, but with different content based on the setting
+      if (gnomeLowBatteryEnabled) {
+        this._row_low_battery.set_subtitle(
+          _("Automatic power-saver on low battery enabled in GNOME settings")
+        );
+        this._low_battery_value.set_label(`${upowerPercentageLow}%`);
+      } else {
+        this._row_low_battery.set_subtitle(
+          _(
+            "Automatic power-saver on low battery is disabled in GNOME Settings"
+          )
+        );
+        this._low_battery_value.set_label(_("Off"));
+      }
     }
   }
 );
