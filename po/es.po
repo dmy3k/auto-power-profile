@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: auto-power-profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 10:16+0200\n"
+"POT-Creation-Date: 2025-10-01 16:29+0200\n"
 "PO-Revision-Date: 2025-08-19 11:45+0200\n"
 "Last-Translator: Marcelo Gigirey <mgigirey@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -20,15 +20,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:69
+#: extension.js:70
 msgid "Error connecting UPower DBus"
 msgstr "Error al conectar con UPower DBus"
 
-#: extension.js:86
+#: extension.js:87
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "Error al conectar con el DBus de power-profiles-daemon"
 
-#: extension.js:317
+#: extension.js:159
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr "El perfil de energía '%s' se usará por defecto al conectar la alimentación"
+
+#: extension.js:170
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr "El perfil de energía '%s' se usará por defecto al funcionar con batería"
+
+#: extension.js:376
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -36,7 +47,7 @@ msgstr ""
 "La gestión de perfiles de energía no está disponible - esta extensión no "
 "tendrá efecto en su sistema"
 
-#: extension.js:322
+#: extension.js:382
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -46,42 +57,42 @@ msgstr ""
 "dispositivo - el ahorro de energía será limitado. Su sistema puede "
 "necesitar actualizaciones para habilitar la funcionalidad completa"
 
-#: prefs.js:65 ui/general.ui:5
+#: prefs.js:66 ui/general.ui:5
 msgid "General"
 msgstr "General"
 
-#: prefs.js:112
+#: prefs.js:119
 msgid "Performance Apps"
 msgstr "Aplicaciones de rendimiento"
 
-#: prefs.js:117
+#: prefs.js:124
 msgid "Application-Based Profiles"
 msgstr "Perfiles según la aplicación"
 
-#: prefs.js:119
+#: prefs.js:126
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
 msgstr ""
 "Activa perfiles para las aplicaciones seleccionadas en ejecución. Puede usarse para priorizar el rendimiento de forma puntual"
 
-#: prefs.js:141 ui/general.ui:36
+#: prefs.js:148 ui/general.ui:36
 msgid "On Battery"
 msgstr "Batería"
 
-#: prefs.js:149 ui/general.ui:14
+#: prefs.js:156 ui/general.ui:14
 msgid "On AC"
 msgstr "Enchufado"
 
-#: prefs.js:238
+#: prefs.js:245
 msgid "Performance"
 msgstr "Rendimiento"
 
-#: prefs.js:239
+#: prefs.js:246
 msgid "Balanced"
 msgstr "Balanceado"
 
-#: prefs.js:240
+#: prefs.js:247
 msgid "Power Saver"
 msgstr "Ahorro de energía"
 
@@ -120,6 +131,14 @@ msgstr "Umbral de ahorro de energía"
 #: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Cambiar al perfil de ahorro de energía cuando la batería desciende de"
+
+#: ui/general.ui:59
+msgid "Show notifications"
+msgstr "Mostrar notificaciones"
+
+#: ui/general.ui:60
+msgid "Display extension notifications"
+msgstr "Mostrar notificaciones de la extensión"
 
 #~ msgid "Advanced"
 #~ msgstr "Avanzado"

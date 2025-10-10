@@ -53,6 +53,19 @@
                         <property name="update-policy">if-valid</property>
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwActionRow" id="row_notifications">
+                        <property name="title" translatable="yes">Show notifications</property>
+                        <property name="subtitle" translatable="yes">Display extension notifications</property>
+                        <property name="activatable-widget">notifications</property>
+                        <child>
+                            <object class="GtkSwitch" id="notifications">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
     </template>

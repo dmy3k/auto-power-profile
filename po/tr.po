@@ -1,14 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Turkish translations for auto-power-profile package
+# Copyright (C) 2025 THE auto-power-profile'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Auto Power Profile package.
 # bywkgexmkiltxh <ascdasvcfasx@outlook.com>, 2025.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 10:16+0200\n"
+"POT-Creation-Date: 2025-10-01 16:29+0200\n"
 "PO-Revision-Date: 2025-09-23 00:46+0300\n"
 "Last-Translator: bywkgexmkiltxh <ascdasvcfasx@outlook.com>\n"
 "Language-Team: Turkish\n"
@@ -18,15 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:69
+#: extension.js:70
 msgid "Error connecting UPower DBus"
 msgstr "UPower DBus'a bağlanırken hata oluştu"
 
-#: extension.js:86
+#: extension.js:87
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "power-profiles-daemon DBus'a bağlanırken hata oluştu"
 
-#: extension.js:317
+#: extension.js:159
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr "Fişe takılıyken '%s' güç profili varsayılan olarak kullanılacak"
+
+#: extension.js:170
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr "Pildeyken '%s' güç profili varsayılan olarak kullanılacak"
+
+#: extension.js:376
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -34,7 +44,7 @@ msgstr ""
 "Güç profili yönetimi kullanılamıyor - bu uzantının sisteminizde hiçbir "
 "etkisi olmayacak"
 
-#: extension.js:322
+#: extension.js:382
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -44,39 +54,39 @@ msgstr ""
 "sınırlı olacaktır. Tam işlevselliği etkinleştirmek için sisteminizin "
 "güncellemelere ihtiyacı olabilir"
 
-#: prefs.js:65 ui/general.ui:5
+#: prefs.js:66 ui/general.ui:5
 msgid "General"
 msgstr "Genel"
 
-#: prefs.js:112
+#: prefs.js:119
 msgid "Performance Apps"
 msgstr "Başarım Uygulamaları"
 
-#: prefs.js:117
+#: prefs.js:124
 msgid "Application-Based Profiles"
 msgstr "Uygulama Tabanlı Profiller"
 
-#: prefs.js:119
+#: prefs.js:126
 msgid "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc"
 msgstr "Seçili uygulamalar çalıştırıldığında profiller etkinleştirilir. Geçici olarak başarım önceliği vermek için kullanılabilir"
 
-#: prefs.js:141 ui/general.ui:36
+#: prefs.js:148 ui/general.ui:36
 msgid "On Battery"
 msgstr "Pildeyken"
 
-#: prefs.js:149 ui/general.ui:14
+#: prefs.js:156 ui/general.ui:14
 msgid "On AC"
 msgstr "Fişe Takılıyken"
 
-#: prefs.js:238
+#: prefs.js:245
 msgid "Performance"
 msgstr "Başarım"
 
-#: prefs.js:239
+#: prefs.js:246
 msgid "Balanced"
 msgstr "Dengeli"
 
-#: prefs.js:240
+#: prefs.js:247
 msgid "Power Saver"
 msgstr "Güç Tutumu"
 
@@ -111,6 +121,14 @@ msgstr "Güç Tutumu Eşiği"
 #: ui/general.ui:49
 msgid "Switch to power saving profile when the battery level drops below"
 msgstr "Pil düzeyi şunun altına düştüğünde güç tutumu profiline geç"
+
+#: ui/general.ui:59
+msgid "Show notifications"
+msgstr "Bildirimleri göster"
+
+#: ui/general.ui:60
+msgid "Display extension notifications"
+msgstr "Uzantı bildirimlerini göster"
 
 #~ msgid "Auto Power Profiles"
 #~ msgstr "Auto Power Profiles"

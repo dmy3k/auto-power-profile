@@ -27,14 +27,14 @@ This extension can be found in the [store](https://extensions.gnome.org/extensio
 
 Typically this is needed for testing and development. Clone the repo, pack and install the extension.
 
-```
+```bash
 # Clone repository
 git clone https://github.com/dmy3k/auto-power-profile
 cd auto-power-profile
 
 # Build
 glib-compile-schemas schemas/
-gnome-extensions pack --podir=po --extra-source=ui --extra-source=lib
+gnome-extensions pack --force --podir=po --extra-source=ui --extra-source=lib
 
 # Install and activate
 gnome-extensions install --force auto-power-profile@dmy3k.github.io.shell-extension.zip
@@ -47,7 +47,7 @@ Extension will appear in the list of extensions and will be activated after you 
 
 - re-generate `pot` file if you add new strings during development
 
-```
+```bash
 xgettext \
     --from-code=UTF-8 \
     --package-name="Auto Power Profile" \
