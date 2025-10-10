@@ -108,9 +108,6 @@ export const General = GObject.registerClass(
     }
 
     _updateLowBatteryInfo() {
-      const upowerPercentageLow = readPercentageLow();
-
-      // Try to read GNOME power settings
       let gnomeLowBatteryEnabled = false;
       try {
         const schemaSource = Gio.SettingsSchemaSource.get_default();
@@ -131,20 +128,11 @@ export const General = GObject.registerClass(
         console.log("Could not read GNOME power settings:", e.message);
       }
 
-      // Always show the row, but with different content based on the setting
-      if (gnomeLowBatteryEnabled) {
-        this._row_low_battery.set_subtitle(
-          _("Automatic power-saver on low battery enabled in GNOME settings")
-        );
-        this._low_battery_value.set_label(`${upowerPercentageLow}%`);
-      } else {
-        this._row_low_battery.set_subtitle(
-          _(
-            "Automatic power-saver on low battery is disabled in GNOME Settings"
-          )
-        );
-        this._low_battery_value.set_label(_("Off"));
-      }
+      const percentagelow = readPercentageLow();
+      const percentageDisplay = percentagelow ? `${percentagelow}%` : _("None");
+      const value = gnomeLowBatteryEnabled ? percentageDisplay : _("Off");
+
+      this._low_battery_value.set_label(value);
     }
   }
 );
