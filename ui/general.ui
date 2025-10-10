@@ -38,22 +38,22 @@
                         <property name="model">platform_profile_model</property>
                     </object>
                 </child>
+
+                <child>
+                    <object class="AdwActionRow" id="row_low_battery">
+                        <property name="title" translatable="yes">Low Battery Threshold</property>
+                        <child>
+                            <object class="GtkLabel" id="low_battery_value">
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
 
         <child>
             <object class="AdwPreferencesGroup">
-                <child>
-                    <object class="AdwSpinRow" id="threshold">
-                        <property name="title" translatable="yes">Power Saving Threshold</property>
-                        <property name="subtitle" translatable="yes">Switch to power saving profile when the battery level drops below</property>
-                        <property name="adjustment">threshold_adjustment</property>
-                        <property name="numeric">True</property>
-                        <property name="snap-to-ticks">True</property>
-                        <property name="update-policy">if-valid</property>
-                    </object>
-                </child>
-
                 <child>
                     <object class="AdwActionRow" id="row_notifications">
                         <property name="title" translatable="yes">Show notifications</property>
@@ -71,12 +71,4 @@
     </template>
 
     <object class="GtkStringList" id="platform_profile_model"></object>
-
-    <object class="GtkAdjustment" id="threshold_adjustment">
-        <property name="page-increment">5.0</property>
-        <property name="step-increment">1.0</property>
-        <property name="upper">99.0</property>
-        <property name="lower">0.0</property>
-        <property name="value">25.0</property>
-    </object>
 </interface>

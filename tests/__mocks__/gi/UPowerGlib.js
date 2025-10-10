@@ -5,6 +5,16 @@ const DeviceState = {
   UNKNOWN: 0,
 };
 
+const DeviceLevel = {
+  UNKNOWN: 0,
+  NONE: 1,
+  DISCHARGING: 2,
+  LOW: 3,
+  CRITICAL: 4,
+  ACTION: 5,
+};
+
 module.exports = {
   DeviceState,
+  DeviceLevel,
 };

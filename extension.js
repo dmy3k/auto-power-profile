@@ -1,4 +1,5 @@
 import GLib from "gi://GLib";
+import Gio from "gi://Gio";
 import UPower from "gi://UPowerGlib";
 import Shell from "gi://Shell";
 import * as FileUtils from "resource:///org/gnome/shell/misc/fileUtils.js";
@@ -27,6 +28,8 @@ export default class AutoPowerProfile extends Extension {
   _powerManagerProxy;
   _powerManagerWatcher;
 
+  _gnomePowerSettings;
+
   _powerProfilesProxy;
   _powerProfileWatcher;
   _winCreatedWatcher;
@@ -49,6 +52,26 @@ export default class AutoPowerProfile extends Extension {
       "changed",
       this._onSettingsChange
     );
+
+    try {
+      const schemaSource = Gio.SettingsSchemaSource.get_default();
+      const schema = schemaSource.lookup(
+        "org.gnome.settings-daemon.plugins.power",
+        false
+      );
+
+      if (schema) {
+        this._gnomePowerSettings = new Gio.Settings({
+          schema_id: "org.gnome.settings-daemon.plugins.power",
+        });
+        this._gnomePowerSettingsWatcher = this._gnomePowerSettings.connect(
+          "changed::power-saver-profile-on-low-battery",
+          this._onSettingsChange
+        );
+      }
+    } catch (e) {
+      console.log("Could not load GNOME power settings:", e.message);
+    }
 
     this._winCreatedWatcher = global.display.connect_after(
       "window-created",
@@ -118,6 +141,7 @@ export default class AutoPowerProfile extends Extension {
       this._notifier = null;
     }
     this._settings?.disconnect(this._settingsWatcher);
+    this._gnomePowerSettings?.disconnect(this._gnomePowerSettingsWatcher);
 
     this._switchProfile("balanced");
 
@@ -129,6 +153,7 @@ export default class AutoPowerProfile extends Extension {
     this._clearCurrentPowerState();
 
     this._settings = null;
+    this._gnomePowerSettings = null;
     this._settingsCache = {};
 
     this._powerManagerProxy = null;
@@ -252,12 +277,14 @@ export default class AutoPowerProfile extends Extension {
     this._settingsCache = {
       ACDefault: this._settings.get_string("ac"),
       batteryDefault: this._settings.get_string("bat"),
-      batteryThreshold: this._settings.get_int("threshold"),
       lapmode: this._settings.get_boolean("lapmode"),
       notifications: this._settings.get_boolean("notifications"),
       performanceApps: this._settings.get_strv("performance-apps"),
       perfAppsAcMode: this._settings.get_string("performance-apps-ac"),
       perfAppsBatMode: this._settings.get_string("performance-apps-bat"),
+      lowBatteryEnabled: this._gnomePowerSettings?.get_boolean(
+        "power-saver-profile-on-low-battery"
+      ),
     };
 
     this._clearCurrentPowerState();
@@ -276,6 +303,18 @@ export default class AutoPowerProfile extends Extension {
     }
   };
 
+  _getWarningLevel() {
+    // WarningLevel may not be exposed via the proxy wrapper if the DBus XML is outdated
+    // Access it directly via get_cached_property as a fallback
+    let warningLevel = this._powerManagerProxy?.WarningLevel;
+    if (warningLevel === undefined && this._powerManagerProxy) {
+      const variant =
+        this._powerManagerProxy.get_cached_property("WarningLevel");
+      warningLevel = variant?.unpack() ?? UPower.DeviceLevel.NONE;
+    }
+    return warningLevel;
+  }
+
   _getPowerState = () => {
     let configuredProfile = "balanced";
 
@@ -288,15 +327,23 @@ export default class AutoPowerProfile extends Extension {
       this._powerManagerProxy?.State === UPower.DeviceState.PENDING_DISCHARGE ||
       this._powerManagerProxy?.State === UPower.DeviceState.DISCHARGING;
 
+    const warningLevel = this._getWarningLevel();
     const lowBattery =
-      this._settingsCache?.batteryThreshold >=
-      this._powerManagerProxy?.Percentage;
+      onBattery &&
+      (warningLevel === UPower.DeviceLevel.LOW ||
+        warningLevel === UPower.DeviceLevel.CRITICAL ||
+        warningLevel === UPower.DeviceLevel.ACTION);
+
+    const gnomeLowBatteryEnabled =
+      this._settingsCache.lowBatteryEnabled ?? true;
 
     if (onBattery === false) {
       configuredProfile = this._settingsCache?.ACDefault;
-    } else if (onBattery === true && lowBattery) {
+    } else if (onBattery === true && lowBattery && gnomeLowBatteryEnabled) {
       configuredProfile = "power-saver";
     } else if (onBattery === true && !lowBattery) {
+      configuredProfile = this._settingsCache?.batteryDefault;
+    } else if (onBattery === true && lowBattery && !gnomeLowBatteryEnabled) {
       configuredProfile = this._settingsCache?.batteryDefault;
     }
 
