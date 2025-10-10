@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 16:29+0200\n"
+"POT-Creation-Date: 2025-10-10 15:58+0200\n"
 "PO-Revision-Date: 2025-08-19 11:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:70
+#: extension.js:93
 msgid "Error connecting UPower DBus"
 msgstr "Fel vid anslutning till UPower DBus"
 
-#: extension.js:87
+#: extension.js:110
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "Fel vid anslutning till power-profiles-daemon DBus"
 
-#: extension.js:159
+#: extension.js:184
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr "Strömprofi '%s' kommer nu att användas som standard vid nätström"
 
-#: extension.js:170
+#: extension.js:195
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr "Strömprofi '%s' kommer nu att användas som standard vid batteriström"
 
-#: extension.js:376
+#: extension.js:423
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
 msgstr ""
-"Strömprofilhantering är inte tillgänglig - detta tillägg kommer inte att "
-"ha någon effekt på ditt system"
+"Strömprofilhantering är inte tillgänglig - detta tillägg kommer inte att ha "
+"någon effekt på ditt system"
 
-#: extension.js:382
+#: extension.js:429
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -54,42 +54,55 @@ msgstr ""
 "energibesparingar kommer att vara begränsade. Ditt system kan behöva "
 "uppdateringar för att aktivera full funktionalitet"
 
-#: prefs.js:66 ui/general.ui:5
+#: prefs.js:69 ui/general.ui:5
 msgid "General"
 msgstr "Allmänt"
 
-#: prefs.js:119
+#: prefs.js:137
+msgid "Automatic power-saver on low battery enabled in GNOME settings"
+msgstr "Automatiskt energisparläge vid lågt batteri aktiverat i GNOME-inställningar"
+
+#: prefs.js:143
+msgid "Automatic power-saver on low battery is disabled in GNOME Settings"
+msgstr "Automatiskt energisparläge vid lågt batteri inaktiverat i GNOME-inställningar"
+
+#: prefs.js:146
+msgid "Off"
+msgstr "Av"
+
+#: prefs.js:159
 msgid "Performance Apps"
 msgstr "Prestandaappar"
 
-#: prefs.js:124
+#: prefs.js:164
 msgid "Application-Based Profiles"
 msgstr "Applikationsbaserade profiler"
 
-#: prefs.js:126
+#: prefs.js:166
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
 msgstr ""
-"Aktivera profiler för valda appar som körs. Kan användas för att prioritera prestanda ad-hoc"
+"Aktivera profiler för valda appar som körs. Kan användas för att prioritera "
+"prestanda ad-hoc"
 
-#: prefs.js:148 ui/general.ui:36
+#: prefs.js:188 ui/general.ui:36
 msgid "On Battery"
 msgstr "På batteri"
 
-#: prefs.js:156 ui/general.ui:14
+#: prefs.js:196 ui/general.ui:14
 msgid "On AC"
 msgstr "På nätström"
 
-#: prefs.js:245
+#: prefs.js:285
 msgid "Performance"
 msgstr "Prestanda"
 
-#: prefs.js:246
+#: prefs.js:286
 msgid "Balanced"
 msgstr "Balanserad"
 
-#: prefs.js:247
+#: prefs.js:287
 msgid "Power Saver"
 msgstr "Energisparläge"
 
@@ -114,19 +127,16 @@ msgid ""
 "Try to maintain performance mode on unstable surfaces. Disable if you are "
 "experiencing thermal issues"
 msgstr ""
-"Försök behålla prestandaläge på instabila ytor. Inaktivera om du upplever termiska problem"
+"Försök behålla prestandaläge på instabila ytor. Inaktivera om du upplever "
+"termiska problem"
 
 #: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr "Välj standardprofil när datorn körs på batteri"
 
-#: ui/general.ui:48
-msgid "Power Saving Threshold"
-msgstr "Gräns för energisparläge"
-
-#: ui/general.ui:49
-msgid "Switch to power saving profile when the battery level drops below"
-msgstr "Byt till energisparprofil när batterinivån sjunker under"
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Gräns för låg batterinivå"
 
 #: ui/general.ui:59
 msgid "Show notifications"
@@ -135,3 +145,6 @@ msgstr "Visa notifikationer"
 #: ui/general.ui:60
 msgid "Display extension notifications"
 msgstr "Visa tilläggsnotifikationer"
+
+#~ msgid "Switch to power saving profile when the battery level drops below"
+#~ msgstr "Byt till energisparprofil när batterinivån sjunker under"

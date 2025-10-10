@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 16:29+0200\n"
+"POT-Creation-Date: 2025-10-10 15:58+0200\n"
 "PO-Revision-Date: 2025-09-23 00:46+0300\n"
 "Last-Translator: bywkgexmkiltxh <ascdasvcfasx@outlook.com>\n"
 "Language-Team: Turkish\n"
@@ -17,26 +17,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:70
+#: extension.js:93
 msgid "Error connecting UPower DBus"
 msgstr "UPower DBus'a bağlanırken hata oluştu"
 
-#: extension.js:87
+#: extension.js:110
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "power-profiles-daemon DBus'a bağlanırken hata oluştu"
 
-#: extension.js:159
+#: extension.js:184
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr "Fişe takılıyken '%s' güç profili varsayılan olarak kullanılacak"
 
-#: extension.js:170
+#: extension.js:195
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr "Pildeyken '%s' güç profili varsayılan olarak kullanılacak"
 
-#: extension.js:376
+#: extension.js:423
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -44,7 +44,7 @@ msgstr ""
 "Güç profili yönetimi kullanılamıyor - bu uzantının sisteminizde hiçbir "
 "etkisi olmayacak"
 
-#: extension.js:382
+#: extension.js:429
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -54,39 +54,55 @@ msgstr ""
 "sınırlı olacaktır. Tam işlevselliği etkinleştirmek için sisteminizin "
 "güncellemelere ihtiyacı olabilir"
 
-#: prefs.js:66 ui/general.ui:5
+#: prefs.js:69 ui/general.ui:5
 msgid "General"
 msgstr "Genel"
 
-#: prefs.js:119
+#: prefs.js:137
+msgid "Automatic power-saver on low battery enabled in GNOME settings"
+msgstr "GNOME ayarlarında düşük pilde otomatik güç tutumu etkinleştirildi"
+
+#: prefs.js:143
+msgid "Automatic power-saver on low battery is disabled in GNOME Settings"
+msgstr "GNOME ayarlarında düşük pilde otomatik güç tutumu etkisizleştirildi"
+
+#: prefs.js:146
+msgid "Off"
+msgstr "Kapalı"
+
+#: prefs.js:159
 msgid "Performance Apps"
 msgstr "Başarım Uygulamaları"
 
-#: prefs.js:124
+#: prefs.js:164
 msgid "Application-Based Profiles"
 msgstr "Uygulama Tabanlı Profiller"
 
-#: prefs.js:126
-msgid "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc"
-msgstr "Seçili uygulamalar çalıştırıldığında profiller etkinleştirilir. Geçici olarak başarım önceliği vermek için kullanılabilir"
+#: prefs.js:166
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Seçili uygulamalar çalıştırıldığında profiller etkinleştirilir. Geçici "
+"olarak başarım önceliği vermek için kullanılabilir"
 
-#: prefs.js:148 ui/general.ui:36
+#: prefs.js:188 ui/general.ui:36
 msgid "On Battery"
 msgstr "Pildeyken"
 
-#: prefs.js:156 ui/general.ui:14
+#: prefs.js:196 ui/general.ui:14
 msgid "On AC"
 msgstr "Fişe Takılıyken"
 
-#: prefs.js:245
+#: prefs.js:285
 msgid "Performance"
 msgstr "Başarım"
 
-#: prefs.js:246
+#: prefs.js:286
 msgid "Balanced"
 msgstr "Dengeli"
 
-#: prefs.js:247
+#: prefs.js:287
 msgid "Power Saver"
 msgstr "Güç Tutumu"
 
@@ -107,20 +123,20 @@ msgid "Handle lap-mode on AC"
 msgstr "Fişe takılıyken kucak modunu ele al"
 
 #: ui/general.ui:23
-msgid "Try to maintain performance mode on unstable surfaces. Disable if you are experiencing thermal issues"
-msgstr "Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları yaşıyorsanız etkisizleştirin"
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Kararsız yüzeylerde başarım kipini korumaya çalış. Sıcaklık sorunları "
+"yaşıyorsanız etkisizleştirin"
 
 #: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr "Pildeyken kullanılacak öntanımlı profili seç"
 
-#: ui/general.ui:48
-msgid "Power Saving Threshold"
-msgstr "Güç Tutumu Eşiği"
-
-#: ui/general.ui:49
-msgid "Switch to power saving profile when the battery level drops below"
-msgstr "Pil düzeyi şunun altına düştüğünde güç tutumu profiline geç"
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Düşük Pil Eşiği"
 
 #: ui/general.ui:59
 msgid "Show notifications"
@@ -129,6 +145,9 @@ msgstr "Bildirimleri göster"
 #: ui/general.ui:60
 msgid "Display extension notifications"
 msgstr "Uzantı bildirimlerini göster"
+
+#~ msgid "Switch to power saving profile when the battery level drops below"
+#~ msgstr "Pil düzeyi şunun altına düştüğünde güç tutumu profiline geç"
 
 #~ msgid "Auto Power Profiles"
 #~ msgstr "Auto Power Profiles"

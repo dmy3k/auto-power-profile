@@ -4,8 +4,8 @@
 
 GNOME Shell extension to automatically switch between power profiles based on power supply status and battery level.
 
-The extension offers alternative solution to long-standing
-[feature request #715](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/715) in `gnome-settings-daemon` repo.
+The extension addresses long-standing issues in `gnome-settings-daemon`
+[#715](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/715), [#810](https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/810)
 
 ## Settings
 
@@ -54,6 +54,9 @@ xgettext \
     --output="po/auto-power-profile.pot" \
     *.js \
     ui/*.ui
+
+# merge template into target translation
+msgmerge --update --backup=none po/sv.po po/auto-power-profile.pot
 ```
 
 - create (e.g `cp po/auto-power-profile.pot po/es.po`) or edit corresponding `po` files, e.g with [Poedit](https://poedit.net/)

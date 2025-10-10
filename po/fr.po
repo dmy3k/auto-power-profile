@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 16:29+0200\n"
+"POT-Creation-Date: 2025-10-10 15:58+0200\n"
 "PO-Revision-Date: 2025-08-21 16:11+0200\n"
 "Last-Translator: p-sage\n"
 "Language-Team: \n"
@@ -17,57 +17,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:70
+#: extension.js:93
 msgid "Error connecting UPower DBus"
 msgstr "Erreur lors de la connexion à UPower DBus"
 
-#: extension.js:87
+#: extension.js:110
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr "Erreur de connexion à power-profiles-daemon DBus"
 
-#: extension.js:159
+#: extension.js:184
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
-msgstr "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur secteur"
+msgstr ""
+"Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur secteur"
 
-#: extension.js:170
+#: extension.js:195
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
-msgstr "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur batterie"
+msgstr ""
+"Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur batterie"
 
-#: extension.js:376
+#: extension.js:423
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
 msgstr ""
-"La gestion des profils d'alimentation n'est pas disponible - cette "
-"extension n'aura aucun effet sur votre système"
+"La gestion des profils d'alimentation n'est pas disponible - cette extension "
+"n'aura aucun effet sur votre système"
 
-#: extension.js:382
+#: extension.js:429
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
 "functionality"
 msgstr ""
-"Le changement de profil d'alimentation peut ne pas fonctionner "
-"correctement sur cet appareil - les économies d'énergie seront limitées. "
-"Votre système peut avoir besoin de mises à jour pour activer toutes les "
-"fonctionnalités"
+"Le changement de profil d'alimentation peut ne pas fonctionner correctement "
+"sur cet appareil - les économies d'énergie seront limitées. Votre système "
+"peut avoir besoin de mises à jour pour activer toutes les fonctionnalités"
 
-#: prefs.js:66 ui/general.ui:5
+#: prefs.js:69 ui/general.ui:5
 msgid "General"
 msgstr "Général"
 
-#: prefs.js:119
+#: prefs.js:137
+msgid "Automatic power-saver on low battery enabled in GNOME settings"
+msgstr "Économie d'énergie automatique sur batterie faible activée dans les paramètres GNOME"
+
+#: prefs.js:143
+msgid "Automatic power-saver on low battery is disabled in GNOME Settings"
+msgstr "Économie d'énergie automatique sur batterie faible désactivée dans les paramètres GNOME"
+
+#: prefs.js:146
+msgid "Off"
+msgstr "Désactivé"
+
+#: prefs.js:159
 msgid "Performance Apps"
 msgstr "Applications de performance"
 
-#: prefs.js:124
+#: prefs.js:164
 msgid "Application-Based Profiles"
 msgstr "Profils basés sur les applications"
 
-#: prefs.js:126
+#: prefs.js:166
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
@@ -75,23 +88,23 @@ msgstr ""
 "Activer des profils pour les applications en cours d'exécution. Peut être "
 "utilisé pour prioriser la performance de manière ponctuelle"
 
-#: prefs.js:148 ui/general.ui:36
+#: prefs.js:188 ui/general.ui:36
 msgid "On Battery"
 msgstr "Sur batterie"
 
-#: prefs.js:156 ui/general.ui:14
+#: prefs.js:196 ui/general.ui:14
 msgid "On AC"
 msgstr "Sur secteur"
 
-#: prefs.js:245
+#: prefs.js:285
 msgid "Performance"
 msgstr "Performance"
 
-#: prefs.js:246
+#: prefs.js:286
 msgid "Balanced"
 msgstr "Équilibré"
 
-#: prefs.js:247
+#: prefs.js:287
 msgid "Power Saver"
 msgstr "Économie d'énergie"
 
@@ -129,15 +142,9 @@ msgstr ""
 "Sélectionner le profil par défaut lorsque l’ordinateur fonctionne sur "
 "batterie"
 
-#: ui/general.ui:48
-msgid "Power Saving Threshold"
-msgstr "Seuil d'économie d'énergie"
-
-#: ui/general.ui:49
-msgid "Switch to power saving profile when the battery level drops below"
-msgstr ""
-"Passer au profil Économie d'énergie lorsque le niveau de la batterie "
-"descend en dessous"
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Seuil de batterie faible"
 
 #: ui/general.ui:59
 msgid "Show notifications"
@@ -146,3 +153,8 @@ msgstr "Afficher les notifications"
 #: ui/general.ui:60
 msgid "Display extension notifications"
 msgstr "Afficher les notifications de l'extension"
+
+#~ msgid "Switch to power saving profile when the battery level drops below"
+#~ msgstr ""
+#~ "Passer au profil Économie d'énergie lorsque le niveau de la batterie "
+#~ "descend en dessous"

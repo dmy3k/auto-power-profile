@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-01 16:29+0200\n"
+"POT-Creation-Date: 2025-10-10 15:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,73 +17,85 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:70
+#: extension.js:93
 msgid "Error connecting UPower DBus"
 msgstr ""
 
-#: extension.js:87
+#: extension.js:110
 msgid "Error connecting power-profiles-daemon DBus"
 msgstr ""
 
-#: extension.js:159
+#: extension.js:184
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr ""
 
-#: extension.js:170
+#: extension.js:195
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr ""
 
-#: extension.js:376
+#: extension.js:423
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
 msgstr ""
 
-#: extension.js:382
+#: extension.js:429
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
 "functionality"
 msgstr ""
 
-#: prefs.js:66 ui/general.ui:5
+#: prefs.js:69 ui/general.ui:5
 msgid "General"
 msgstr ""
 
-#: prefs.js:119
+#: prefs.js:137
+msgid "Automatic power-saver on low battery enabled in GNOME settings"
+msgstr ""
+
+#: prefs.js:143
+msgid "Automatic power-saver on low battery is disabled in GNOME Settings"
+msgstr ""
+
+#: prefs.js:146
+msgid "Off"
+msgstr ""
+
+#: prefs.js:159
 msgid "Performance Apps"
 msgstr ""
 
-#: prefs.js:124
+#: prefs.js:164
 msgid "Application-Based Profiles"
 msgstr ""
 
-#: prefs.js:126
+#: prefs.js:166
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
 msgstr ""
 
-#: prefs.js:148 ui/general.ui:36
+#: prefs.js:188 ui/general.ui:36
 msgid "On Battery"
 msgstr ""
 
-#: prefs.js:156 ui/general.ui:14
+#: prefs.js:196 ui/general.ui:14
 msgid "On AC"
 msgstr ""
 
-#: prefs.js:245
+#: prefs.js:285
 msgid "Performance"
 msgstr ""
 
-#: prefs.js:246
+#: prefs.js:286
 msgid "Balanced"
 msgstr ""
 
-#: prefs.js:247
+#: prefs.js:287
 msgid "Power Saver"
 msgstr ""
 
@@ -113,12 +125,8 @@ msgstr ""
 msgid "Select the default profile when running on battery"
 msgstr ""
 
-#: ui/general.ui:48
-msgid "Power Saving Threshold"
-msgstr ""
-
-#: ui/general.ui:49
-msgid "Switch to power saving profile when the battery level drops below"
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
 msgstr ""
 
 #: ui/general.ui:59
