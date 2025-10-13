@@ -54,21 +54,13 @@ export default class AutoPowerProfile extends Extension {
     );
 
     try {
-      const schemaSource = Gio.SettingsSchemaSource.get_default();
-      const schema = schemaSource.lookup(
-        "org.gnome.settings-daemon.plugins.power",
-        false
+      this._gnomePowerSettings = new Gio.Settings({
+        schema_id: "org.gnome.settings-daemon.plugins.power",
+      });
+      this._gnomePowerSettingsWatcher = this._gnomePowerSettings.connect(
+        "changed::power-saver-profile-on-low-battery",
+        this._onSettingsChange
       );
-
-      if (schema) {
-        this._gnomePowerSettings = new Gio.Settings({
-          schema_id: "org.gnome.settings-daemon.plugins.power",
-        });
-        this._gnomePowerSettingsWatcher = this._gnomePowerSettings.connect(
-          "changed::power-saver-profile-on-low-battery",
-          this._onSettingsChange
-        );
-      }
     } catch (e) {
       console.log("Could not load GNOME power settings:", e.message);
     }

@@ -110,20 +110,12 @@ export const General = GObject.registerClass(
     _updateLowBatteryInfo() {
       let gnomeLowBatteryEnabled = false;
       try {
-        const schemaSource = Gio.SettingsSchemaSource.get_default();
-        const schema = schemaSource.lookup(
-          "org.gnome.settings-daemon.plugins.power",
-          false
+        const gnomePowerSettings = new Gio.Settings({
+          schema_id: "org.gnome.settings-daemon.plugins.power",
+        });
+        gnomeLowBatteryEnabled = gnomePowerSettings.get_boolean(
+          "power-saver-profile-on-low-battery"
         );
-
-        if (schema) {
-          const gnomePowerSettings = new Gio.Settings({
-            schema_id: "org.gnome.settings-daemon.plugins.power",
-          });
-          gnomeLowBatteryEnabled = gnomePowerSettings.get_boolean(
-            "power-saver-profile-on-low-battery"
-          );
-        }
       } catch (e) {
         console.log("Could not read GNOME power settings:", e.message);
       }
