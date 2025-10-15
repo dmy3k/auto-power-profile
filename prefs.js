@@ -260,27 +260,21 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     window.add(new PerformanceApps(settings, availableProfiles));
   }
 
-  _loadAvailableProfiles = () => {
+  _loadAvailableProfiles = async () => {
     const PROFILES_I18N = [
       ["performance", _("Performance")],
       ["balanced", _("Balanced")],
       ["power-saver", _("Power Saver")],
     ];
 
-    return new Promise((resolve, reject) => {
-      createPowerProfilesProxy(loadInterfaceXML, (proxy, error) => {
-        if (error) {
-          reject(error);
-        } else {
-          const keys = proxy?.Profiles?.map((x) => x.Profile.unpack()) || [];
-          const profiles = PROFILES_I18N.filter(([k, n]) => keys.includes(k));
-          if (profiles.length) {
-            resolve(profiles);
-          } else {
-            reject(new Error("No available power profiles"));
-          }
-        }
-      });
-    });
+    const proxy = await createPowerProfilesProxy(loadInterfaceXML);
+    const keys = proxy?.Profiles?.map((x) => x.Profile.unpack()) || [];
+    const profiles = PROFILES_I18N.filter(([k, n]) => keys.includes(k));
+
+    if (profiles.length) {
+      return profiles;
+    } else {
+      throw new Error("No available power profiles");
+    }
   };
 }

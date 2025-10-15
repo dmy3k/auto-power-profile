@@ -29,7 +29,7 @@ class PowerProfilesProxyMock {
   };
 
   constructor(dbus, bus_name, obj_path, callback) {
-    process.nextTick(callback);
+    process.nextTick(() => callback(this, null));
   }
 
   connect = (name, handler) => {
@@ -77,7 +77,7 @@ class UpowerProxyMock {
   };
 
   constructor(dbus, bus_name, obj_path, callback) {
-    process.nextTick(callback);
+    process.nextTick(() => callback(this, null));
   }
 
   get State() {
@@ -95,7 +95,7 @@ class UpowerProxyMock {
   get_cached_property(propertyName) {
     if (propertyName === "WarningLevel") {
       return {
-        unpack: () => UpowerProxyMock._state.warningLevel
+        unpack: () => UpowerProxyMock._state.warningLevel,
       };
     }
     return null;
