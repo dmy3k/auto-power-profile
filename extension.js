@@ -1,7 +1,7 @@
 import GLib from "gi://GLib";
 import {
   Extension,
-  gettext as _,
+  gettext as _
 } from "resource:///org/gnome/shell/extensions/extension.js";
 
 import { Notifier } from "./lib/notifier.js";
@@ -60,7 +60,7 @@ export default class AutoPowerProfile extends Extension {
 
     await Promise.all([
       this._upowerDbus.initialize(),
-      this._powerProfilesDbus.initialize(),
+      this._powerProfilesDbus.initialize()
     ]);
 
     this._upowerDbus.connectSignal("g-properties-changed", this._checkProfile);
@@ -106,6 +106,11 @@ export default class AutoPowerProfile extends Extension {
   }
 
   _onUserProfileChange = (profile, { lowBattery, onBattery, onAC }) => {
+    // Don't remember user changes if the feature is disabled
+    if (!this._settings.rememberUserProfile) {
+      return;
+    }
+
     // Only update defaults for basic profiles, not when performance apps are active
     // Don't update if we're in low battery mode (power-saver is forced)
     if (lowBattery || this._perfAppTracker?.hasActiveApps) {
@@ -164,6 +169,9 @@ export default class AutoPowerProfile extends Extension {
         const reason = payload?.PerformanceDegraded?.unpack();
 
         if (reason === "lap-detected" && this._settings.lapModeEnabled) {
+          if (this._perfDebounceTimerId) {
+            GLib.Source.remove(this._perfDebounceTimerId);
+          }
           this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
             5,
@@ -228,7 +236,7 @@ export default class AutoPowerProfile extends Extension {
     return {
       ...powerState,
       perfApps: perfAppsActive,
-      configuredProfile,
+      configuredProfile
     };
   }
 
@@ -277,7 +285,7 @@ export default class AutoPowerProfile extends Extension {
           "Power profile switching may not work properly on this device - energy savings will be limited. Your system may need updates to enable full functionality"
         ),
         {
-          uri: "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html",
+          uri: "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html"
         }
       );
     }

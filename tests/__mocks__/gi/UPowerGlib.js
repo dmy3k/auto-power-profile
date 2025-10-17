@@ -2,7 +2,7 @@ const DeviceState = {
   PENDING_DISCHARGE: 6,
   DISCHARGING: 2,
   CHARGING: 1,
-  UNKNOWN: 0,
+  UNKNOWN: 0
 };
 
 const DeviceLevel = {
@@ -11,10 +11,10 @@ const DeviceLevel = {
   DISCHARGING: 2,
   LOW: 3,
   CRITICAL: 4,
-  ACTION: 5,
+  ACTION: 5
 };
 
 module.exports = {
   DeviceState,
-  DeviceLevel,
+  DeviceLevel
 };

@@ -4,7 +4,7 @@ import { DeviceState, DeviceLevel } from "./__mocks__/gi/UPowerGlib.js";
 import {
   UpowerProxyMock,
   PowerProfilesProxyMock,
-  SettingsMock,
+  SettingsMock
 } from "./__mocks__/gi/Gio.js";
 import { Extension } from "./__mocks__/resource/org/gnome/shell/extensions/extension.js";
 
@@ -52,7 +52,7 @@ test("starts in performance profile on AC according to settings", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 5,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   const p = new AutoPowerProfile();
@@ -77,7 +77,7 @@ test("switch from balanced to power-saver when low-battery threshold reached", a
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 29,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   const p = new AutoPowerProfile();
@@ -88,7 +88,7 @@ test("switch from balanced to power-saver when low-battery threshold reached", a
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 29,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
   await sleep(10);
 
@@ -97,7 +97,7 @@ test("switch from balanced to power-saver when low-battery threshold reached", a
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 24,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
   await sleep(10);
 
@@ -108,7 +108,7 @@ test("switch from power-saver to performance when AC connected", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 24,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
 
   const p = new AutoPowerProfile();
@@ -121,7 +121,7 @@ test("switch from power-saver to performance when AC connected", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 24,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
   await sleep(10);
 
@@ -132,7 +132,7 @@ test("switch to balanced after corresponding setting changed", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 29,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   const p = new AutoPowerProfile();
@@ -142,7 +142,7 @@ test("switch to balanced after corresponding setting changed", async () => {
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
 
   UpowerProxyMock._state.update({
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
   await sleep(10);
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
@@ -152,7 +152,7 @@ test("handles lap-mode when on performance while pluggen in", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 29,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   const p = new AutoPowerProfile();
@@ -179,7 +179,7 @@ test("ignores lap-mode when on battery", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 33,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   const p = new AutoPowerProfile();
@@ -228,7 +228,7 @@ test("uses power-saver on CRITICAL warning level", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 10,
-    warningLevel: DeviceLevel.CRITICAL,
+    warningLevel: DeviceLevel.CRITICAL
   });
 
   const p = new AutoPowerProfile();
@@ -243,7 +243,7 @@ test("uses power-saver on ACTION warning level", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 5,
-    warningLevel: DeviceLevel.ACTION,
+    warningLevel: DeviceLevel.ACTION
   });
 
   const p = new AutoPowerProfile();
@@ -258,7 +258,7 @@ test("respects battery default setting when battery is not low", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 50,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   Extension._mock.update({ bat: "power-saver" });
@@ -349,7 +349,7 @@ test("switches to balanced profile when settings change from AC to battery", asy
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 80,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   Extension._mock.update({ ac: "performance", bat: "balanced" });
@@ -365,7 +365,7 @@ test("switches to balanced profile when settings change from AC to battery", asy
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 80,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
   await sleep(10);
 
@@ -393,7 +393,7 @@ test("switches profile when AC setting is changed", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 80,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   Extension._mock.update({ ac: "performance" });
@@ -416,7 +416,7 @@ test("switches profile when battery setting is changed", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 60,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   Extension._mock.update({ bat: "balanced" });
@@ -463,7 +463,7 @@ test("transitions from LOW to CRITICAL warning level", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 50,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
 
   Extension._mock.update({ bat: "balanced" });
@@ -478,7 +478,7 @@ test("transitions from LOW to CRITICAL warning level", async () => {
   // Battery gets low
   UpowerProxyMock._state.update({
     percentage: 15,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
   await sleep(10);
 
@@ -487,7 +487,7 @@ test("transitions from LOW to CRITICAL warning level", async () => {
   // Battery gets critical
   UpowerProxyMock._state.update({
     percentage: 8,
-    warningLevel: DeviceLevel.CRITICAL,
+    warningLevel: DeviceLevel.CRITICAL
   });
   await sleep(10);
 
@@ -499,7 +499,7 @@ test("exits low battery mode when charged above threshold", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 15,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
 
   Extension._mock.update({ bat: "balanced" });
@@ -515,7 +515,7 @@ test("exits low battery mode when charged above threshold", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     percentage: 25,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
   await sleep(10);
 
@@ -526,7 +526,7 @@ test("exits low battery mode when charged above threshold", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 25,
-    warningLevel: DeviceLevel.NONE,
+    warningLevel: DeviceLevel.NONE
   });
   await sleep(10);
 
@@ -543,7 +543,7 @@ test("respects GNOME low battery setting when disabled", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 15,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
 
   Extension._mock.update({ bat: "balanced" });
@@ -566,7 +566,7 @@ test("reacts to GNOME low battery setting changes", async () => {
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     percentage: 15,
-    warningLevel: DeviceLevel.LOW,
+    warningLevel: DeviceLevel.LOW
   });
 
   Extension._mock.update({ bat: "balanced" });
@@ -682,7 +682,7 @@ describe("Async Initialization & Race Conditions", () => {
     // Change power state immediately
     UpowerProxyMock._state.update({
       state: DeviceState.CHARGING,
-      percentage: 50,
+      percentage: 50
     });
 
     await sleep(10);

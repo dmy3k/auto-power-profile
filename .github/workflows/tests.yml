@@ -29,8 +29,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --non-interactive --frozen-lockfile
 
-      # - name: Check formatting
-      #   run: yarn fmtcheck
+      - name: Check formatting
+        run: yarn fmtcheck ..
 
       - name: Run test suite
         run: yarn test

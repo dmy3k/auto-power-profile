@@ -10,7 +10,7 @@ class Extension {
       lapmode: true,
       "performance-apps": [],
       "performance-apps-ac": "performance",
-      "performance-apps-bat": "balanced",
+      "performance-apps-bat": "balanced"
     },
     handlers: [],
 
@@ -49,7 +49,7 @@ class Extension {
 
     disconnect(handlerId) {
       this.handlers.splice(handlerId, 1);
-    },
+    }
   };
 
   getSettings() {
@@ -62,7 +62,7 @@ module.exports = {
   gettext: (x) => {
     return {
       toString: () => x,
-      format: (...args) => x.replace(/%s/g, () => args.shift()),
+      format: (...args) => x.replace(/%s/g, () => args.shift())
     };
-  },
+  }
 };

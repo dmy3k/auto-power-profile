@@ -9,7 +9,7 @@ global.log = function (...args) {
 global._ = (x) => x;
 
 global.display = {
-  connect_after: () => {},
+  connect_after: () => {}
 };
 
 global.get_window_actors = () => [];

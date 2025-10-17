@@ -15,7 +15,7 @@ class PowerProfilesProxyMock {
     notify(extra = {}) {
       const props = {
         ...extra,
-        ActiveProfile: this.ActiveProfile,
+        ActiveProfile: this.ActiveProfile
       };
 
       const payload = Object.entries(props).reduce(
@@ -25,7 +25,7 @@ class PowerProfilesProxyMock {
       this.handlers.forEach((x) => x(null, { deep_unpack: () => payload }));
 
       this.PerformanceDegraded = null;
-    },
+    }
   };
 
   constructor(dbus, bus_name, obj_path, callback) {
@@ -42,7 +42,7 @@ class PowerProfilesProxyMock {
 
   get Profiles() {
     return PowerProfilesProxyMock._state.Profiles.map((x) => ({
-      Profile: { unpack: () => x },
+      Profile: { unpack: () => x }
     }));
   }
 
@@ -73,7 +73,7 @@ class UpowerProxyMock {
       this.warningLevel =
         warningLevel !== undefined ? warningLevel : this.warningLevel;
       this.handlers.forEach((x) => x());
-    },
+    }
   };
 
   constructor(dbus, bus_name, obj_path, callback) {
@@ -95,7 +95,7 @@ class UpowerProxyMock {
   get_cached_property(propertyName) {
     if (propertyName === "WarningLevel") {
       return {
-        unpack: () => UpowerProxyMock._state.warningLevel,
+        unpack: () => UpowerProxyMock._state.warningLevel
       };
     }
     return null;
@@ -113,7 +113,7 @@ class UpowerProxyMock {
 class SettingsMock {
   static _state = {
     "power-saver-profile-on-low-battery": true,
-    handlers: [],
+    handlers: []
   };
 
   constructor({ schema_id }) {
@@ -161,11 +161,11 @@ module.exports = {
       } else {
         throw new Error(`No mock is defined for makeProxyWrapper("${ref}")`);
       }
-    },
+    }
   },
   Settings: SettingsMock,
   SettingsSchemaSource: SettingsSchemaSourceMock,
   PowerProfilesProxyMock,
   UpowerProxyMock,
-  SettingsMock,
+  SettingsMock
 };

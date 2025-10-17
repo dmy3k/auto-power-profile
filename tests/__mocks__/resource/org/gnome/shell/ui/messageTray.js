@@ -13,5 +13,5 @@ module.exports = {
   Urgency: {},
   NotificationDestroyedReason: {},
   Source,
-  Notification: Notification,
+  Notification: Notification
 };
