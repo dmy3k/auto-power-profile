@@ -1,3 +1,3 @@
 module.exports = {
-  loadInterfaceXML: (name) => name,
+  loadInterfaceXML: (name) => name
 };

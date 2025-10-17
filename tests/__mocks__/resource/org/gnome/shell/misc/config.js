@@ -1,3 +1,3 @@
 module.exports = {
-  PACKAGE_VERSION: "45.0",
+  PACKAGE_VERSION: "45.0"
 };

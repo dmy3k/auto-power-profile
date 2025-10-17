@@ -6,7 +6,7 @@ import Gtk from "gi://Gtk";
 
 import {
   ExtensionPreferences,
-  gettext as _,
+  gettext as _
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 import { createPowerProfilesProxy } from "./lib/utils.js";
@@ -59,7 +59,8 @@ export const General = GObject.registerClass(
       "row_lap_mode",
       "lap_mode",
       "notifications",
-    ],
+      "remember_user_profile"
+    ]
   },
   class General extends Adw.PreferencesPage {
     _init(settings, availableProfilesPromise, params = {}) {
@@ -67,7 +68,7 @@ export const General = GObject.registerClass(
         ...params,
         name: "general",
         title: _("General"),
-        icon_name: "power-profile-performance-symbolic",
+        icon_name: "power-profile-performance-symbolic"
       });
 
       // Update low battery threshold info
@@ -96,6 +97,12 @@ export const General = GObject.registerClass(
             "active",
             Gio.SettingsBindFlags.DEFAULT
           );
+          settings.bind(
+            "remember-user-profile",
+            this._remember_user_profile,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT
+          );
 
           const onSettingsUpdate = () => {
             const acDefault = settings.get_string("ac");
@@ -111,7 +118,7 @@ export const General = GObject.registerClass(
       let gnomeLowBatteryEnabled = false;
       try {
         const gnomePowerSettings = new Gio.Settings({
-          schema_id: "org.gnome.settings-daemon.plugins.power",
+          schema_id: "org.gnome.settings-daemon.plugins.power"
         });
         gnomeLowBatteryEnabled = gnomePowerSettings.get_boolean(
           "power-saver-profile-on-low-battery"
@@ -137,14 +144,14 @@ export const PerformanceApps = GObject.registerClass(
         ...params,
         name: "performance-apps",
         title: _("Performance Apps"),
-        icon_name: "application-x-executable-symbolic",
+        icon_name: "application-x-executable-symbolic"
       });
 
       const modesGroup = new Adw.PreferencesGroup({
         title: _("Application-Based Profiles"),
         description: _(
           "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc"
-        ),
+        )
       });
       this.add(modesGroup);
 
@@ -167,7 +174,7 @@ export const PerformanceApps = GObject.registerClass(
         const batCombo = new Adw.ComboRow({
           title: _("On Battery"),
           model: Gtk.StringList.new(availableProfiles.map(([_, n]) => n)),
-          selected: profileKeys.indexOf(currentBatProfile),
+          selected: profileKeys.indexOf(currentBatProfile)
         });
         bindAdwComboRow(batCombo, settings, performanceAppsBatKey, profileKeys);
         modesGroup.add(batCombo);
@@ -175,7 +182,7 @@ export const PerformanceApps = GObject.registerClass(
         const acCombo = new Adw.ComboRow({
           title: _("On AC"),
           model: Gtk.StringList.new(availableProfiles.map(([_, n]) => n)),
-          selected: profileKeys.indexOf(currentAcProfile),
+          selected: profileKeys.indexOf(currentAcProfile)
         });
         bindAdwComboRow(acCombo, settings, performanceAppsAcKey, profileKeys);
         modesGroup.add(acCombo);
@@ -191,10 +198,22 @@ export const PerformanceApps = GObject.registerClass(
           }
         });
 
-        apps.sort((a, b) =>
-          a.get_display_name().localeCompare(b.get_display_name())
-        );
         const selectedIds = new Set(settings.get_strv("performance-apps"));
+
+        // Sort apps: selected apps first (alphabetically), then unselected apps (alphabetically)
+        apps.sort((a, b) => {
+          const aSelected = selectedIds.has(a.get_id());
+          const bSelected = selectedIds.has(b.get_id());
+
+          // If selection status differs, selected apps come first
+          if (aSelected !== bSelected) {
+            return bSelected ? 1 : -1;
+          }
+
+          // Within same selection status, sort alphabetically
+          return a.get_display_name().localeCompare(b.get_display_name());
+        });
+
         this._switchRows = {};
 
         apps.forEach((app) => {
@@ -204,14 +223,14 @@ export const PerformanceApps = GObject.registerClass(
 
           const row = new Adw.SwitchRow({
             title: appName,
-            active: selectedIds.has(appId),
+            active: selectedIds.has(appId)
           });
 
           if (icon) {
             const image = new Gtk.Image({
               gicon: icon,
               pixel_size: 24,
-              margin_end: 8,
+              margin_end: 8
             });
             row.add_prefix(image);
           }
@@ -264,7 +283,7 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
     const PROFILES_I18N = [
       ["performance", _("Performance")],
       ["balanced", _("Balanced")],
-      ["power-saver", _("Power Saver")],
+      ["power-saver", _("Power Saver")]
     ];
 
     const proxy = await createPowerProfilesProxy(loadInterfaceXML);
