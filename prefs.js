@@ -47,7 +47,7 @@ export const General = GObject.registerClass(
     Template: GLib.Uri.resolve_relative(
       import.meta.url,
       "./ui/general.ui",
-      GLib.UriFlags.NONE
+      GLib.UriFlags.NONE,
     ),
     InternalChildren: [
       "ac_profile",
@@ -59,6 +59,7 @@ export const General = GObject.registerClass(
       "row_lap_mode",
       "lap_mode",
       "notifications",
+      "remember_user_profile",
     ],
   },
   class General extends Adw.PreferencesPage {
@@ -88,13 +89,19 @@ export const General = GObject.registerClass(
             "lapmode",
             this._lap_mode,
             "active",
-            Gio.SettingsBindFlags.DEFAULT
+            Gio.SettingsBindFlags.DEFAULT,
           );
           settings.bind(
             "notifications",
             this._notifications,
             "active",
-            Gio.SettingsBindFlags.DEFAULT
+            Gio.SettingsBindFlags.DEFAULT,
+          );
+          settings.bind(
+            "remember-user-profile",
+            this._remember_user_profile,
+            "active",
+            Gio.SettingsBindFlags.DEFAULT,
           );
 
           const onSettingsUpdate = () => {
@@ -114,7 +121,7 @@ export const General = GObject.registerClass(
           schema_id: "org.gnome.settings-daemon.plugins.power",
         });
         gnomeLowBatteryEnabled = gnomePowerSettings.get_boolean(
-          "power-saver-profile-on-low-battery"
+          "power-saver-profile-on-low-battery",
         );
       } catch (e) {
         console.log("Could not read GNOME power settings:", e.message);
@@ -126,7 +133,7 @@ export const General = GObject.registerClass(
 
       this._low_battery_value.set_label(value);
     }
-  }
+  },
 );
 
 export const PerformanceApps = GObject.registerClass(
@@ -143,14 +150,14 @@ export const PerformanceApps = GObject.registerClass(
       const modesGroup = new Adw.PreferencesGroup({
         title: _("Application-Based Profiles"),
         description: _(
-          "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc"
+          "Activate profiles for running selected apps. Can be used to prioritize performance ad-hoc",
         ),
       });
       this.add(modesGroup);
 
       availableProfilesPromise.then((allProfiles) => {
         const availableProfiles = allProfiles.filter(
-          ([k, _]) => k !== "power-saver"
+          ([k, _]) => k !== "power-saver",
         );
         const profileKeys = availableProfiles.map(([k, _]) => k);
 
@@ -191,10 +198,22 @@ export const PerformanceApps = GObject.registerClass(
           }
         });
 
-        apps.sort((a, b) =>
-          a.get_display_name().localeCompare(b.get_display_name())
-        );
         const selectedIds = new Set(settings.get_strv("performance-apps"));
+
+        // Sort apps: selected apps first (alphabetically), then unselected apps (alphabetically)
+        apps.sort((a, b) => {
+          const aSelected = selectedIds.has(a.get_id());
+          const bSelected = selectedIds.has(b.get_id());
+
+          // If selection status differs, selected apps come first
+          if (aSelected !== bSelected) {
+            return bSelected ? 1 : -1;
+          }
+
+          // Within same selection status, sort alphabetically
+          return a.get_display_name().localeCompare(b.get_display_name());
+        });
+
         this._switchRows = {};
 
         apps.forEach((app) => {
@@ -236,7 +255,7 @@ export const PerformanceApps = GObject.registerClass(
             Object.entries(this._switchRows).forEach(([appId, row]) => {
               row.active = updated.has(appId);
             });
-          }
+          },
         );
       });
     }
@@ -248,7 +267,7 @@ export const PerformanceApps = GObject.registerClass(
       }
       super.vfunc_dispose();
     }
-  }
+  },
 );
 
 export default class AutoPowerProfilePreferences extends ExtensionPreferences {

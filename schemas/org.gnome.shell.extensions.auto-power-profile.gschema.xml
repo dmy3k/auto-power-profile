@@ -22,6 +22,12 @@
       <description>Show extension notifications</description>
     </key>
 
+    <key name="remember-user-profile" type="b">
+      <default>false</default>
+      <summary>Remember manual profile changes</summary>
+      <description>When enabled, manually selected profiles become the new default for the current power state (AC/battery). When disabled, manual changes are temporary and the extension will revert to configured defaults on the next power state change.</description>
+    </key>
+
     <key name="performance-apps" type="as">
       <default>[]</default>
       <summary>List of application IDs that should enable performance mode</summary>

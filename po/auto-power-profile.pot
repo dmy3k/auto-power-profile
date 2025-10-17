@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 12:32+0200\n"
+"POT-Creation-Date: 2025-10-17 21:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,99 +17,78 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:93
-msgid "Error connecting UPower DBus"
+#: extension.js:52
+msgid "Error connecting to power management services"
 msgstr ""
 
-#: extension.js:110
-msgid "Error connecting power-profiles-daemon DBus"
-msgstr ""
-
-#: extension.js:184
+#: extension.js:125
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr ""
 
-#: extension.js:195
+#: extension.js:133
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr ""
 
-#: extension.js:423
+#: extension.js:276
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
 msgstr ""
 
-#: extension.js:429
+#: extension.js:282
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
 "functionality"
 msgstr ""
 
-#: prefs.js:69 ui/general.ui:5
+#: prefs.js:70 ui/general.ui:5
 msgid "General"
 msgstr ""
 
-#: prefs.js:132
+#: prefs.js:131
 msgid "None"
 msgstr ""
 
-#: prefs.js:135
-msgid "Automatic power-saver on low battery"
-msgstr ""
-
-#: prefs.js:138
+#: prefs.js:132
 msgid "Off"
 msgstr ""
 
-#: prefs.js:151
+#: prefs.js:146
 msgid "Performance Apps"
 msgstr ""
 
-#: prefs.js:156
+#: prefs.js:151
 msgid "Application-Based Profiles"
 msgstr ""
 
-#: prefs.js:158
+#: prefs.js:153
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
 msgstr ""
 
-#: prefs.js:180 ui/general.ui:36
+#: prefs.js:175 ui/general.ui:36
 msgid "On Battery"
 msgstr ""
 
-#: prefs.js:188 ui/general.ui:14
+#: prefs.js:183 ui/general.ui:14
 msgid "On AC"
 msgstr ""
 
-#: prefs.js:277
+#: prefs.js:272
 msgid "Performance"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:273
 msgid "Balanced"
 msgstr ""
 
-#: prefs.js:279
+#: prefs.js:274
 msgid "Power Saver"
-msgstr ""
-
-#: lib/notifier.js:25
-msgid "Auto Power Profiles"
-msgstr ""
-
-#. Add 'Do not show again' action for all notifications
-#: lib/notifier.js:60
-msgid "Do not show again"
-msgstr ""
-
-#: lib/notifier.js:65
-msgid "Show details"
 msgstr ""
 
 #: ui/general.ui:9
@@ -143,16 +122,30 @@ msgid "Low Battery Threshold"
 msgstr ""
 
 #: ui/general.ui:45
+msgid "Automatic power-saver on low battery"
+msgstr ""
+
+#: ui/general.ui:57
 msgid ""
 "Enable/disable in GNOME Settings → Power → Power Saving Options. The "
 "percentage threshold value is configured in the UPower config file (/etc/"
 "UPower/UPower.conf)"
 msgstr ""
 
-#: ui/general.ui:60
-msgid "Show notifications"
+#: ui/general.ui:74
+msgid "Notifications"
 msgstr ""
 
-#: ui/general.ui:61
-msgid "Display extension notifications"
+#: ui/general.ui:75
+msgid "Allow extension notifications"
+msgstr ""
+
+#: ui/general.ui:87
+msgid "Remember manual profile changes"
+msgstr ""
+
+#: ui/general.ui:88
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state. When disabled, manual changes are temporary"
 msgstr ""

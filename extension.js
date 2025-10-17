@@ -31,7 +31,7 @@ export default class AutoPowerProfile extends Extension {
 
   enable() {
     const settings = this.getSettings(
-      "org.gnome.shell.extensions.auto-power-profile"
+      "org.gnome.shell.extensions.auto-power-profile",
     );
     this._settings = new CustomSettings(settings);
     this._settings.connect(this._onSettingsChange);
@@ -49,7 +49,7 @@ export default class AutoPowerProfile extends Extension {
       .catch((err) => {
         console.error("Failed to initialize power management proxies:", err);
         this._notifier?.notify(
-          _("Error connecting to power management services")
+          _("Error connecting to power management services"),
         );
       });
   }
@@ -66,7 +66,7 @@ export default class AutoPowerProfile extends Extension {
     this._upowerDbus.connectSignal("g-properties-changed", this._checkProfile);
     this._powerProfilesDbus.connectSignal(
       "g-properties-changed",
-      this._onProfileChange
+      this._onProfileChange,
     );
   }
 
@@ -106,6 +106,11 @@ export default class AutoPowerProfile extends Extension {
   }
 
   _onUserProfileChange = (profile, { lowBattery, onBattery, onAC }) => {
+    // Don't remember user changes if the feature is disabled
+    if (!this._settings.rememberUserProfile) {
+      return;
+    }
+
     // Only update defaults for basic profiles, not when performance apps are active
     // Don't update if we're in low battery mode (power-saver is forced)
     if (lowBattery || this._perfAppTracker?.hasActiveApps) {
@@ -117,17 +122,17 @@ export default class AutoPowerProfile extends Extension {
       this._settings.acProfile = profile;
       this._notifier?.notify(
         _(
-          `Power profile '%s' will now be used by default when connected to AC power`
+          `Power profile '%s' will now be used by default when connected to AC power`,
         ).format(profile),
-        { isTransient: true }
+        { isTransient: true },
       );
     } else if (onBattery && this._settings.batteryProfile !== profile) {
       this._settings.batteryProfile = profile;
       this._notifier?.notify(
         _(
-          `Power profile '%s' will now be used by default when running on battery`
+          `Power profile '%s' will now be used by default when running on battery`,
         ).format(profile),
-        { isTransient: true }
+        { isTransient: true },
       );
     }
   };
@@ -172,11 +177,11 @@ export default class AutoPowerProfile extends Extension {
               this._checkProfile();
               this._perfDebounceTimerId = null;
               return GLib.SOURCE_REMOVE;
-            }
+            },
           );
         } else if (reason) {
           console.log(
-            `ActiveProfile: ${this._powerProfilesDbus.activeProfile}, PerformanceDegraded: ${reason}`
+            `ActiveProfile: ${this._powerProfilesDbus.activeProfile}, PerformanceDegraded: ${reason}`,
           );
         }
       } catch (e) {
@@ -268,17 +273,17 @@ export default class AutoPowerProfile extends Extension {
     if (!active) {
       this._notifier.notify(
         _(
-          "Power profile management is not available - this extension will have no effect on your system"
-        )
+          "Power profile management is not available - this extension will have no effect on your system",
+        ),
       );
     } else if (!hasDrivers) {
       this._notifier.notify(
         _(
-          "Power profile switching may not work properly on this device - energy savings will be limited. Your system may need updates to enable full functionality"
+          "Power profile switching may not work properly on this device - energy savings will be limited. Your system may need updates to enable full functionality",
         ),
         {
           uri: "https://upower.pages.freedesktop.org/power-profiles-daemon/power-profiles-daemon-Platform-Profile-Drivers.html",
-        }
+        },
       );
     }
   }

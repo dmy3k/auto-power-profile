@@ -634,7 +634,7 @@ describe("Async Initialization & Race Conditions", () => {
 
     // Should NOT have any race condition errors
     const raceConditionError = consoleErrorSpy.mock.calls.find((call) =>
-      call[0]?.includes("proxy not initialized")
+      call[0]?.includes("proxy not initialized"),
     );
 
     expect(raceConditionError).toBeUndefined();
@@ -661,7 +661,7 @@ describe("Async Initialization & Race Conditions", () => {
 
     // Should work without errors
     const debugCalls = consoleDebugSpy.mock.calls.filter((call) =>
-      call[0]?.includes("proxy not initialized")
+      call[0]?.includes("proxy not initialized"),
     );
 
     expect(debugCalls.length).toBe(0);
@@ -688,7 +688,7 @@ describe("Async Initialization & Race Conditions", () => {
     await sleep(10);
 
     const debugCalls = consoleDebugSpy.mock.calls.filter((call) =>
-      call[0]?.includes("proxy not initialized")
+      call[0]?.includes("proxy not initialized"),
     );
 
     expect(debugCalls.length).toBe(0);
@@ -717,7 +717,7 @@ describe("Async Initialization & Race Conditions", () => {
     await sleep(10);
 
     const debugCalls = consoleDebugSpy.mock.calls.filter((call) =>
-      call[0]?.includes("proxy not initialized")
+      call[0]?.includes("proxy not initialized"),
     );
 
     expect(debugCalls.length).toBe(0);
@@ -738,7 +738,7 @@ describe("Error Handling & Defensive Programming", () => {
     dbus.switchProfile("performance");
 
     expect(consoleDebugSpy).toHaveBeenCalledWith(
-      expect.stringContaining("proxy not initialized")
+      expect.stringContaining("proxy not initialized"),
     );
 
     consoleDebugSpy.mockRestore();
