@@ -20,7 +20,7 @@ class PowerProfilesProxyMock {
 
       const payload = Object.entries(props).reduce(
         (acc, [k, v]) => ({ ...acc, [k]: { unpack: () => v } }),
-        {}
+        {},
       );
       this.handlers.forEach((x) => x(null, { deep_unpack: () => payload }));
 

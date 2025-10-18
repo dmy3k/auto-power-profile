@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 12:32+0200\n"
+"POT-Creation-Date: 2025-10-17 21:12+0200\n"
 "PO-Revision-Date: 2025-08-21 16:11+0200\n"
 "Last-Translator: p-sage\n"
 "Language-Team: \n"
@@ -17,28 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:93
-msgid "Error connecting UPower DBus"
-msgstr "Erreur lors de la connexion à UPower DBus"
-
-#: extension.js:110
-msgid "Error connecting power-profiles-daemon DBus"
+#: extension.js:52
+#, fuzzy
+msgid "Error connecting to power management services"
 msgstr "Erreur de connexion à power-profiles-daemon DBus"
 
-#: extension.js:184
+#: extension.js:125
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr ""
 "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur secteur"
 
-#: extension.js:195
+#: extension.js:133
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr ""
 "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur batterie"
 
-#: extension.js:423
+#: extension.js:276
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -46,7 +43,7 @@ msgstr ""
 "La gestion des profils d'alimentation n'est pas disponible - cette extension "
 "n'aura aucun effet sur votre système"
 
-#: extension.js:429
+#: extension.js:282
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -56,31 +53,27 @@ msgstr ""
 "sur cet appareil - les économies d'énergie seront limitées. Votre système "
 "peut avoir besoin de mises à jour pour activer toutes les fonctionnalités"
 
-#: prefs.js:69 ui/general.ui:5
+#: prefs.js:70 ui/general.ui:5
 msgid "General"
 msgstr "Général"
 
-#: prefs.js:132
+#: prefs.js:131
 msgid "None"
 msgstr "Aucun"
 
-#: prefs.js:135
-msgid "Automatic power-saver on low battery"
-msgstr "Économie d'énergie automatique sur batterie"
-
-#: prefs.js:138
+#: prefs.js:132
 msgid "Off"
 msgstr "Désactivé"
 
-#: prefs.js:151
+#: prefs.js:146
 msgid "Performance Apps"
 msgstr "Applications de performance"
 
-#: prefs.js:156
+#: prefs.js:151
 msgid "Application-Based Profiles"
 msgstr "Profils basés sur les applications"
 
-#: prefs.js:158
+#: prefs.js:153
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
@@ -88,38 +81,25 @@ msgstr ""
 "Activer des profils pour les applications en cours d'exécution. Peut être "
 "utilisé pour prioriser la performance de manière ponctuelle"
 
-#: prefs.js:180 ui/general.ui:36
+#: prefs.js:175 ui/general.ui:36
 msgid "On Battery"
 msgstr "Sur batterie"
 
-#: prefs.js:188 ui/general.ui:14
+#: prefs.js:183 ui/general.ui:14
 msgid "On AC"
 msgstr "Sur secteur"
 
-#: prefs.js:277
+#: prefs.js:272
 msgid "Performance"
 msgstr "Performance"
 
-#: prefs.js:278
+#: prefs.js:273
 msgid "Balanced"
 msgstr "Équilibré"
 
-#: prefs.js:279
+#: prefs.js:274
 msgid "Power Saver"
 msgstr "Économie d'énergie"
-
-#: lib/notifier.js:25
-msgid "Auto Power Profiles"
-msgstr "Profils d'alimentation automatiques"
-
-#. Add 'Do not show again' action for all notifications
-#: lib/notifier.js:60
-msgid "Do not show again"
-msgstr "Ne plus afficher"
-
-#: lib/notifier.js:65
-msgid "Show details"
-msgstr "Afficher les détails"
 
 #: ui/general.ui:9
 msgid "Default Profiles"
@@ -160,22 +140,51 @@ msgid "Low Battery Threshold"
 msgstr "Seuil de batterie faible"
 
 #: ui/general.ui:45
+msgid "Automatic power-saver on low battery"
+msgstr "Économie d'énergie automatique sur batterie"
+
+#: ui/general.ui:57
 msgid ""
 "Enable/disable in GNOME Settings → Power → Power Saving Options. The "
 "percentage threshold value is configured in the UPower config file (/etc/"
 "UPower/UPower.conf)"
 msgstr ""
-"Activer/désactiver dans Paramètres GNOME → Alimentation → Options d'économie d'énergie. "
-"La valeur de seuil en pourcentage est configurée dans le fichier de configuration UPower (/etc/"
-"UPower/UPower.conf)"
+"Activer/désactiver dans Paramètres GNOME → Alimentation → Options d'économie "
+"d'énergie. La valeur de seuil en pourcentage est configurée dans le fichier "
+"de configuration UPower (/etc/UPower/UPower.conf)"
 
-#: ui/general.ui:60
-msgid "Show notifications"
+#: ui/general.ui:74
+msgid "Notifications"
 msgstr "Afficher les notifications"
 
-#: ui/general.ui:61
-msgid "Display extension notifications"
+#: ui/general.ui:75
+msgid "Allow extension notifications"
 msgstr "Afficher les notifications de l'extension"
+
+#: ui/general.ui:87
+msgid "Remember manual profile changes"
+msgstr "Mémoriser les changements manuels de profil"
+
+#: ui/general.ui:88
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state. When disabled, manual changes are temporary"
+msgstr ""
+"Lorsque activé, les profils sélectionnés manuellement deviennent le nouveau "
+"profil par défaut pour l'état d'alimentation actuel. Lorsque désactivé, les "
+"changements manuels sont temporaires"
+
+#~ msgid "Error connecting UPower DBus"
+#~ msgstr "Erreur lors de la connexion à UPower DBus"
+
+#~ msgid "Auto Power Profiles"
+#~ msgstr "Profils d'alimentation automatiques"
+
+#~ msgid "Do not show again"
+#~ msgstr "Ne plus afficher"
+
+#~ msgid "Show details"
+#~ msgstr "Afficher les détails"
 
 #~ msgid "Switch to power saving profile when the battery level drops below"
 #~ msgstr ""
