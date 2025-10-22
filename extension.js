@@ -22,6 +22,7 @@ export default class AutoPowerProfile extends Extension {
   _requestedProfile;
 
   _perfDebounceTimerId;
+  _perfDebounceTimeout = 10;
 
   _notifier;
 
@@ -144,6 +145,10 @@ export default class AutoPowerProfile extends Extension {
     const payload = properties?.deep_unpack();
     const powerState = this._getConfiguredPowerState();
 
+    if (!powerState) {
+      return;
+    }
+
     if (payload?.ActiveProfile) {
       if (this._perfDebounceTimerId) {
         GLib.Source.remove(this._perfDebounceTimerId);
@@ -155,11 +160,11 @@ export default class AutoPowerProfile extends Extension {
 
         if (this._currentProfile === this._requestedProfile) {
           // This was our requested change - mark as complete
-          this.requestedProfile = null;
+          this._requestedProfile = null;
         } else {
           // This appears to be a user-initiated change
           this._onUserProfileChange(this._currentProfile, powerState);
-          this.requestedProfile = null;
+          this._requestedProfile = null;
         }
       }
     }
@@ -168,13 +173,16 @@ export default class AutoPowerProfile extends Extension {
       try {
         const reason = payload?.PerformanceDegraded?.unpack();
 
-        if (reason === "lap-detected" && this._settings.lapModeEnabled) {
+        if (reason === "lap-detected") {
+          // the computer is sitting on the user's lap
+          // has false triggers when device sits stationary on a bit shaky stand/arm
+          // try to re-apply performance profile
           if (this._perfDebounceTimerId) {
             GLib.Source.remove(this._perfDebounceTimerId);
           }
           this._perfDebounceTimerId = GLib.timeout_add_seconds(
             GLib.PRIORITY_DEFAULT,
-            5,
+            this._perfDebounceTimeout,
             () => {
               this._clearCurrentPowerState();
               this._checkProfile();
@@ -183,6 +191,8 @@ export default class AutoPowerProfile extends Extension {
             }
           );
         } else if (reason) {
+          // the computer is close to overheating ("high-operating-temperature")
+          // and other values potentially might be added in newer versions of dbus interface
           console.log(
             `ActiveProfile: ${this._powerProfilesDbus.activeProfile}, PerformanceDegraded: ${reason}`
           );
@@ -204,7 +214,7 @@ export default class AutoPowerProfile extends Extension {
    * @returns {Object} Extended power state with configured profile
    */
   _getConfiguredPowerState() {
-    if (!this._upowerDbus) {
+    if (!this._upowerDbus || !this._powerProfilesDbus) {
       return null;
     }
 
@@ -249,7 +259,7 @@ export default class AutoPowerProfile extends Extension {
   _checkProfile = () => {
     const newState = this._getConfiguredPowerState();
 
-    if (!newState) {
+    if (!newState || !this._powerProfilesDbus) {
       return;
     }
 

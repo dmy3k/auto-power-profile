@@ -18,20 +18,6 @@
                 </child>
 
                 <child>
-                    <object class="AdwActionRow" id="row_lap_mode">
-                        <property name="title" translatable="yes">Handle lap-mode on AC</property>
-                        <property name="subtitle" translatable="yes">Try to maintain performance mode on unstable surfaces. Disable if you are experiencing thermal issues</property>
-                        <property name="activatable-widget">lap_mode</property>
-                        <property name="visible">False</property>
-                        <child>
-                            <object class="GtkSwitch" id="lap_mode">
-                                <property name="valign">center</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
                     <object class="AdwComboRow" id="bat_profile">
                         <property name="title" translatable="yes">On Battery</property>
                         <property name="subtitle" translatable="yes">Select the default profile when running on battery</property>

@@ -7,7 +7,6 @@ class Extension {
       bat: "balanced",
       threshold: 25,
       debug: false,
-      lapmode: true,
       "performance-apps": [],
       "performance-apps-ac": "performance",
       "performance-apps-bat": "balanced"

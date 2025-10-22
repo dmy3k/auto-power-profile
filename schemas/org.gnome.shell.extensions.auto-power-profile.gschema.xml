@@ -6,14 +6,11 @@
       <summary>On AC profile</summary>
       <description>Select the default profile to use when connected to AC</description>
     </key>
+
     <key name="bat" type="s">
       <default>"balanced"</default>
       <summary>On battery profile</summary>
       <description>Select the default profile to use when running on battery</description>
-    </key>
-    <key name="lapmode" type="b">
-      <default>true</default>
-      <summary>lap-mode handling on AC</summary>
     </key>
 
     <key name="notifications" type="b">
@@ -35,6 +32,7 @@
         This is a list of desktop application IDs. When any of these applications are running, performance mode will be enabled.
       </description>
     </key>
+
     <key name="performance-apps-bat" type="s">
       <default>"performance"</default>
       <summary>Profile to use for performance apps on battery</summary>
@@ -42,6 +40,7 @@
         The power profile to enter when launching a performance app while on battery.
       </description>
     </key>
+    
     <key name="performance-apps-ac" type="s">
       <default>"performance"</default>
       <summary>Profile to use for performance apps on AC</summary>
