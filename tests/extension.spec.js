@@ -168,7 +168,7 @@ test("handles lap-mode when on performance while pluggen in", async () => {
   jest.runAllTicks();
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
 
-  jest.advanceTimersByTime(5000);
+  jest.advanceTimersByTime(10000);
   jest.useRealTimers();
 
   await sleep(10);
@@ -195,7 +195,7 @@ test("ignores lap-mode when on battery", async () => {
   PowerProfilesProxyMock._state.notifyPerformanceDegraded();
   jest.runAllTicks();
 
-  await jest.advanceTimersByTimeAsync(5000);
+  await jest.advanceTimersByTimeAsync(10000);
   jest.useRealTimers();
 
   await sleep(10);

@@ -56,8 +56,6 @@ export const General = GObject.registerClass(
       "ui_group",
       "row_low_battery",
       "low_battery_value",
-      "row_lap_mode",
-      "lap_mode",
       "notifications",
       "remember_user_profile"
     ]
@@ -86,12 +84,6 @@ export const General = GObject.registerClass(
           bindAdwComboRow(this._bat_profile, settings, "bat", indexedProfiles);
 
           settings.bind(
-            "lapmode",
-            this._lap_mode,
-            "active",
-            Gio.SettingsBindFlags.DEFAULT
-          );
-          settings.bind(
             "notifications",
             this._notifications,
             "active",
@@ -103,13 +95,6 @@ export const General = GObject.registerClass(
             "active",
             Gio.SettingsBindFlags.DEFAULT
           );
-
-          const onSettingsUpdate = () => {
-            const acDefault = settings.get_string("ac");
-            this._row_lap_mode.visible = acDefault === "performance";
-          };
-          settings.connect("changed::ac", onSettingsUpdate);
-          onSettingsUpdate();
         })
         .catch((e) => console.error(e));
     }
@@ -146,6 +131,8 @@ export const PerformanceApps = GObject.registerClass(
         title: _("Performance Apps"),
         icon_name: "application-x-executable-symbolic"
       });
+
+      this._settings = settings;
 
       const modesGroup = new Adw.PreferencesGroup({
         title: _("Application-Based Profiles"),
