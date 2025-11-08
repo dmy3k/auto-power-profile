@@ -1,0 +1,173 @@
+# Occitan translation file.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Auto Power Profile package.
+# Quentin PAGÈS, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Power Profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-17 21:12+0200\n"
+"PO-Revision-Date: 2025-11-08 14:59+0100\n"
+"Last-Translator: Quentin PAGÈS\n"
+"Language-Team: \n"
+"Language: oc\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: extension.js:52
+msgid "Error connecting to power management services"
+msgstr "Error en se connectant als servicis de gestion de l'alimentacion"
+
+#: extension.js:125
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr ""
+"Lo perfil d'energia « %s » serà ara utilizat per defaut en foncionament sus "
+"sector"
+
+#: extension.js:133
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr ""
+"Lo perfil d'energia « %s » serà ara utilizat per defaut en foncionament sus "
+"batariá"
+
+#: extension.js:276
+msgid ""
+"Power profile management is not available - this extension will have no "
+"effect on your system"
+msgstr ""
+"La gestion dels perfils d'energia es pas disponibla - aquesta extension "
+"aurà pas cap d'efièch sus vòstre sistèma"
+
+#: extension.js:282
+msgid ""
+"Power profile switching may not work properly on this device - energy "
+"savings will be limited. Your system may need updates to enable full "
+"functionality"
+msgstr ""
+"Lo cambiament de perfil d'energia poiriá non pas foncionar corrèctament sus "
+"aqueste periferic - las economias d'energia seràn limitadas. Vòstre sistèma "
+"poiriá requerir de mesas a jorn per activar la plena foncionalitat"
+
+#: prefs.js:70 ui/general.ui:5
+msgid "General"
+msgstr "General"
+
+#: prefs.js:131
+msgid "None"
+msgstr "Pas cap"
+
+#: prefs.js:132
+msgid "Off"
+msgstr "Desactivat"
+
+#: prefs.js:146
+msgid "Performance Apps"
+msgstr "Performança per las aplicacions"
+
+#: prefs.js:151
+msgid "Application-Based Profiles"
+msgstr "Perfiles segon las aplicacions"
+
+#: prefs.js:153
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Activar los perfiles per las aplicacions seleccionadas en execucion. Se pòt "
+"utilizar per priorizar las performanças"
+
+#: prefs.js:175 ui/general.ui:36
+msgid "On Battery"
+msgstr "Sus batariá"
+
+#: prefs.js:183 ui/general.ui:14
+msgid "On AC"
+msgstr "Sus sector"
+
+#: prefs.js:272
+msgid "Performance"
+msgstr "Performança"
+
+#: prefs.js:273
+msgid "Balanced"
+msgstr "Equilibri"
+
+#: prefs.js:274
+msgid "Power Saver"
+msgstr "Estalviador d'energia"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Perfiles per defaut"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+"Aplicat automaticament levat se l'utilizaire ne definisca un autre "
+"manualament"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Seleccionar lo perfil per defaut quand es connectat a CA"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Gerir lo mòde portable sus sector"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Ensajatz de manténer lo mòde performança sus de superfícias instablas. "
+"Desactivatz-lo se rencontratz de problèmas termics"
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Seleccionar lo perfil per defaut en execucion sus batariá"
+
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Sulhet de batariá es feble"
+
+#: ui/general.ui:45
+msgid "Automatic power-saver on low battery"
+msgstr "Estalviador d’energia automatic quand la batariá es febla"
+
+#: ui/general.ui:57
+msgid ""
+"Enable/disable in GNOME Settings → Power → Power Saving Options. The "
+"percentage threshold value is configured in the UPower config file (/etc/"
+"UPower/UPower.conf)"
+msgstr ""
+"Activar/Desactivar dins Paramètres de GNOME → Energia → Opcions d’estalvi "
+"d’energia. La valor sulhet en percentatge es configurada dins lo fichièr de "
+"configuracion UPower (/etc/UPower/UPower.conf)"
+
+#: ui/general.ui:74
+msgid "Notifications"
+msgstr "Notificacions"
+
+#: ui/general.ui:75
+msgid "Allow extension notifications"
+msgstr "Autorizar las notificacions de l’extension"
+
+#: ui/general.ui:87
+msgid "Remember manual profile changes"
+msgstr "Memorizar los cambiaments de perfil manuals"
+
+#: ui/general.ui:88
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state. When disabled, manual changes are temporary"
+msgstr ""
+"Quand activat, los perfils seleccionats manualament venon la novèla "
+"configuracion per defaut per l'estat d'energia actual. Quand es desactivat, "
+"los cambiaments manuals son temporaris"
