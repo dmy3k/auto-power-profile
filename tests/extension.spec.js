@@ -4,7 +4,8 @@ import { DeviceState, DeviceLevel } from "./__mocks__/gi/UPowerGlib.js";
 import {
   UpowerProxyMock,
   PowerProfilesProxyMock,
-  SettingsMock
+  SettingsMock,
+  LinePowerProxyMock
 } from "./__mocks__/gi/Gio.js";
 import { Extension } from "./__mocks__/resource/org/gnome/shell/extensions/extension.js";
 
@@ -13,9 +14,13 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 beforeEach(() => {
   // Reset mock state without triggering handlers
   UpowerProxyMock._state.state = DeviceState.DISCHARGING;
+  UpowerProxyMock._state.online = false;
   UpowerProxyMock._state.percentage = 24;
   UpowerProxyMock._state.warningLevel = DeviceLevel.LOW;
   UpowerProxyMock._state.handlers = [];
+
+  LinePowerProxyMock._state.online = false;
+  LinePowerProxyMock._state.handlers = [];
 
   Extension._mock.state.ac = "performance";
   Extension._mock.state.bat = "balanced";
@@ -273,6 +278,7 @@ test("respects battery default setting when battery is not low", async () => {
 
 test("user can manually override profile on AC", async () => {
   UpowerProxyMock._state.state = DeviceState.CHARGING;
+  UpowerProxyMock._state.online = true;
   UpowerProxyMock._state.percentage = 80;
   UpowerProxyMock._state.warningLevel = DeviceLevel.NONE;
 
@@ -375,6 +381,7 @@ test("switches to balanced profile when settings change from AC to battery", asy
 test("handles device without battery", async () => {
   UpowerProxyMock._state.state = DeviceState.UNKNOWN;
   UpowerProxyMock._state.percentage = undefined;
+  UpowerProxyMock._state.online = true;
   UpowerProxyMock._state.warningLevel = DeviceLevel.NONE;
 
   Extension._mock.state.ac = "performance";
@@ -387,6 +394,56 @@ test("handles device without battery", async () => {
   // Should use AC default for desktop without battery
   // When battery state is UNKNOWN and percentage is undefined, onBattery = false
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+});
+
+test("uses Online property to detect AC power when battery present", async () => {
+  UpowerProxyMock._state.update({
+    state: DeviceState.CHARGING,
+    online: true,
+    percentage: 50,
+    warningLevel: DeviceLevel.NONE
+  });
+
+  Extension._mock.update({ ac: "performance", bat: "balanced" });
+
+  const p = new AutoPowerProfile();
+
+  p.enable();
+  await sleep(20); // Increased to allow time for line power device initialization
+
+  // Should be on AC (Online=true)
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+  // Unplug - Online becomes false even though state might still be CHARGING momentarily
+  UpowerProxyMock._state.update({
+    state: DeviceState.CHARGING,
+    online: false,
+    percentage: 50,
+    warningLevel: DeviceLevel.NONE
+  });
+  await sleep(20); // Increased to allow time for profile switch
+
+  // Should switch to battery profile because Online=false
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+});
+
+test("handles PENDING_DISCHARGE state correctly", async () => {
+  UpowerProxyMock._state.update({
+    state: DeviceState.PENDING_DISCHARGE,
+    online: false,
+    percentage: 80,
+    warningLevel: DeviceLevel.NONE
+  });
+
+  Extension._mock.update({ ac: "performance", bat: "balanced" });
+
+  const p = new AutoPowerProfile();
+
+  p.enable();
+  await sleep(10);
+
+  // PENDING_DISCHARGE should use battery profile
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
 });
 
 test("switches profile when AC setting is changed", async () => {
@@ -437,6 +494,7 @@ test("switches profile when battery setting is changed", async () => {
 
 test("restores to balanced profile on disable", async () => {
   UpowerProxyMock._state.state = DeviceState.CHARGING;
+  UpowerProxyMock._state.online = true;
   UpowerProxyMock._state.percentage = 80;
   UpowerProxyMock._state.warningLevel = DeviceLevel.NONE;
 
@@ -625,6 +683,7 @@ describe("Async Initialization & Race Conditions", () => {
     const consoleDebugSpy = jest.spyOn(console, "debug").mockImplementation();
 
     UpowerProxyMock._state.state = DeviceState.CHARGING;
+    UpowerProxyMock._state.online = true;
     UpowerProxyMock._state.percentage = 80;
     UpowerProxyMock._state.warningLevel = DeviceLevel.NONE;
 
@@ -649,6 +708,7 @@ describe("Async Initialization & Race Conditions", () => {
     const consoleDebugSpy = jest.spyOn(console, "debug").mockImplementation();
 
     UpowerProxyMock._state.state = DeviceState.CHARGING;
+    UpowerProxyMock._state.online = true;
     UpowerProxyMock._state.percentage = 80;
 
     const p = new AutoPowerProfile();

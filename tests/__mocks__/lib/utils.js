@@ -1,4 +1,8 @@
-import { UpowerProxyMock, PowerProfilesProxyMock } from "../gi/Gio.js";
+import {
+  UpowerProxyMock,
+  PowerProfilesProxyMock,
+  LinePowerProxyMock
+} from "../gi/Gio.js";
 
 /**
  * Mock implementation of createPowerProfilesProxy
@@ -34,6 +38,55 @@ export const createPowerManagerProxy = () => {
           resolve(p);
         }
       });
+    });
+  });
+};
+
+/**
+ * Mock implementation of enumerateUPowerDevices
+ * Returns mock device paths
+ */
+export const enumerateUPowerDevices = () => {
+  return Promise.resolve([
+    "/org/freedesktop/UPower/devices/line_power_AC",
+    "/org/freedesktop/UPower/devices/battery_BAT0"
+  ]);
+};
+
+/**
+ * Mock implementation of createUPowerDeviceProxy
+ * Returns appropriate mock based on device path
+ */
+export const createUPowerDeviceProxy = (devicePath) => {
+  return new Promise((resolve, reject) => {
+    process.nextTick(() => {
+      if (devicePath.includes("line_power") || devicePath.includes("AC")) {
+        const proxy = new LinePowerProxyMock(
+          null,
+          null,
+          devicePath,
+          (p, error) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(p);
+            }
+          }
+        );
+      } else {
+        const proxy = new UpowerProxyMock(
+          null,
+          null,
+          devicePath,
+          (p, error) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(p);
+            }
+          }
+        );
+      }
     });
   });
 };
