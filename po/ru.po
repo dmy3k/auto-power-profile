@@ -1,0 +1,174 @@
+# Russian translations for auto-power-profile package.
+# Русский перевод для расширения auto-power-profile.
+# Copyright (C) 2023 THE auto-power-profile'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Auto Power Profile package.
+# Coyotle <me@coyotle.ru>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Power Profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-17 21:12+0200\n"
+"PO-Revision-Date: 2025-11-25 22:05+0300\n"
+"Last-Translator: Coyotle <me@coyotle.ru>\n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Generator: Poedit 3.8\n"
+
+#: extension.js:52
+msgid "Error connecting to power management services"
+msgstr "Ошибка подключения к службам управления питанием"
+
+#: extension.js:125
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr ""
+"Профиль питания '%s' теперь будет использоваться по умолчанию при "
+"подключении к сети"
+
+#: extension.js:133
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr ""
+"Профиль питания '%s' теперь будет использоваться по умолчанию при работе от "
+"батареи"
+
+#: extension.js:276
+msgid ""
+"Power profile management is not available - this extension will have no "
+"effect on your system"
+msgstr ""
+"Управление профилями питания недоступною. Расширение не будет оказывать "
+"влияния на вашу систему"
+
+#: extension.js:282
+msgid ""
+"Power profile switching may not work properly on this device - energy "
+"savings will be limited. Your system may need updates to enable full "
+"functionality"
+msgstr ""
+"Переключение профилей питания может работать некорректно на этом "
+"устройстве, экономия энергии будет ограничена. Вашей системе могут "
+"потребоваться обновления для включения полной функциональности"
+
+#: prefs.js:70 ui/general.ui:5
+msgid "General"
+msgstr "Основные"
+
+#: prefs.js:131
+msgid "None"
+msgstr "Нет"
+
+#: prefs.js:132
+msgid "Off"
+msgstr "Выкл"
+
+#: prefs.js:146
+msgid "Performance Apps"
+msgstr "Производительные приложения"
+
+#: prefs.js:151
+msgid "Application-Based Profiles"
+msgstr "Профили на основе приложений"
+
+#: prefs.js:153
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Активировать профили для запущенных выбранных приложений. Можно "
+"использовать для ситуативного повышения приоритета производительности"
+
+#: prefs.js:175 ui/general.ui:36
+msgid "On Battery"
+msgstr "От батареи"
+
+#: prefs.js:183 ui/general.ui:14
+msgid "On AC"
+msgstr "От сети"
+
+#: prefs.js:272
+msgid "Performance"
+msgstr "Производительный"
+
+#: prefs.js:273
+msgid "Balanced"
+msgstr "Сбалансированный"
+
+#: prefs.js:274
+msgid "Power Saver"
+msgstr "Энергосберегающий"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Профили по умолчанию"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr ""
+"Применяются автоматически, если пользователь вручную не установит другой"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Выберите профиль по умолчанию при подключении к сети"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Обрабатывать режим работы на коленях при питании от сети"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Пытаться сохранять режим производительности на неустойчивых поверхностях. "
+"Отключите, если возникают проблемы с перегревом"
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Выберите профиль по умолчанию при работе от батареи"
+
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Порог низкого заряда батареи"
+
+#: ui/general.ui:45
+msgid "Automatic power-saver on low battery"
+msgstr "Автоматическая экономия энергии при низком заряде батареи"
+
+#: ui/general.ui:57
+msgid ""
+"Enable/disable in GNOME Settings → Power → Power Saving Options. The "
+"percentage threshold value is configured in the UPower config file (/etc/"
+"UPower/UPower.conf)"
+msgstr ""
+"Включить/выключить в Настройки GNOME → Питание → Энергосбережение. Значение "
+"процентного порога настраивается в конфигурационном файле UPower (\"/etc/"
+"UPower/UPower.conf)"
+
+#: ui/general.ui:74
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: ui/general.ui:75
+msgid "Allow extension notifications"
+msgstr "Разрешить уведомления расширения"
+
+#: ui/general.ui:87
+msgid "Remember manual profile changes"
+msgstr "Запоминать ручное изменения профилей"
+
+#: ui/general.ui:88
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state. When disabled, manual changes are temporary"
+msgstr ""
+"Если включено — вручную выбранные профили становятся новыми настройками по "
+"умолчанию для текущего состояния питания. Если отключено — ручные изменения "
+"временны"
