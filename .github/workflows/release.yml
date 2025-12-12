@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-attach:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Package and upload extension
+        id: package
+        uses: murar8/gnome-extensions-action@aad5516b92eeed1014a06a6e7d47d34c96fd82c5
+        with:
+          username: ${{ secrets.GNOME_USERNAME }}
+          password: ${{ secrets.GNOME_PASSWORD }}
+          accept-tos: true
+          extra-source: |
+            lib
+            preferences
+          force: true
+
+      - name: Get filename
+        id: filename
+        run: echo "name=$(basename '${{ steps.package.outputs.zip-file }}')" >> $GITHUB_OUTPUT
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.package.outputs.zip-file }}
+          asset_name: ${{ steps.filename.outputs.name }}
+          asset_content_type: application/zip

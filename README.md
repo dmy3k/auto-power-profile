@@ -15,7 +15,7 @@ The extension addresses long-standing issues in `gnome-settings-daemon`
 
 ### Dependencies
 
-This extension requires [`powerprofilesctl`](https://gitlab.freedesktop.org/upower/power-profiles-daemon) (used in most distros with Gnome desktop) or `tuned-ppd` (Fedora >= 40) package to operate.
+This extension depends on [`power-profiles-daemon`](https://gitlab.freedesktop.org/upower/power-profiles-daemon). Fedora 40 and later replaced it with `tuned` and `tuned-ppd` providing compatible interfaces.
 
 ### From Gnome Extensions store
 

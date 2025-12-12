@@ -7,5 +7,9 @@
   "shell-version": ["45", "46", "47", "48", "49"],
   "url": "https://github.com/dmy3k/auto-power-profile",
   "uuid": "auto-power-profile@dmy3k.github.io",
+  "donations": {
+    "github": "dmy3k",
+    "buymeacoffee": "dm3k"
+  },
   "version": 29
 }
