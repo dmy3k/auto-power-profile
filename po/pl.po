@@ -1,0 +1,172 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Auto Power Profile package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Auto Power Profile\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-17 21:12+0200\n"
+"PO-Revision-Date: 2026-01-11 17:52+0100\n"
+"Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
+"Language-Team: \n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: extension.js:52
+msgid "Error connecting to power management services"
+msgstr "Błąd podczas łączenia z usługą zarządzania zasilaniem"
+
+#: extension.js:125
+#, javascript-format
+msgid ""
+"Power profile '%s' will now be used by default when connected to AC power"
+msgstr ""
+"Profil zasilania '%s' będzie od teraz używany jako domyślny po podłączeniu "
+"do prądu"
+
+#: extension.js:133
+#, javascript-format
+msgid "Power profile '%s' will now be used by default when running on battery"
+msgstr ""
+"Profil zasilania '%s' będzie od teraz używany jako domyślny na zasilaniu z "
+"akumulatora"
+
+#: extension.js:276
+msgid ""
+"Power profile management is not available - this extension will have no "
+"effect on your system"
+msgstr ""
+"Zarządzanie profilami zasilania jest niedostępne – to rozszerzenie nie "
+"będzie miało żadnego wpływu na Twój system"
+
+#: extension.js:282
+msgid ""
+"Power profile switching may not work properly on this device - energy "
+"savings will be limited. Your system may need updates to enable full "
+"functionality"
+msgstr ""
+"Zarządzanie profilami zasilania jest niedostępne – to rozszerzenie nie "
+"będzie miało żadnego wpływu na Twój system"
+
+#: prefs.js:70 ui/general.ui:5
+msgid "General"
+msgstr "Ogólne"
+
+#: prefs.js:131
+msgid "None"
+msgstr "Brak"
+
+#: prefs.js:132
+msgid "Off"
+msgstr "Wyłącz"
+
+#: prefs.js:146
+msgid "Performance Apps"
+msgstr "Wymagające programy"
+
+#: prefs.js:151
+msgid "Application-Based Profiles"
+msgstr "Profile według programów"
+
+#: prefs.js:153
+msgid ""
+"Activate profiles for running selected apps. Can be used to prioritize "
+"performance ad-hoc"
+msgstr ""
+"Aktywuj profile dla uruchomionych wybranych programów. Może być używane do "
+"doraźnego priorytetyzowania wydajności"
+
+#: prefs.js:175 ui/general.ui:36
+msgid "On Battery"
+msgstr "Na zasilaniu z akumulatora"
+
+#: prefs.js:183 ui/general.ui:14
+msgid "On AC"
+msgstr "Po podłączeniu do prądu"
+
+#: prefs.js:272
+msgid "Performance"
+msgstr "Wydajność"
+
+#: prefs.js:273
+msgid "Balanced"
+msgstr "Zrównoważony"
+
+#: prefs.js:274
+msgid "Power Saver"
+msgstr "Oszczędzanie energii"
+
+#: ui/general.ui:9
+msgid "Default Profiles"
+msgstr "Domyślne profile"
+
+#: ui/general.ui:10
+msgid "Applied automatically unless user sets manually another one"
+msgstr "Stosowane automatycznie, chyba że użytkownik ręcznie ustawi inny"
+
+#: ui/general.ui:15
+msgid "Select the default profile when connected to AC"
+msgstr "Wybierz domyślny profil po podłączeniu do prądu"
+
+#: ui/general.ui:22
+msgid "Handle lap-mode on AC"
+msgstr "Obsługa trybu pracy na kolanach po podłączeniu do prądu"
+
+#: ui/general.ui:23
+msgid ""
+"Try to maintain performance mode on unstable surfaces. Disable if you are "
+"experiencing thermal issues"
+msgstr ""
+"Próbuj utrzymać tryb wydajności na niestabilnych podłożach. Wyłącz, jeśli "
+"występują problemy termiczne"
+
+#: ui/general.ui:37
+msgid "Select the default profile when running on battery"
+msgstr "Wybierz domyślny profil na zasilaniu z akumulatora"
+
+#: ui/general.ui:44
+msgid "Low Battery Threshold"
+msgstr "Próg niskiego poziomu naładowania akumulatora"
+
+#: ui/general.ui:45
+msgid "Automatic power-saver on low battery"
+msgstr ""
+"Automatyczny tryb oszczędzania energii przy niskim poziomie naładowania "
+"akumulatora"
+
+#: ui/general.ui:57
+msgid ""
+"Enable/disable in GNOME Settings → Power → Power Saving Options. The "
+"percentage threshold value is configured in the UPower config file (/etc/"
+"UPower/UPower.conf)"
+msgstr ""
+"Włącz/Wyłącz w ustawieniach GNOME -> Zasilanie -> Oszczędzanie energii. "
+"Wartość procentowa jest konfigurowalna w pliku konfiguracyjnym UPower (/etc/"
+"UPower/UPower.conf)"
+
+#: ui/general.ui:74
+msgid "Notifications"
+msgstr "Powiadomienia"
+
+#: ui/general.ui:75
+msgid "Allow extension notifications"
+msgstr "Zezwól na powiadomienia"
+
+#: ui/general.ui:87
+msgid "Remember manual profile changes"
+msgstr "Zapamiętywanie ręcznych zmian profilu"
+
+#: ui/general.ui:88
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state. When disabled, manual changes are temporary"
+msgstr ""
+"Gdy opcja jest włączona, ręcznie wybrane profile stają się nowym standardem "
+"dla bieżącego stanu zasilania. Gdy jest wyłączona, zmiany ręczne są "
+"tymczasowe"
