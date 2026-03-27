@@ -15,6 +15,7 @@ export default class AutoPowerProfile extends Extension {
   _upowerDbus;
   _powerProfilesDbus;
   _perfAppTracker;
+  _settingsChangedId;
 
   // Used to distinguish between user and extension-initiated changes
   _currentPowerState = {};
@@ -35,7 +36,7 @@ export default class AutoPowerProfile extends Extension {
       "org.gnome.shell.extensions.auto-power-profile"
     );
     this._settings = new CustomSettings(settings);
-    this._settings.connect(this._onSettingsChange);
+    this._settingsChangedId = this._settings.connect(this._onSettingsChange);
 
     this._perfAppTracker = new PerformanceAppTracker();
     this._perfAppTracker.initialize(this._checkProfile);
@@ -72,6 +73,10 @@ export default class AutoPowerProfile extends Extension {
   }
 
   disable() {
+    // "unlock-dialog" session mode is used to preserve power profile set by user
+    // prolonging battery runtime in some scenarios:
+    // https://github.com/dmy3k/auto-power-profile/issues/48
+
     if (this._notifier) {
       this._notifier.destroy();
       this._notifier = null;
@@ -89,6 +94,11 @@ export default class AutoPowerProfile extends Extension {
     }
 
     this._clearCurrentPowerState();
+
+    if (this._settingsChangedId) {
+      this.settings?.disconnect(this._settingsChangedId);
+      this._settingsChangedId = null;
+    }
 
     if (this._settings) {
       this._settings.destroy();
