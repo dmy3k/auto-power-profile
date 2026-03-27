@@ -72,6 +72,10 @@ export default class AutoPowerProfile extends Extension {
   }
 
   disable() {
+    // "unlock-dialog" session mode is used to preserve power profile set by user
+    // prolonging battery runtime in some scenarios:
+    // https://github.com/dmy3k/auto-power-profile/issues/48
+
     if (this._notifier) {
       this._notifier.destroy();
       this._notifier = null;

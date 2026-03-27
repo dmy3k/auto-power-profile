@@ -3,6 +3,7 @@
   "description": "Automatically switch between power profiles based on power supply and battery status.",
   "gettext-domain": "org.gnome.shell.extensions.auto-power-profile",
   "name": "Auto Power Profile",
+  "session-modes": ["unlock-dialog", "user"],
   "settings-schema": "org.gnome.shell.extensions.auto-power-profile",
   "shell-version": ["45", "46", "47", "48", "49", "50"],
   "url": "https://github.com/dmy3k/auto-power-profile",
@@ -11,5 +12,5 @@
     "github": "dmy3k",
     "buymeacoffee": "dm3k"
   },
-  "version": 29
+  "version": 31
 }
