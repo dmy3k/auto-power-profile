@@ -48,5 +48,11 @@
         The power profile to enter when launching a performance app while on AC power.
       </description>
     </key>
+
+    <key name="weak-adapter-protection" type="b">
+      <default>false</default>
+      <summary>Weak AC adapter protection</summary>
+      <description>Switch to Power Saver when AC adapter is connected but battery is discharging due to insufficient adapter power. Resets when AC is disconnected.</description>
+    </key>
   </schema>
 </schemalist>

@@ -257,6 +257,46 @@ export const PerformanceApps = GObject.registerClass(
   }
 );
 
+export const Experimental = GObject.registerClass(
+  { GTypeName: "AutoPowerProfileExperimentalPrefs" },
+  class Experimental extends Adw.PreferencesPage {
+    _init(settings, params = {}) {
+      super._init({
+        ...params,
+        name: "experimental",
+        title: _("Experimental"),
+        icon_name: "applications-science-symbolic"
+      });
+
+      const group = new Adw.PreferencesGroup({
+        title: _("Experimental Features"),
+        description: _(
+          "Addresses quirks found on certain hardware configurations. Enable only if the described issue applies to your setup."
+        )
+      });
+      this.add(group);
+
+      const weakAdapterSwitch = new Gtk.Switch({ valign: Gtk.Align.CENTER });
+      settings.bind(
+        "weak-adapter-protection",
+        weakAdapterSwitch,
+        "active",
+        Gio.SettingsBindFlags.DEFAULT
+      );
+
+      const weakAdapterRow = new Adw.ActionRow({
+        title: _("Underpowered Adapter Handling"),
+        subtitle: _(
+          "Switch to Power Saver when adapter is connected but battery is discharging under load. Resets when adapter is unplugged."
+        ),
+        activatable_widget: weakAdapterSwitch
+      });
+      weakAdapterRow.add_suffix(weakAdapterSwitch);
+      group.add(weakAdapterRow);
+    }
+  }
+);
+
 export default class AutoPowerProfilePreferences extends ExtensionPreferences {
   fillPreferencesWindow(window) {
     const settings = this.getSettings();
@@ -264,6 +304,7 @@ export default class AutoPowerProfilePreferences extends ExtensionPreferences {
 
     window.add(new General(settings, availableProfiles));
     window.add(new PerformanceApps(settings, availableProfiles));
+    window.add(new Experimental(settings));
   }
 
   _loadAvailableProfiles = async () => {

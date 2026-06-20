@@ -24,6 +24,7 @@ beforeEach(() => {
 
   Extension._mock.state.ac = "performance";
   Extension._mock.state.bat = "balanced";
+  Extension._mock.state["weak-adapter-protection"] = false;
   Extension._mock.handlers = [];
 
   PowerProfilesProxyMock._state.ActiveProfile = "balanced";
@@ -785,6 +786,296 @@ describe("Async Initialization & Race Conditions", () => {
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
 
     consoleDebugSpy.mockRestore();
+  });
+});
+
+describe("Weak AC Adapter Protection", () => {
+  test("feature off by default: Online=true with DISCHARGING keeps AC profile", async () => {
+    // Simulate the Lenovo Yoga scenario: adapter connected but battery drains under load
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 31,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    // Feature is off (default false)
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    // Without the feature, Online=true means AC profile is used even while discharging
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+    expect(p._weakAdapterModeActive).toBe(false);
+  });
+
+  test("no false-positive on adapter connect: brief DISCHARGING does not immediately trigger", async () => {
+    // Start on battery
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: false,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance", bat: "balanced" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+
+    jest.useFakeTimers();
+
+    // Plug in any adapter: Online=true but State still briefly DISCHARGING
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+    jest.runAllTicks();
+
+    // Debounce started but not fired — must NOT switch to power-saver yet
+    expect(p._weakAdapterPending).toBe(true);
+    expect(p._weakAdapterModeActive).toBe(false);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    jest.useRealTimers();
+  });
+
+  test("feature on: Online=true with sustained DISCHARGING activates power-saver after debounce", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    jest.useFakeTimers();
+
+    // Adapter can no longer keep up — battery starts discharging while AC stays Online
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 49,
+      warningLevel: DeviceLevel.NONE
+    });
+    jest.runAllTicks();
+
+    // Debounce pending — profile unchanged
+    expect(p._weakAdapterPending).toBe(true);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    // Condition persists past debounce timeout
+    jest.advanceTimersByTime(5000);
+    jest.runAllTicks();
+
+    jest.useRealTimers();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+    expect(p._weakAdapterModeActive).toBe(true);
+    expect(p._weakAdapterPending).toBe(false);
+  });
+
+  test("debounce cancelled when adapter charges normally before timeout", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: false,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    jest.useFakeTimers();
+
+    // Adapter connects — brief DISCHARGING state
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+    jest.runAllTicks();
+    expect(p._weakAdapterPending).toBe(true);
+
+    // Battery transitions to CHARGING before debounce fires — good adapter
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE
+    });
+    jest.runAllTicks();
+
+    // Debounce should be cancelled
+    expect(p._weakAdapterPending).toBe(false);
+    expect(p._weakAdapterModeActive).toBe(false);
+
+    // Even after timeout would have fired, mode stays off
+    jest.advanceTimersByTime(5000);
+    jest.runAllTicks();
+
+    jest.useRealTimers();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+    expect(p._weakAdapterModeActive).toBe(false);
+  });
+
+  // Helper: put extension directly into weak adapter mode without going through debounce
+  async function activateWeakAdapterMode(p) {
+    p._weakAdapterModeActive = true;
+    p._currentProfile = null;
+    p._currentPowerState = {};
+    p._checkProfile();
+    await sleep(10);
+  }
+
+  test("weak adapter mode persists when battery starts charging again (no oscillation)", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 30,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    await activateWeakAdapterMode(p);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+
+    // Power Saver reduced load enough that the adapter can now charge the battery
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 31,
+      warningLevel: DeviceLevel.NONE
+    });
+    await sleep(10);
+
+    // Mode must stay active to prevent oscillation — only clears on unplug
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+    expect(p._weakAdapterModeActive).toBe(true);
+  });
+
+  test("weak adapter mode clears when AC is unplugged", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 30,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance", bat: "balanced" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    await activateWeakAdapterMode(p);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+    expect(p._weakAdapterModeActive).toBe(true);
+
+    // User unplugs adapter
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: false,
+      percentage: 29,
+      warningLevel: DeviceLevel.NONE
+    });
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+    expect(p._weakAdapterModeActive).toBe(false);
+  });
+
+  test("does not update AC settings when user changes profile during weak adapter mode", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 30,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const originalAcSetting = Extension._mock.state.ac;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    await activateWeakAdapterMode(p);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+
+    // Simulate user manually changing profile during weak adapter mode
+    const settingsSpy = jest.spyOn(Extension._mock, "set_string");
+    p._requestedProfile = null;
+    PowerProfilesProxyMock._state.ActiveProfile = "balanced";
+    await sleep(10);
+
+    // Extension must NOT update the AC default setting
+    expect(settingsSpy).not.toHaveBeenCalled();
+    expect(Extension._mock.state.ac).toBe(originalAcSetting);
+  });
+
+  test("performance app override is blocked while in weak adapter mode", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 30,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({
+      ac: "performance",
+      "performance-apps-ac": "performance"
+    });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    await activateWeakAdapterMode(p);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+    expect(p._weakAdapterModeActive).toBe(true);
+
+    // Even with a performance app active, weak adapter mode must keep power-saver.
+    // Perf app changes call _checkProfile directly (not _onSettingsChange).
+    jest.spyOn(p._perfAppTracker, "hasActiveApps", "get").mockReturnValue(true);
+    p._checkProfile();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
   });
 });
 
