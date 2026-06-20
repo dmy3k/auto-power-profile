@@ -9,7 +9,8 @@ class Extension {
       debug: false,
       "performance-apps": [],
       "performance-apps-ac": "performance",
-      "performance-apps-bat": "balanced"
+      "performance-apps-bat": "balanced",
+      "weak-adapter-protection": false
     },
     handlers: [],
 

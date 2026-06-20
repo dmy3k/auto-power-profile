@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: auto-power-profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 21:12+0200\n"
+"POT-Creation-Date: 2026-06-20 17:25+0200\n"
 "PO-Revision-Date: 2025-08-19 11:54+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -17,23 +17,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:52
+#: extension.js:64
 #, fuzzy
 msgid "Error connecting to power management services"
 msgstr "Помилка з'єднання з power-profiles-daemon DBus"
 
-#: extension.js:125
+#: extension.js:155
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr "Профіль '%s' тепер буде використовуватися за замовчуванням від мережі"
 
-#: extension.js:133
+#: extension.js:163
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr "Профіль '%s' тепер буде використовуватися за замовчуванням від батареї"
 
-#: extension.js:276
+#: extension.js:294
+msgid ""
+"Low power adapter detected. Switched to Power Saver — charging will resume "
+"in a few seconds"
+msgstr ""
+
+#: extension.js:398
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -41,7 +47,7 @@ msgstr ""
 "Керування профілями живлення недоступне - це розширення не матиме жодного "
 "впливу на вашу систему"
 
-#: extension.js:282
+#: extension.js:404
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -51,27 +57,27 @@ msgstr ""
 "економія енергії буде обмеженою. Вашій системі можуть знадобитися оновлення "
 "для забезпечення повної функціональності"
 
-#: prefs.js:70 ui/general.ui:5
+#: prefs.js:68 ui/general.ui:5
 msgid "General"
 msgstr "Загальні"
 
-#: prefs.js:131
+#: prefs.js:116
 msgid "None"
 msgstr "Немає"
 
-#: prefs.js:132
+#: prefs.js:117
 msgid "Off"
 msgstr "Вимкнено"
 
-#: prefs.js:146
+#: prefs.js:131
 msgid "Performance Apps"
 msgstr "Профілі додатків"
 
-#: prefs.js:151
+#: prefs.js:138
 msgid "Application-Based Profiles"
 msgstr "Профілі додатків"
 
-#: prefs.js:153
+#: prefs.js:140
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
@@ -79,23 +85,47 @@ msgstr ""
 "Активує профіль для запуску обраних додатків. Можна використати для "
 "підвищеної продуктивності ПО"
 
-#: prefs.js:175 ui/general.ui:36
+#: prefs.js:162 ui/general.ui:22
 msgid "On Battery"
 msgstr "Від батареї"
 
-#: prefs.js:183 ui/general.ui:14
+#: prefs.js:170 ui/general.ui:14
 msgid "On AC"
 msgstr "Від мережі"
 
+#: prefs.js:267
+msgid "Experimental"
+msgstr ""
+
 #: prefs.js:272
+msgid "Experimental Features"
+msgstr ""
+
+#: prefs.js:274
+msgid ""
+"Addresses quirks found on certain hardware configurations. Enable only if "
+"the described issue applies to your setup."
+msgstr ""
+
+#: prefs.js:288
+msgid "Underpowered Adapter Handling"
+msgstr ""
+
+#: prefs.js:290
+msgid ""
+"Switch to Power Saver when adapter is connected but battery is discharging "
+"under load. Resets when adapter is unplugged."
+msgstr ""
+
+#: prefs.js:312
 msgid "Performance"
 msgstr "Швидкодія"
 
-#: prefs.js:273
+#: prefs.js:313
 msgid "Balanced"
 msgstr "Баланс"
 
-#: prefs.js:274
+#: prefs.js:314
 msgid "Power Saver"
 msgstr "Заощадження"
 
@@ -111,31 +141,19 @@ msgstr "Застосовуються автоматично якшо не обр
 msgid "Select the default profile when connected to AC"
 msgstr "Профіль за замовчуванням від мережі"
 
-#: ui/general.ui:22
-msgid "Handle lap-mode on AC"
-msgstr "Обробляти режим lap-mode"
-
 #: ui/general.ui:23
-msgid ""
-"Try to maintain performance mode on unstable surfaces. Disable if you are "
-"experiencing thermal issues"
-msgstr ""
-"Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя дозволить "
-"перехід в режим 'Баланс' задля зниження температури пристрою"
-
-#: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr "Профіль за замовчуванням від батареї"
 
-#: ui/general.ui:44
+#: ui/general.ui:30
 msgid "Low Battery Threshold"
 msgstr "Поріг низького заряду батареї"
 
-#: ui/general.ui:45
+#: ui/general.ui:31
 msgid "Automatic power-saver on low battery"
 msgstr "Автоматичне заощадження при низькому заряді"
 
-#: ui/general.ui:57
+#: ui/general.ui:43
 msgid ""
 "Enable/disable in GNOME Settings → Power → Power Saving Options. The "
 "percentage threshold value is configured in the UPower config file (/etc/"
@@ -145,25 +163,35 @@ msgstr ""
 "енергозбереження. Значення порогу у відсотках налаштовується у файлі "
 "конфігурації UPower (/etc/UPower/UPower.conf)"
 
-#: ui/general.ui:74
-msgid "Notifications"
-msgstr "Показувати сповіщення"
-
-#: ui/general.ui:75
-msgid "Allow extension notifications"
-msgstr "Показувати сповіщення розширення"
-
-#: ui/general.ui:87
+#: ui/general.ui:60
 msgid "Remember manual profile changes"
 msgstr "Запам'ятовувати ручні зміни профілю"
 
-#: ui/general.ui:88
+#: ui/general.ui:61
 msgid ""
 "When enabled, manually selected profiles become the new default for the "
 "current power state. When disabled, manual changes are temporary"
 msgstr ""
 "Коли увімкнено, профілі, обрані вручну, стають новими за замовчуванням для "
 "поточного стану живлення. Коли вимкнено, ручні зміни є тимчасовими"
+
+#: ui/general.ui:73
+msgid "Notifications"
+msgstr "Показувати сповіщення"
+
+#: ui/general.ui:74
+msgid "Allow extension notifications"
+msgstr "Показувати сповіщення розширення"
+
+#~ msgid "Handle lap-mode on AC"
+#~ msgstr "Обробляти режим lap-mode"
+
+#~ msgid ""
+#~ "Try to maintain performance mode on unstable surfaces. Disable if you are "
+#~ "experiencing thermal issues"
+#~ msgstr ""
+#~ "Утримувати профіль 'Швидкодія' на нестабільних поверхнях. Вимкненя "
+#~ "дозволить перехід в режим 'Баланс' задля зниження температури пристрою"
 
 #~ msgid "Error connecting UPower DBus"
 #~ msgstr "Помилка з'єднання з UPower DBus"

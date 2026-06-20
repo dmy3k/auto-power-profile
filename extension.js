@@ -22,6 +22,16 @@ export default class AutoPowerProfile extends Extension {
   _currentProfile;
   _requestedProfile;
 
+  // Runtime-only: true when AC is connected but battery is discharging due to
+  // an underpowered adapter. Cleared when AC is physically unplugged.
+  _weakAdapterModeActive = false;
+
+  // Pending stateavoids false positives from the brief DISCHARGING state that
+  // UPower emits when any adapter is first connected.
+  _weakAdapterPending = false;
+  _weakAdapterDebounceTimerId = null;
+  _weakAdapterDebounceTimeout = 5;
+
   _perfDebounceTimerId;
   _perfDebounceTimeout = 10;
 
@@ -93,6 +103,11 @@ export default class AutoPowerProfile extends Extension {
       this._perfDebounceTimerId = null;
     }
 
+    if (this._weakAdapterDebounceTimerId) {
+      GLib.Source.remove(this._weakAdapterDebounceTimerId);
+      this._weakAdapterDebounceTimerId = null;
+    }
+
     this._clearCurrentPowerState();
 
     if (this._settingsChangedId) {
@@ -122,9 +137,13 @@ export default class AutoPowerProfile extends Extension {
       return;
     }
 
-    // Only update defaults for basic profiles, not when performance apps are active
-    // Don't update if we're in low battery mode (power-saver is forced)
-    if (lowBattery || this._perfAppTracker?.hasActiveApps) {
+    // Only update defaults for basic profiles, not when performance apps are active.
+    // Don't update if we're in low battery or weak adapter mode (power-saver is forced).
+    if (
+      lowBattery ||
+      this._weakAdapterModeActive ||
+      this._perfAppTracker?.hasActiveApps
+    ) {
       return;
     }
 
@@ -235,6 +254,72 @@ export default class AutoPowerProfile extends Extension {
     const gnomeLowBatteryEnabled =
       this._settings?.powerSaverOnLowBatteryEnabled ?? true;
 
+    // Update weak adapter mode tracking. A debounce guards against the brief
+    // DISCHARGING state UPower emits when any adapter is first connected.
+    // Only commit to weak-adapter mode if the condition persists for
+    // _weakAdapterDebounceTimeout seconds. Only clear when AC goes offline
+    // (prevents oscillation if power-saver briefly lets the battery charge).
+    if (this._settings?.weakAdapterProtectionEnabled) {
+      if (powerState.onBattery) {
+        // AC physically disconnected — reset for the next adapter session
+        this._weakAdapterModeActive = false;
+        this._weakAdapterPending = false;
+        if (this._weakAdapterDebounceTimerId) {
+          GLib.Source.remove(this._weakAdapterDebounceTimerId);
+          this._weakAdapterDebounceTimerId = null;
+        }
+      } else if (
+        powerState.acConnectedButDischarging &&
+        !this._weakAdapterModeActive
+      ) {
+        // Start debounce on first observation; don't restart if already pending
+        if (!this._weakAdapterPending) {
+          this._weakAdapterPending = true;
+          this._weakAdapterDebounceTimerId = GLib.timeout_add_seconds(
+            GLib.PRIORITY_DEFAULT,
+            this._weakAdapterDebounceTimeout,
+            () => {
+              this._weakAdapterDebounceTimerId = null;
+              this._weakAdapterPending = false;
+              // Re-evaluate current state — only activate if condition still holds
+              const currentState = this._upowerDbus?.getPowerState();
+              if (
+                currentState?.acConnectedButDischarging &&
+                this._settings?.weakAdapterProtectionEnabled &&
+                !this._weakAdapterModeActive
+              ) {
+                this._weakAdapterModeActive = true;
+                this._notifier?.notify(
+                  _(
+                    "Low power adapter detected. Switched to Power Saver — charging will resume in a few seconds"
+                  ),
+                  { isTransient: true }
+                );
+              }
+              this._checkProfile();
+              return GLib.SOURCE_REMOVE;
+            }
+          );
+        }
+      } else if (!powerState.acConnectedButDischarging) {
+        // Condition cleared (battery charging) — cancel any pending debounce
+        if (this._weakAdapterPending) {
+          this._weakAdapterPending = false;
+          if (this._weakAdapterDebounceTimerId) {
+            GLib.Source.remove(this._weakAdapterDebounceTimerId);
+            this._weakAdapterDebounceTimerId = null;
+          }
+        }
+      }
+    } else {
+      this._weakAdapterModeActive = false;
+      this._weakAdapterPending = false;
+      if (this._weakAdapterDebounceTimerId) {
+        GLib.Source.remove(this._weakAdapterDebounceTimerId);
+        this._weakAdapterDebounceTimerId = null;
+      }
+    }
+
     // Determine configured profile based on power state
     if (powerState.onBattery === false) {
       configuredProfile = this._settings.acProfile;
@@ -253,9 +338,16 @@ export default class AutoPowerProfile extends Extension {
       configuredProfile = this._settings.performanceAppsACMode;
     }
 
+    // Weak adapter override: highest priority — forces power-saver regardless
+    // of performance apps since the goal is to reduce load enough to charge
+    if (this._weakAdapterModeActive) {
+      configuredProfile = "power-saver";
+    }
+
     return {
       ...powerState,
       perfApps: perfAppsActive,
+      weakAdapterMode: this._weakAdapterModeActive,
       configuredProfile
     };
   }
@@ -264,6 +356,12 @@ export default class AutoPowerProfile extends Extension {
     this._currentProfile = null;
     this._requestedProfile = null;
     this._currentPowerState = {};
+    this._weakAdapterModeActive = false;
+    this._weakAdapterPending = false;
+    if (this._weakAdapterDebounceTimerId) {
+      GLib.Source.remove(this._weakAdapterDebounceTimerId);
+      this._weakAdapterDebounceTimerId = null;
+    }
   }
 
   _checkProfile = () => {
@@ -276,7 +374,8 @@ export default class AutoPowerProfile extends Extension {
     const hasPowerConditionChanged =
       this._currentPowerState.onBattery !== newState.onBattery ||
       this._currentPowerState.lowBattery !== newState.lowBattery ||
-      this._currentPowerState.perfApps !== newState.perfApps;
+      this._currentPowerState.perfApps !== newState.perfApps ||
+      this._currentPowerState.weakAdapterMode !== newState.weakAdapterMode;
 
     if (
       hasPowerConditionChanged &&
