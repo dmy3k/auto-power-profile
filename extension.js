@@ -384,8 +384,16 @@ export default class AutoPowerProfile extends Extension {
       // handling edge case where user-initiated profile matches target
       this._currentPowerState = newState;
     } else if (hasPowerConditionChanged || !this._currentProfile) {
-      this._requestedProfile = newState.configuredProfile;
-      this._powerProfilesDbus.switchProfile(this._requestedProfile);
+      const targetProfile = newState.configuredProfile;
+      if (this._powerProfilesDbus.activeProfile === targetProfile) {
+        // Profile already correct — settle state directly without a pending DBus
+        // round-trip so _requestedProfile is never left stale
+        this._currentProfile = targetProfile;
+        this._currentPowerState = newState;
+      } else {
+        this._requestedProfile = targetProfile;
+        this._powerProfilesDbus.switchProfile(targetProfile);
+      }
     }
   };
 

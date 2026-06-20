@@ -25,6 +25,7 @@ beforeEach(() => {
   Extension._mock.state.ac = "performance";
   Extension._mock.state.bat = "balanced";
   Extension._mock.state["weak-adapter-protection"] = false;
+  Extension._mock.state["remember-user-profile"] = false;
   Extension._mock.handlers = [];
 
   PowerProfilesProxyMock._state.ActiveProfile = "balanced";
@@ -326,6 +327,51 @@ test("user can manually override profile on battery (not low)", async () => {
 
   // Profile should be changed
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+});
+
+test("does not overwrite battery profile when external agent switches to performance during AC plug-in", async () => {
+  // Reproduces the bug where _currentProfile stays null because switchProfile
+  // returns early (profile already matches), leaving _requestedProfile stale.
+  // A subsequent external profile change was then misclassified as user intent.
+
+  // Start on battery, both profiles set to balanced, daemon already at balanced
+  UpowerProxyMock._state.update({
+    state: DeviceState.DISCHARGING,
+    online: false,
+    percentage: 60,
+    warningLevel: DeviceLevel.NONE
+  });
+  Extension._mock.update({ ac: "balanced", bat: "balanced" });
+  PowerProfilesProxyMock._state.ActiveProfile = "balanced";
+  Extension._mock.state["remember-user-profile"] = true;
+
+  const p = new AutoPowerProfile();
+  p.enable();
+  await sleep(10);
+
+  // Sanity: profile is balanced, _currentProfile must be settled (not null)
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+  expect(p._currentProfile).toBe("balanced");
+
+  const settingsSpy = jest.spyOn(Extension._mock, "set_string");
+
+  // Plug in AC
+  UpowerProxyMock._state.update({
+    state: DeviceState.CHARGING,
+    online: true,
+    percentage: 61,
+    warningLevel: DeviceLevel.NONE
+  });
+  await sleep(10);
+
+  // Simulate an external agent (e.g. GNOME Quick Settings) switching to performance
+  PowerProfilesProxyMock._state.ActiveProfile = "performance";
+  await sleep(10);
+
+  // The stored battery profile must NOT have been overwritten
+  expect(Extension._mock.state.bat).toBe("balanced");
+  // AC profile also must not have been overwritten
+  expect(Extension._mock.state.ac).toBe("balanced");
 });
 
 test("does not update settings when user changes profile during low battery", async () => {
