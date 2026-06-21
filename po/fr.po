@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 21:12+0200\n"
+"POT-Creation-Date: 2026-06-20 17:25+0200\n"
 "PO-Revision-Date: 2025-08-21 16:11+0200\n"
 "Last-Translator: p-sage\n"
 "Language-Team: \n"
@@ -17,25 +17,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.6\n"
 
-#: extension.js:52
+#: extension.js:64
 #, fuzzy
 msgid "Error connecting to power management services"
 msgstr "Erreur de connexion à power-profiles-daemon DBus"
 
-#: extension.js:125
+#: extension.js:155
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
 msgstr ""
 "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur secteur"
 
-#: extension.js:133
+#: extension.js:163
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr ""
 "Le profil d'alimentation '%s' sera maintenant utilisé par défaut sur batterie"
 
-#: extension.js:276
+#: extension.js:294
+msgid ""
+"Low power adapter detected. Switched to Power Saver — charging will resume "
+"in a few seconds"
+msgstr ""
+
+#: extension.js:398
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -43,7 +49,7 @@ msgstr ""
 "La gestion des profils d'alimentation n'est pas disponible - cette extension "
 "n'aura aucun effet sur votre système"
 
-#: extension.js:282
+#: extension.js:404
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -53,27 +59,27 @@ msgstr ""
 "sur cet appareil - les économies d'énergie seront limitées. Votre système "
 "peut avoir besoin de mises à jour pour activer toutes les fonctionnalités"
 
-#: prefs.js:70 ui/general.ui:5
+#: prefs.js:68 ui/general.ui:5
 msgid "General"
 msgstr "Général"
 
-#: prefs.js:131
+#: prefs.js:116
 msgid "None"
 msgstr "Aucun"
 
-#: prefs.js:132
+#: prefs.js:117
 msgid "Off"
 msgstr "Désactivé"
 
-#: prefs.js:146
+#: prefs.js:131
 msgid "Performance Apps"
 msgstr "Applications de performance"
 
-#: prefs.js:151
+#: prefs.js:138
 msgid "Application-Based Profiles"
 msgstr "Profils basés sur les applications"
 
-#: prefs.js:153
+#: prefs.js:140
 msgid ""
 "Activate profiles for running selected apps. Can be used to prioritize "
 "performance ad-hoc"
@@ -81,23 +87,47 @@ msgstr ""
 "Activer des profils pour les applications en cours d'exécution. Peut être "
 "utilisé pour prioriser la performance de manière ponctuelle"
 
-#: prefs.js:175 ui/general.ui:36
+#: prefs.js:162 ui/general.ui:22
 msgid "On Battery"
 msgstr "Sur batterie"
 
-#: prefs.js:183 ui/general.ui:14
+#: prefs.js:170 ui/general.ui:14
 msgid "On AC"
 msgstr "Sur secteur"
 
+#: prefs.js:267
+msgid "Experimental"
+msgstr ""
+
 #: prefs.js:272
+msgid "Experimental Features"
+msgstr ""
+
+#: prefs.js:274
+msgid ""
+"Addresses quirks found on certain hardware configurations. Enable only if "
+"the described issue applies to your setup."
+msgstr ""
+
+#: prefs.js:288
+msgid "Underpowered Adapter Handling"
+msgstr ""
+
+#: prefs.js:290
+msgid ""
+"Switch to Power Saver when adapter is connected but battery is discharging "
+"under load. Resets when adapter is unplugged."
+msgstr ""
+
+#: prefs.js:312
 msgid "Performance"
 msgstr "Performance"
 
-#: prefs.js:273
+#: prefs.js:313
 msgid "Balanced"
 msgstr "Équilibré"
 
-#: prefs.js:274
+#: prefs.js:314
 msgid "Power Saver"
 msgstr "Économie d'énergie"
 
@@ -117,33 +147,21 @@ msgstr ""
 "Sélectionner le profil par défaut lorsque l’ordinateur est branché sur "
 "secteur"
 
-#: ui/general.ui:22
-msgid "Handle lap-mode on AC"
-msgstr "Gérer le mode portable sur secteur"
-
 #: ui/general.ui:23
-msgid ""
-"Try to maintain performance mode on unstable surfaces. Disable if you are "
-"experiencing thermal issues"
-msgstr ""
-"Essayer de maintenir le mode Performance sur les surfaces instables. "
-"Désactivez-le en cas de problèmes thermiques"
-
-#: ui/general.ui:37
 msgid "Select the default profile when running on battery"
 msgstr ""
 "Sélectionner le profil par défaut lorsque l’ordinateur fonctionne sur "
 "batterie"
 
-#: ui/general.ui:44
+#: ui/general.ui:30
 msgid "Low Battery Threshold"
 msgstr "Seuil de batterie faible"
 
-#: ui/general.ui:45
+#: ui/general.ui:31
 msgid "Automatic power-saver on low battery"
 msgstr "Économie d'énergie automatique sur batterie"
 
-#: ui/general.ui:57
+#: ui/general.ui:43
 msgid ""
 "Enable/disable in GNOME Settings → Power → Power Saving Options. The "
 "percentage threshold value is configured in the UPower config file (/etc/"
@@ -153,19 +171,11 @@ msgstr ""
 "d'énergie. La valeur de seuil en pourcentage est configurée dans le fichier "
 "de configuration UPower (/etc/UPower/UPower.conf)"
 
-#: ui/general.ui:74
-msgid "Notifications"
-msgstr "Afficher les notifications"
-
-#: ui/general.ui:75
-msgid "Allow extension notifications"
-msgstr "Afficher les notifications de l'extension"
-
-#: ui/general.ui:87
+#: ui/general.ui:60
 msgid "Remember manual profile changes"
 msgstr "Mémoriser les changements manuels de profil"
 
-#: ui/general.ui:88
+#: ui/general.ui:61
 msgid ""
 "When enabled, manually selected profiles become the new default for the "
 "current power state. When disabled, manual changes are temporary"
@@ -173,6 +183,24 @@ msgstr ""
 "Lorsque activé, les profils sélectionnés manuellement deviennent le nouveau "
 "profil par défaut pour l'état d'alimentation actuel. Lorsque désactivé, les "
 "changements manuels sont temporaires"
+
+#: ui/general.ui:73
+msgid "Notifications"
+msgstr "Afficher les notifications"
+
+#: ui/general.ui:74
+msgid "Allow extension notifications"
+msgstr "Afficher les notifications de l'extension"
+
+#~ msgid "Handle lap-mode on AC"
+#~ msgstr "Gérer le mode portable sur secteur"
+
+#~ msgid ""
+#~ "Try to maintain performance mode on unstable surfaces. Disable if you are "
+#~ "experiencing thermal issues"
+#~ msgstr ""
+#~ "Essayer de maintenir le mode Performance sur les surfaces instables. "
+#~ "Désactivez-le en cas de problèmes thermiques"
 
 #~ msgid "Error connecting UPower DBus"
 #~ msgstr "Erreur lors de la connexion à UPower DBus"
