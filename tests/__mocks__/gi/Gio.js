@@ -65,9 +65,10 @@ class UpowerProxyMock {
     state: DeviceState.CHARGING,
     percentage: 0,
     warningLevel: DeviceLevel.NONE,
+    energyRate: 0,
     handlers: [],
 
-    update({ state, percentage, warningLevel, online }) {
+    update({ state, percentage, warningLevel, online, energyRate }) {
       this.state = state || this.state;
       this.on_battery = this.state === DeviceState.DISCHARGING;
       this.online =
@@ -75,6 +76,7 @@ class UpowerProxyMock {
       this.percentage = percentage !== undefined ? percentage : this.percentage;
       this.warningLevel =
         warningLevel !== undefined ? warningLevel : this.warningLevel;
+      this.energyRate = energyRate !== undefined ? energyRate : this.energyRate;
 
       // Update LinePowerProxyMock state BEFORE triggering handlers
       if (online !== undefined) {
@@ -108,6 +110,10 @@ class UpowerProxyMock {
     return UpowerProxyMock._state.warningLevel;
   }
 
+  get EnergyRate() {
+    return UpowerProxyMock._state.energyRate;
+  }
+
   get Type() {
     // Return LINE_POWER (1) if path contains "line_power" or "AC"
     // Otherwise return BATTERY (2)
@@ -125,6 +131,11 @@ class UpowerProxyMock {
     if (propertyName === "WarningLevel") {
       return {
         unpack: () => UpowerProxyMock._state.warningLevel
+      };
+    }
+    if (propertyName === "EnergyRate") {
+      return {
+        unpack: () => UpowerProxyMock._state.energyRate
       };
     }
     if (propertyName === "Type") {

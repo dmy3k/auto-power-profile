@@ -1,8 +1,10 @@
 const DeviceState = {
-  PENDING_DISCHARGE: 6,
-  DISCHARGING: 2,
+  UNKNOWN: 0,
   CHARGING: 1,
-  UNKNOWN: 0
+  DISCHARGING: 2,
+  FULLY_CHARGED: 4,
+  PENDING_CHARGE: 5,
+  PENDING_DISCHARGE: 6
 };
 
 const DeviceLevel = {
