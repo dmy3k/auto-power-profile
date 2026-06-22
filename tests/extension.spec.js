@@ -330,11 +330,14 @@ test("user can manually override profile on battery (not low)", async () => {
 });
 
 test("does not overwrite battery profile when external agent switches to performance during AC plug-in", async () => {
-  // Reproduces the bug where _currentProfile stays null because switchProfile
-  // returns early (profile already matches), leaving _requestedProfile stale.
-  // A subsequent external profile change was then misclassified as user intent.
+  // Regression test for the race where the battery display device fires
+  // g-properties-changed (State=CHARGING) before linePowerProxy.Online updates
+  // in its own cache.  The fix connects linePowerProxy to _checkProfile so that
+  // _currentPowerState is set to onBattery=false as soon as Online→true, before
+  // an external profile change (e.g. GNOME auto-restoring an AC profile) fires
+  // _onProfileChange and attempts to attribute the change to a power context.
 
-  // Start on battery, both profiles set to balanced, daemon already at balanced
+  // Start on battery, both profiles balanced, daemon at balanced
   UpowerProxyMock._state.update({
     state: DeviceState.DISCHARGING,
     online: false,
@@ -349,13 +352,13 @@ test("does not overwrite battery profile when external agent switches to perform
   p.enable();
   await sleep(10);
 
-  // Sanity: profile is balanced, _currentProfile must be settled (not null)
+  // Sanity: settled on battery with balanced profile
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
   expect(p._currentProfile).toBe("balanced");
 
-  const settingsSpy = jest.spyOn(Extension._mock, "set_string");
-
-  // Plug in AC
+  // Plug in AC — mock updates both battery device and linePowerProxy atomically
+  // and fires all registered handlers (including the newly connected linePower
+  // handler) so _currentPowerState correctly settles to onBattery=false.
   UpowerProxyMock._state.update({
     state: DeviceState.CHARGING,
     online: true,
@@ -364,14 +367,17 @@ test("does not overwrite battery profile when external agent switches to perform
   });
   await sleep(10);
 
-  // Simulate an external agent (e.g. GNOME Quick Settings) switching to performance
-  PowerProfilesProxyMock._state.ActiveProfile = "performance";
+  // External agent (e.g. GNOME Quick Settings) switches to "performance".
+  // Use the proxy instance setter so g-properties-changed actually fires and
+  // _onProfileChange runs — the previous test used direct state mutation which
+  // bypassed the signal entirely, making the assertion trivially true.
+  p._powerProfilesDbus._proxy.ActiveProfile = "performance";
   await sleep(10);
 
-  // The stored battery profile must NOT have been overwritten
+  // Battery profile must NOT be overwritten: _currentPowerState was already
+  // settled to onBattery=false before the external change arrived, so
+  // _onUserProfileChange correctly attributes it to the AC context.
   expect(Extension._mock.state.bat).toBe("balanced");
-  // AC profile also must not have been overwritten
-  expect(Extension._mock.state.ac).toBe("balanced");
 });
 
 test("does not update settings when user changes profile during low battery", async () => {
