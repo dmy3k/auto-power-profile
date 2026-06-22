@@ -17,6 +17,7 @@ beforeEach(() => {
   UpowerProxyMock._state.online = false;
   UpowerProxyMock._state.percentage = 24;
   UpowerProxyMock._state.warningLevel = DeviceLevel.LOW;
+  UpowerProxyMock._state.energyRate = 0;
   UpowerProxyMock._state.handlers = [];
 
   LinePowerProxyMock._state.online = false;
@@ -857,7 +858,7 @@ describe("Weak AC Adapter Protection", () => {
     expect(p._weakAdapterModeActive).toBe(false);
   });
 
-  test("no false-positive on adapter connect: brief DISCHARGING does not immediately trigger", async () => {
+  test("no false-positive on adapter connect: brief DISCHARGING with no energy drain is ignored", async () => {
     // Start on battery
     UpowerProxyMock._state.update({
       state: DeviceState.DISCHARGING,
@@ -875,23 +876,22 @@ describe("Weak AC Adapter Protection", () => {
 
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
 
-    jest.useFakeTimers();
-
-    // Plug in any adapter: Online=true but State still briefly DISCHARGING
+    // Plug in adapter: Online=true but State still briefly DISCHARGING with zero
+    // energy drain (transitional firmware state before settling to CHARGING/PENDING_CHARGE)
     UpowerProxyMock._state.update({
       state: DeviceState.DISCHARGING,
       online: true,
       percentage: 50,
-      warningLevel: DeviceLevel.NONE
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 0
     });
-    jest.runAllTicks();
+    await sleep(10);
 
-    // Debounce started but not fired — must NOT switch to power-saver yet
-    expect(p._weakAdapterPending).toBe(true);
+    // energyRate=0 → weakAdapterSuspected=false → debounce never starts
+    expect(p._weakAdapterPending).toBe(false);
     expect(p._weakAdapterModeActive).toBe(false);
+    // onBattery=false with AC online → switches to AC profile
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
-
-    jest.useRealTimers();
   });
 
   test("feature on: Online=true with sustained DISCHARGING activates power-saver after debounce", async () => {
@@ -918,7 +918,8 @@ describe("Weak AC Adapter Protection", () => {
       state: DeviceState.DISCHARGING,
       online: true,
       percentage: 49,
-      warningLevel: DeviceLevel.NONE
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 5
     });
     jest.runAllTicks();
 
@@ -927,7 +928,7 @@ describe("Weak AC Adapter Protection", () => {
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
 
     // Condition persists past debounce timeout
-    jest.advanceTimersByTime(5000);
+    jest.advanceTimersByTime(10000);
     jest.runAllTicks();
 
     jest.useRealTimers();
@@ -955,12 +956,13 @@ describe("Weak AC Adapter Protection", () => {
 
     jest.useFakeTimers();
 
-    // Adapter connects — brief DISCHARGING state
+    // Adapter connects — battery still draining (energyRate>0 confirms real draw)
     UpowerProxyMock._state.update({
       state: DeviceState.DISCHARGING,
       online: true,
       percentage: 50,
-      warningLevel: DeviceLevel.NONE
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 5
     });
     jest.runAllTicks();
     expect(p._weakAdapterPending).toBe(true);
@@ -979,7 +981,7 @@ describe("Weak AC Adapter Protection", () => {
     expect(p._weakAdapterModeActive).toBe(false);
 
     // Even after timeout would have fired, mode stays off
-    jest.advanceTimersByTime(5000);
+    jest.advanceTimersByTime(10000);
     jest.runAllTicks();
 
     jest.useRealTimers();
@@ -1122,6 +1124,183 @@ describe("Weak AC Adapter Protection", () => {
     await sleep(10);
 
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+  });
+
+  test("charging threshold: PENDING_CHARGE clears weak adapter mode and restores AC profile", async () => {
+    // Scenario: battery charges to stop threshold, briefly goes DISCHARGING
+    // (adapter still online), then settles at PENDING_CHARGE. Weak adapter mode
+    // must NOT remain active after PENDING_CHARGE is observed.
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 79,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance", bat: "balanced" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    // Force weak adapter mode as if the debounce fired during a sustained
+    // DISCHARGING phase at the threshold
+    p._weakAdapterModeActive = true;
+    p._currentProfile = null;
+    p._currentPowerState = {};
+    p._checkProfile();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+    expect(p._weakAdapterModeActive).toBe(true);
+
+    // Battery reaches PENDING_CHARGE (charging threshold state)
+    UpowerProxyMock._state.update({
+      state: DeviceState.PENDING_CHARGE,
+      online: true,
+      percentage: 80,
+      warningLevel: DeviceLevel.NONE
+    });
+    await sleep(10);
+
+    // Weak adapter mode must be cleared and AC profile restored
+    expect(p._weakAdapterModeActive).toBe(false);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+  });
+
+  test("transitional DISCHARGING with energyRate=0 does not activate weak adapter mode", async () => {
+    // Scenario: AC plugged in at charge threshold — battery briefly shows DISCHARGING
+    // but energy-rate stays at 0 (firmware just hasn't settled to PENDING_CHARGE yet).
+    // energyRate=0 → weakAdapterSuspected=false → debounce never starts, nothing activates.
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 79,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 0
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    // Transitional DISCHARGING: AC online but energyRate is 0 (no real drain)
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 79,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 0
+    });
+    await sleep(10);
+
+    // Debounce must never start — energyRate=0 means weakAdapterSuspected=false
+    expect(p._weakAdapterPending).toBe(false);
+    expect(p._weakAdapterModeActive).toBe(false);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+  });
+
+  test("genuine weak adapter with sustained energyRate>0 activates weak adapter mode after debounce", async () => {
+    // Scenario: underpowered adapter — battery drains continuously despite AC being online.
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 0
+    });
+
+    Extension._mock.update({ ac: "performance" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    jest.useFakeTimers();
+
+    // Adapter cannot keep up — sustained discharge with measurable energy drain
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 49,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 8
+    });
+    jest.runAllTicks();
+
+    expect(p._weakAdapterPending).toBe(true);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+
+    jest.advanceTimersByTime(10000);
+    jest.runAllTicks();
+
+    jest.useRealTimers();
+    await sleep(10);
+
+    expect(p._weakAdapterModeActive).toBe(true);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+  });
+
+  test("charging threshold: PENDING_CHARGE cancels pending debounce before it fires", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.CHARGING,
+      online: true,
+      percentage: 79,
+      warningLevel: DeviceLevel.NONE
+    });
+
+    Extension._mock.update({ ac: "performance", bat: "balanced" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    jest.useFakeTimers();
+
+    // Battery briefly shows DISCHARGING at threshold with measurable drain — debounce starts
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: true,
+      percentage: 80,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 5
+    });
+    jest.runAllTicks();
+
+    expect(p._weakAdapterPending).toBe(true);
+    expect(p._weakAdapterModeActive).toBe(false);
+
+    // Battery settles to PENDING_CHARGE before debounce fires
+    UpowerProxyMock._state.update({
+      state: DeviceState.PENDING_CHARGE,
+      online: true,
+      percentage: 80,
+      warningLevel: DeviceLevel.NONE
+    });
+    jest.runAllTicks();
+
+    // Debounce must be cancelled and mode must never activate
+    expect(p._weakAdapterPending).toBe(false);
+    expect(p._weakAdapterModeActive).toBe(false);
+
+    jest.advanceTimersByTime(10000);
+    jest.runAllTicks();
+
+    jest.useRealTimers();
+    await sleep(10);
+
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+    expect(p._weakAdapterModeActive).toBe(false);
   });
 });
 
