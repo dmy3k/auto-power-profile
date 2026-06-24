@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-20 17:25+0200\n"
-"PO-Revision-Date: 2026-01-11 17:52+0100\n"
+"PO-Revision-Date: 2026-06-21 09:50+0200\n"
 "Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #: extension.js:64
 msgid "Error connecting to power management services"
@@ -42,6 +42,8 @@ msgid ""
 "Low power adapter detected. Switched to Power Saver — charging will resume "
 "in a few seconds"
 msgstr ""
+"Wykryto zasilacz o niskiej mocy. Przełączono w tryb 'Oszczędzanie energii' — "
+"ładowanie zostanie wznowione za kilka sekund"
 
 #: extension.js:398
 msgid ""
@@ -98,27 +100,33 @@ msgstr "Po podłączeniu do prądu"
 
 #: prefs.js:267
 msgid "Experimental"
-msgstr ""
+msgstr "Eksperymentalne"
 
 #: prefs.js:272
 msgid "Experimental Features"
-msgstr ""
+msgstr "Funkcje eksperymentalne"
 
 #: prefs.js:274
 msgid ""
 "Addresses quirks found on certain hardware configurations. Enable only if "
 "the described issue applies to your setup."
 msgstr ""
+"Rozwiązuje specyficzne problemy występujące na niektórych konfiguracjach "
+"sprzętowych. Włącz tę opcję tylko wtedy, gdy opisany problem dotyczy Twojej "
+"konfiguracji."
 
 #: prefs.js:288
 msgid "Underpowered Adapter Handling"
-msgstr ""
+msgstr "Obsługa zasilacza o zbyt niskiej mocy"
 
 #: prefs.js:290
 msgid ""
 "Switch to Power Saver when adapter is connected but battery is discharging "
 "under load. Resets when adapter is unplugged."
 msgstr ""
+"Przełącza w tryb 'Oszczędzanie energii', gdy zasilacz jest podłączony, ale "
+"bateria rozładowuje się pod obciążeniem. Resetuje się po odłączeniu "
+"zasilacza."
 
 #: prefs.js:312
 msgid "Performance"
@@ -188,13 +196,3 @@ msgstr "Powiadomienia"
 #: ui/general.ui:74
 msgid "Allow extension notifications"
 msgstr "Zezwól na powiadomienia"
-
-#~ msgid "Handle lap-mode on AC"
-#~ msgstr "Obsługa trybu pracy na kolanach po podłączeniu do prądu"
-
-#~ msgid ""
-#~ "Try to maintain performance mode on unstable surfaces. Disable if you are "
-#~ "experiencing thermal issues"
-#~ msgstr ""
-#~ "Próbuj utrzymać tryb wydajności na niestabilnych podłożach. Wyłącz, jeśli "
-#~ "występują problemy termiczne"
