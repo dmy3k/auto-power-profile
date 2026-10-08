@@ -5,7 +5,7 @@
   "name": "Auto Power Profile",
   "session-modes": ["unlock-dialog", "user"],
   "settings-schema": "org.gnome.shell.extensions.auto-power-profile",
-  "shell-version": ["45", "46", "47", "48", "49", "50"],
+  "shell-version": ["45", "46", "47", "48", "49", "50", "51"],
   "url": "https://github.com/dmy3k/auto-power-profile",
   "uuid": "auto-power-profile@dmy3k.github.io",
   "donations": {
