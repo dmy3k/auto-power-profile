@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Auto Power Profile\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 17:25+0200\n"
-"PO-Revision-Date: 2026-06-21 09:50+0200\n"
+"POT-Creation-Date: 2026-10-11 20:06+0200\n"
+"PO-Revision-Date: 2026-10-13 19:03+0200\n"
 "Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
 
-#: extension.js:64
+#: extension.js:60
 msgid "Error connecting to power management services"
 msgstr "Błąd podczas łączenia z usługą zarządzania zasilaniem"
 
-#: extension.js:155
+#: extension.js:146
 #, javascript-format
 msgid ""
 "Power profile '%s' will now be used by default when connected to AC power"
@@ -30,14 +30,14 @@ msgstr ""
 "Profil zasilania '%s' będzie od teraz używany jako domyślny po podłączeniu "
 "do prądu"
 
-#: extension.js:163
+#: extension.js:154
 #, javascript-format
 msgid "Power profile '%s' will now be used by default when running on battery"
 msgstr ""
 "Profil zasilania '%s' będzie od teraz używany jako domyślny na zasilaniu z "
 "akumulatora"
 
-#: extension.js:294
+#: extension.js:298
 msgid ""
 "Low power adapter detected. Switched to Power Saver — charging will resume "
 "in a few seconds"
@@ -45,7 +45,7 @@ msgstr ""
 "Wykryto zasilacz o niskiej mocy. Przełączono w tryb 'Oszczędzanie energii' — "
 "ładowanie zostanie wznowione za kilka sekund"
 
-#: extension.js:398
+#: extension.js:366
 msgid ""
 "Power profile management is not available - this extension will have no "
 "effect on your system"
@@ -53,7 +53,7 @@ msgstr ""
 "Zarządzanie profilami zasilania jest niedostępne – to rozszerzenie nie "
 "będzie miało żadnego wpływu na Twój system"
 
-#: extension.js:404
+#: extension.js:372
 msgid ""
 "Power profile switching may not work properly on this device - energy "
 "savings will be limited. Your system may need updates to enable full "
@@ -61,6 +61,18 @@ msgid ""
 msgstr ""
 "Zarządzanie profilami zasilania jest niedostępne – to rozszerzenie nie "
 "będzie miało żadnego wpływu na Twój system"
+
+#: lib/notifier.js:25
+msgid "Auto Power Profiles"
+msgstr "Profile automatycznego zasilania"
+
+#: lib/notifier.js:60
+msgid "Do not show again"
+msgstr "Nie pokazuj ponownie"
+
+#: lib/notifier.js:65
+msgid "Show details"
+msgstr "Pokaz szczegóły"
 
 #: prefs.js:68 ui/general.ui:5
 msgid "General"
@@ -140,6 +152,100 @@ msgstr "Zrównoważony"
 msgid "Power Saver"
 msgstr "Oszczędzanie energii"
 
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:6
+msgid "On AC profile"
+msgstr "Profil na zasilaniu, gdy podłączony do prądu"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:7
+msgid "Select the default profile to use when connected to AC"
+msgstr "Wybierz domyślny profil po podłączeniu do prądu"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:12
+msgid "On battery profile"
+msgstr "Profil na zasilaniu z akumulatora"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:13
+msgid "Select the default profile to use when running on battery"
+msgstr "Wybierz domyślny profil na zasilaniu z akumulatora"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:18
+msgid "Show notifications"
+msgstr "Pokaż powiadomienia"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:19
+msgid "Show extension notifications"
+msgstr "Pokaż powiadomienia rozszerzenia"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:24
+#: ui/general.ui:60
+msgid "Remember manual profile changes"
+msgstr "Zapamiętywanie ręcznych zmian profilu"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:25
+msgid ""
+"When enabled, manually selected profiles become the new default for the "
+"current power state (AC/battery). When disabled, manual changes are "
+"temporary and the extension will revert to configured defaults on the next "
+"power state change."
+msgstr ""
+"Po włączeniu tej opcji ręcznie wybrane profile stają się nowymi profilami "
+"domyślnymi dla bieżącego trybu zasilania (zasilacz/akumulator). Po jej "
+"wyłączeniu zmiany ręczne mają charakter tymczasowy, a rozszerzenie przywraca "
+"skonfigurowane ustawienia domyślne przy kolejnej zmianie trybu zasilania."
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:30
+msgid "List of application IDs that should enable performance mode"
+msgstr "Lista ID aplikacji, które powinny być włączone w trybie wydajności"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:31
+msgid ""
+"This is a list of desktop application IDs. When any of these applications "
+"are running, performance mode will be enabled."
+msgstr ""
+"Oto lista identyfikatorów aplikacji komputerowych. Gdy którakolwiek z tych "
+"aplikacji jest uruchomiona, włączony zostanie tryb wydajności."
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:38
+msgid "Profile to use for performance apps on battery"
+msgstr ""
+"Profil używany do aplikacji wymagającej dużej wydajności na zasilaniu z "
+"akumulatora"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:39
+msgid ""
+"The power profile to enter when launching a performance app while on battery."
+msgstr ""
+"Profil zasilania do uruchomienia, gdy uruchamiana jest wymagająca aplikacja, "
+"a urządzenie jest na zasilaniu z akumulatora."
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:46
+msgid "Profile to use for performance apps on AC"
+msgstr ""
+"Profil używany do aplikacji wymagającej dużej wydajności, gdy podłączony do "
+"prądu"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:47
+msgid ""
+"The power profile to enter when launching a performance app while on AC "
+"power."
+msgstr ""
+"Profil zasilania, który należy wybrać podczas uruchamiania aplikacji "
+"wymagającej dużej wydajności przy zasilaniu sieciowym."
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:54
+msgid "Weak AC adapter protection"
+msgstr "Ochrona przed słabą ładowarką"
+
+#: schemas/org.gnome.shell.extensions.auto-power-profile.gschema.xml:55
+msgid ""
+"Switch to Power Saver when AC adapter is connected but battery is "
+"discharging due to insufficient adapter power. Resets when AC is "
+"disconnected."
+msgstr ""
+"Przełącza na tryb oszczędzania energii, gdy zasilacz jest podłączony, ale "
+"bateria się rozładowuje z powodu niewystarczającej mocy zasilacza. Stan ten "
+"jest resetowany po odłączeniu zasilania."
+
 #: ui/general.ui:9
 msgid "Default Profiles"
 msgstr "Domyślne profile"
@@ -176,10 +282,6 @@ msgstr ""
 "Wartość procentowa jest konfigurowalna w pliku konfiguracyjnym UPower (/etc/"
 "UPower/UPower.conf)"
 
-#: ui/general.ui:60
-msgid "Remember manual profile changes"
-msgstr "Zapamiętywanie ręcznych zmian profilu"
-
 #: ui/general.ui:61
 msgid ""
 "When enabled, manually selected profiles become the new default for the "
@@ -195,4 +297,4 @@ msgstr "Powiadomienia"
 
 #: ui/general.ui:74
 msgid "Allow extension notifications"
-msgstr "Zezwól na powiadomienia"
+msgstr "Zezwól na powiadomienia rozszerzenia"
