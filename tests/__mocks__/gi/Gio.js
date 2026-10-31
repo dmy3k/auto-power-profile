@@ -157,12 +157,18 @@ class UpowerProxyMock {
     return null;
   }
 
+  get _handlers() {
+    return this.Type === 1
+      ? LinePowerProxyMock._state.handlers
+      : UpowerProxyMock._state.handlers;
+  }
+
   connect = (name, handler) => {
-    return UpowerProxyMock._state.handlers.push(handler) - 1;
+    return this._handlers.push(handler) - 1;
   };
 
   disconnect = (handlerId) => {
-    UpowerProxyMock._state.handlers.splice(handlerId, 1);
+    this._handlers.splice(handlerId, 1);
   };
 }
 
@@ -173,9 +179,8 @@ class LinePowerProxyMock {
 
     update({ online }) {
       this.online = online !== undefined ? online : this.online;
+      UpowerProxyMock._state.online = this.online;
       this.handlers.forEach((x) => x());
-      // Also update the main UPower state to keep them in sync
-      UpowerProxyMock._state.update({ online });
     }
   };
 
