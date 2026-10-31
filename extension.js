@@ -45,7 +45,7 @@ export default class AutoPowerProfile extends Extension {
     this._settingsChangedId = this._settings.connect(this._onSettingsChange);
 
     this._perfAppTracker = new PerformanceAppTracker();
-    this._perfAppTracker.initialize(this._checkProfile);
+    this._perfAppTracker.initialize(() => this._checkProfile());
 
     this._notifier = new Notifier(this, this._settings);
 
@@ -71,7 +71,12 @@ export default class AutoPowerProfile extends Extension {
       this._powerProfilesDbus.initialize()
     ]);
 
-    this._upowerDbus.connectSignal("g-properties-changed", this._checkProfile);
+    this._upowerDbus.connectSignal("g-properties-changed", () =>
+      this._checkProfile()
+    );
+    this._upowerDbus.connectLinePowerSignal("g-properties-changed", () =>
+      this._checkProfile(false)
+    );
     this._powerProfilesDbus.connectSignal(
       "g-properties-changed",
       this._onProfileChange
@@ -280,7 +285,7 @@ export default class AutoPowerProfile extends Extension {
     };
   }
 
-  _updateWeakAdapterState(powerState) {
+  _updateWeakAdapterState(powerState, countEvent) {
     if (!this._settings?.weakAdapterProtectionEnabled) {
       this._resetWeakAdapterState();
       return;
@@ -289,7 +294,7 @@ export default class AutoPowerProfile extends Extension {
     if (powerState.onBattery) {
       this._resetWeakAdapterState();
     } else if (powerState.weakAdapterSuspected) {
-      if (!this._weakAdapterModeActive) {
+      if (countEvent && !this._weakAdapterModeActive) {
         this._weakAdapterSuspectedCount++;
         if (this._weakAdapterSuspectedCount >= 2) {
           this._weakAdapterModeActive = true;
@@ -319,12 +324,12 @@ export default class AutoPowerProfile extends Extension {
     this._resetWeakAdapterState();
   }
 
-  _checkProfile = () => {
+  _checkProfile = (countWeakAdapterEvent = true) => {
     const rawPowerState = this._upowerDbus?.getPowerState();
     if (!rawPowerState) {
       return;
     }
-    this._updateWeakAdapterState(rawPowerState);
+    this._updateWeakAdapterState(rawPowerState, countWeakAdapterEvent);
     const newState = this._getConfiguredPowerState(rawPowerState);
 
     if (!newState || !this._powerProfilesDbus) {

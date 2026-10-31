@@ -221,6 +221,8 @@ test("extension disabled successfully and cleans up resources", async () => {
   expect(p._powerProfilesDbus).toBeDefined();
   expect(p._settings).toBeDefined();
   expect(p._perfAppTracker).toBeDefined();
+  expect(UpowerProxyMock._state.handlers).toHaveLength(1);
+  expect(LinePowerProxyMock._state.handlers).toHaveLength(1);
 
   p.disable();
   await sleep(10);
@@ -230,6 +232,8 @@ test("extension disabled successfully and cleans up resources", async () => {
   expect(p._powerProfilesDbus).toBeNull();
   expect(p._settings).toBeNull();
   expect(p._perfAppTracker).toBeNull();
+  expect(UpowerProxyMock._state.handlers).toHaveLength(0);
+  expect(LinePowerProxyMock._state.handlers).toHaveLength(0);
 });
 
 test("uses power-saver on CRITICAL warning level", async () => {
@@ -473,6 +477,31 @@ test("uses Online property to detect AC power when battery present", async () =>
 
   // Should switch to battery profile because Online=false
   expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+});
+
+test("restores AC profile on disconnect/reconnect reported only by line power device", async () => {
+  UpowerProxyMock._state.update({
+    state: DeviceState.DISCHARGING,
+    online: true,
+    percentage: 60,
+    warningLevel: DeviceLevel.NONE
+  });
+  Extension._mock.update({ ac: "balanced", bat: "power-saver" });
+
+  const p = new AutoPowerProfile();
+  p.enable();
+  await sleep(10);
+
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+
+  LinePowerProxyMock._state.update({ online: false });
+  await sleep(10);
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("power-saver");
+
+  LinePowerProxyMock._state.update({ online: true });
+  await sleep(10);
+  expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("balanced");
+  p.disable();
 });
 
 test("handles PENDING_DISCHARGE state correctly", async () => {
@@ -1146,6 +1175,31 @@ describe("Weak AC Adapter Protection", () => {
     await sleep(10);
 
     // Counter must stay at 0 — energyRate=0 means weakAdapterSuspected=false
+    expect(p._weakAdapterSuspectedCount).toBe(0);
+    expect(p._weakAdapterModeActive).toBe(false);
+    expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
+  });
+
+  test("line power plug-in event with stale battery discharge is not counted", async () => {
+    UpowerProxyMock._state.update({
+      state: DeviceState.DISCHARGING,
+      online: false,
+      percentage: 50,
+      warningLevel: DeviceLevel.NONE,
+      energyRate: 8
+    });
+
+    Extension._mock.update({ ac: "performance", bat: "balanced" });
+    Extension._mock.state["weak-adapter-protection"] = true;
+
+    const p = new AutoPowerProfile();
+    p.enable();
+    await sleep(10);
+
+    // Battery device still reports DISCHARGING with drain until it refreshes
+    LinePowerProxyMock._state.update({ online: true });
+    await sleep(10);
+
     expect(p._weakAdapterSuspectedCount).toBe(0);
     expect(p._weakAdapterModeActive).toBe(false);
     expect(p._powerProfilesDbus._proxy.ActiveProfile).toBe("performance");
